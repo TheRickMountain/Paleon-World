@@ -80,7 +80,7 @@ public class OpenglUtils {
         return interleavedBuffer;
     }
 
-    private static FloatBuffer dataToFloatBuffer(float[] vertices, float[] textureCoords) {
+    public static FloatBuffer dataToFloatBuffer(float[] vertices, float[] textureCoords) {
         FloatBuffer interleavedBuffer = BufferUtils.createFloatBuffer(vertices.length
                 + textureCoords.length);
         int veticesPointer = 0;

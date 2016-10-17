@@ -8,7 +8,6 @@ import com.paleon.engine.graph.Camera;
  */
 public class ControllerBh extends Behaviour {
 
-    private float speed = 10;
     public Camera camera;
     private AnimBh animBh;
 

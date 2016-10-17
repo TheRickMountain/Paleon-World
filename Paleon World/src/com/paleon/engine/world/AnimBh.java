@@ -1,7 +1,6 @@
 package com.paleon.engine.world;
 
 import com.paleon.engine.behaviours.Behaviour;
-import com.paleon.engine.graph.transform.Transform3D;
 import com.paleon.engine.scenegraph.Entity;
 
 /**

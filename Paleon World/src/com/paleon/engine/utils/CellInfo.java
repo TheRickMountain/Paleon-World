@@ -15,4 +15,12 @@ public class CellInfo {
         this.state = state;
     }
 
+	public int getX() {
+		return x;
+	}
+
+	public int getZ() {
+		return z;
+	}
+
 }

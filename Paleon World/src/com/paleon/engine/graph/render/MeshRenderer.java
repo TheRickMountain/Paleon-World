@@ -1,7 +1,6 @@
 package com.paleon.engine.graph.render;
 
 import com.paleon.engine.components.Mesh;
-import com.paleon.engine.graph.transform.Transform;
 import com.paleon.engine.core.Display;
 import com.paleon.engine.core.ResourceManager;
 import com.paleon.engine.graph.*;

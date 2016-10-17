@@ -1,7 +1,5 @@
 package com.paleon.engine.graph.font;
 
-import java.io.File;
-
 import com.paleon.engine.components.Text;
 import com.paleon.engine.core.ResourceManager;
 import com.paleon.engine.graph.Texture;
