@@ -1,5 +1,6 @@
 package com.paleon.engine.world;
 
+import com.paleon.engine.components.Material;
 import com.paleon.engine.components.Model;
 import com.paleon.engine.core.ResourceManager;
 import com.paleon.engine.graph.transform.Transform3D;
@@ -16,7 +17,9 @@ public class Plane extends Entity {
         super(world, "Plane");
 
         addComponent(new Model(ResourceManager.getMesh("plane")));
-        addComponent(ResourceManager.getMaterial("plane"));
+        Material planeMat = new Material(ResourceManager.getTexture("plane"));
+        planeMat.useFakeLighting = true;
+        addComponent(planeMat);
         setTransform(new Transform3D());
         scale.set(1.5f);
     }

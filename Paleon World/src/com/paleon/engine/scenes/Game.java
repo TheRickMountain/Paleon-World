@@ -82,11 +82,6 @@ public class Game implements IScene {
         ResourceManager.loadTexture("/gui/axe.png", "axe");
 
         ResourceManager.loadTexture("/models/plane/plane.png", "plane");
-
-        Material planeMat = new Material(ResourceManager.getTexture("plane"));
-        planeMat.useFakeLighting = true;
-        planeMat.color.set(0.0f, 1.0f, 0.0f);
-        ResourceManager.loadMaterial(planeMat, "plane");
         ResourceManager.loadMesh("/models/plane/plane.obj", "plane");
 
         ResourceManager.loadTexture("/models/house/house.png", "house");
