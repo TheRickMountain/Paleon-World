@@ -79,7 +79,8 @@ public class Game implements IScene {
         ResourceManager.loadMaterial(wheatMaterial, "wheat");
         ResourceManager.loadMesh("/models/wheat.obj", "wheat");
 
-        ResourceManager.loadTexture("/gui/axe.png", "axe");
+        ResourceManager.loadTexture("/gui/house.png", "house_ui");
+        ResourceManager.loadTexture("/gui/wheat.png", "wheat_ui");
 
         ResourceManager.loadTexture("/models/plane/plane.png", "plane");
         ResourceManager.loadMesh("/models/plane/plane.obj", "plane");
@@ -147,14 +148,8 @@ public class Game implements IScene {
         /*** *** ***/
 
         /*** GUI ***/
-        Button button = new Button(world, "Building Button", ResourceManager.getTexture("axe"));
-        button.scale.x = 64;
-        button.scale.y = 64;
-        button.position.x = Display.getWidth() - button.scale.x;
-        button.position.y = Display.getHeight() - button.scale.y;
-
         Entity building = new Entity(world, "Building");
-        building.addBehaviour(new BuildingGuiBh(button));
+        building.addBehaviour(new BuildingGuiBh());
         /*** *** ***/
     }
 
