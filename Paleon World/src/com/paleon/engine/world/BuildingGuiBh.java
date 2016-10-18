@@ -97,10 +97,20 @@ public class BuildingGuiBh extends Behaviour {
         			}
 
         			if(Mouse.isButton(0)) {
-        				int ccX = (int)(((ctp.x - firstCell.x) / 3)) + 1;
-        				int ccZ = (int)(((ctp.z - firstCell.z) / 3)) + 1;
+        				int ccX = (int)(((ctp.x - firstCell.x) / 3));
+        				int ccZ = (int)(((ctp.z - firstCell.z) / 3));
         				
-        				System.out.println(ccX + " " + ccZ);
+        				if(ccX < 0) {
+        					ccX--;
+        				} else {
+        					ccX++;
+        				}
+        				       				
+        				if(ccZ < 0) {
+        					ccZ--;
+        				} else {
+        					ccZ++;
+        				}
         				
         				if(lastCCX != ccX || lastCCZ != ccZ) {
         					lastCCX = ccX;
@@ -110,18 +120,29 @@ public class BuildingGuiBh extends Behaviour {
         					if(cellSize != null) {
 	        					for(int x = 0; x < cellSize.length; x++) {        						
 	        						for(int z = 0; z < cellSize[0].length; z++) {
-	        							cellSize[x][z].remove();
+	        							if(cellSize[x][z] != null) {
+	        								cellSize[x][z].remove();
+	        							}
 	        						}
 	        					}
         					}
         					
-        					cellSize = new Plane[ccX][ccZ];
+        					cellSize = new Plane[Math.abs(ccX)][Math.abs(ccZ)];
         					
-        					for(int x = 0; x < ccX; x++) {        						
-        						for(int z = 0; z < ccZ; z++) {
+        					for(int x = 0; x < Math.abs(ccX); x++) {        						
+        						for(int z = 0; z < Math.abs(ccZ); z++) {
         							Plane plane = new Plane(world);
-        							plane.position.x = firstCell.x + x * 3;
-        							plane.position.z = firstCell.z + z * 3;
+        							if(ccX < 0)
+        								plane.position.x = firstCell.x - x * 3;
+        							else
+        								plane.position.x = firstCell.x + x * 3;
+        							
+        							if(ccZ < 0)
+        								plane.position.z = firstCell.z - z * 3;
+        							else
+        								plane.position.z = firstCell.z + z * 3;
+        							
+        							
         							plane.position.y = ctp.y + 0.1f;
         							
         							int state = world.cells.get(plane.position.x + "," + plane.position.z).state;
@@ -140,7 +161,13 @@ public class BuildingGuiBh extends Behaviour {
         			}
 
         			if(Mouse.isButtonUp(0)) {
-
+        				if(cellSize != null) {
+	        				for(int x = 0; x < cellSize.length; x++) {        						
+	    						for(int z = 0; z < cellSize[0].length; z++) {
+	    							cellSize[x][z].remove();
+	    						}
+	        				}
+        				}
         			}
         		}
         	}
