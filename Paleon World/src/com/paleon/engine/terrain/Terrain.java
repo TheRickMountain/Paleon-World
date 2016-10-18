@@ -33,14 +33,14 @@ public class Terrain {
     private int numPerRow;
     private QuadtreeNode headNode;
 
-    public Terrain(int worldX, int worldZ, String heightmap, TexturePack texturePack) {
+    public Terrain(int worldX, int worldZ, TexturePack texturePack) {
         this.texturePack = texturePack;
         this.x = worldX * SIZE;
         this.z = worldZ * SIZE;
         this.gridX = worldX;
         this.gridZ = worldZ;
         TerrainVertex[][] heights = null;
-        heights = TerrainLoader.load(heightmap);
+        heights = TerrainLoader.load(texturePack.getHeightMap());
         if(heights.length != TERRAIN_WIDTH + 1){
             System.err.println("Terrain width must be " + (TERRAIN_WIDTH + 1) + " vertices");
             System.exit(-1);

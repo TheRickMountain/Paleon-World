@@ -1,5 +1,7 @@
 package com.paleon.engine.world;
 
+import org.joml.Vector3f;
+
 import com.paleon.engine.behaviours.Behaviour;
 import com.paleon.engine.components.Material;
 import com.paleon.engine.core.Display;
@@ -10,7 +12,6 @@ import com.paleon.engine.input.Mouse;
 import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.scenegraph.World;
 import com.paleon.engine.utils.MousePicker;
-import org.joml.Vector3f;
 
 /**
  * Created by Rick on 17.10.2016.
@@ -63,6 +64,10 @@ public class BuildingGuiBh extends Behaviour {
 
     @Override
     public void update(float deltaTime) {
+    	if(Keyboard.isKeyDown(Key.K)) {
+    		
+    	}
+    	
         if(house_ui.isOverMouse()) {
             world.onGuiLayer = true;
         } else if(wheat_ui.isOverMouse()) {
@@ -78,6 +83,9 @@ public class BuildingGuiBh extends Behaviour {
 
             for(int x = 0; x < cellSize.length; x++) {
                 for(int z = 0; z < cellSize[0].length; z++) {
+                	if(cellSize[x][z] != null) {
+                		cellSize[x][z].remove();
+                	}
                     cellSize[x][z] = new Plane(parent.getWorld());
                 }
             }
@@ -164,10 +172,13 @@ public class BuildingGuiBh extends Behaviour {
         				if(cellSize != null) {
 	        				for(int x = 0; x < cellSize.length; x++) {        						
 	    						for(int z = 0; z < cellSize[0].length; z++) {
+	    							world.cells.get(cellSize[x][z].position.x + "," + 
+	    									cellSize[x][z].position.z).state = 1;
 	    							cellSize[x][z].remove();
 	    						}
 	        				}
         				}
+        				cellSize = null;
         			}
         		}
         	}

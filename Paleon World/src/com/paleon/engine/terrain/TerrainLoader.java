@@ -1,10 +1,8 @@
 package com.paleon.engine.terrain;
 
-import org.joml.Vector3f;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+
+import org.joml.Vector3f;
 
 public class TerrainLoader {
 
@@ -12,14 +10,7 @@ public class TerrainLoader {
 	private static float [][] heights;
 	private static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
 	
-	protected static TerrainVertex[][] load(String heightmap) {
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(TerrainLoader.class.getClass().getResourceAsStream(heightmap));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+	protected static TerrainVertex[][] load(BufferedImage image) {		
 		int vertexCount = image.getHeight() + 1;
     	heights = new float[vertexCount][vertexCount];
 		TerrainVertex[][] terrainVertices = new TerrainVertex[vertexCount][vertexCount];

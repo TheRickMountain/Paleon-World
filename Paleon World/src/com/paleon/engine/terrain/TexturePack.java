@@ -1,5 +1,7 @@
 package com.paleon.engine.terrain;
 
+import java.awt.image.BufferedImage;
+
 import com.paleon.engine.graph.Texture;
 
 /**
@@ -7,17 +9,25 @@ import com.paleon.engine.graph.Texture;
  */
 public class TexturePack {
 
-    public final Texture blendMap;
-    public final Texture redTexture;
-    public final Texture greenTexture;
-    public final Texture blueTexture;
-    public final Texture alphaTexture;
+	private final BufferedImage heightMap;
+    public Texture blendMap;
+    public Texture redTexture;
+    public Texture greenTexture;
+    public Texture blueTexture;
+    public Texture alphaTexture;
 
-    public TexturePack(Texture blendMap, Texture redTexture, Texture greenTexture, Texture blueTexture, Texture alphaTexture) {
+    public TexturePack(BufferedImage heightMap, Texture blendMap, Texture redTexture, 
+    		Texture greenTexture, Texture blueTexture, Texture alphaTexture) {
+    	this.heightMap = heightMap;
         this.blendMap = blendMap;
         this.redTexture = redTexture;
         this.greenTexture = greenTexture;
         this.blueTexture = blueTexture;
         this.alphaTexture = alphaTexture;
     }
+
+	public BufferedImage getHeightMap() {
+		return heightMap;
+	}
+    
 }

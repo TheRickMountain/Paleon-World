@@ -29,7 +29,7 @@ import com.paleon.engine.graph.Texture;
 
 public class TextureLoader {
 	
-	public static int load(BufferedImage image) {
+	public static Texture load(BufferedImage image) {
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 		
@@ -53,14 +53,15 @@ public class TextureLoader {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
         // Upload the texture data
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, 
+        		GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         
         // Generate Mip Map
         glGenerateMipmap(GL_TEXTURE_2D);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -0.4f);
         
-        return id;
+        return new Texture(id, image.getWidth(), image.getHeight());
 	}
 	
     public static Texture load(String textureName) throws Exception {

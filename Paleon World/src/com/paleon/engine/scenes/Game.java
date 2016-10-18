@@ -1,26 +1,26 @@
 package com.paleon.engine.scenes;
 
+import org.joml.Vector3f;
+
+import com.paleon.engine.components.Material;
 import com.paleon.engine.components.Model;
 import com.paleon.engine.components.Text;
-import com.paleon.engine.core.Display;
-import com.paleon.engine.graph.render.GUIRenderer;
-import com.paleon.engine.graph.transform.Transform2D;
-import com.paleon.engine.graph.transform.Transform3D;
 import com.paleon.engine.core.IScene;
 import com.paleon.engine.core.ResourceManager;
 import com.paleon.engine.graph.Camera;
-import com.paleon.engine.components.Material;
+import com.paleon.engine.graph.render.GUIRenderer;
+import com.paleon.engine.graph.transform.Transform2D;
+import com.paleon.engine.graph.transform.Transform3D;
 import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.scenegraph.World;
 import com.paleon.engine.terrain.Terrain;
+import com.paleon.engine.terrain.TerrainGenerator;
 import com.paleon.engine.terrain.TexturePack;
 import com.paleon.engine.utils.CellInfo;
 import com.paleon.engine.utils.Color;
 import com.paleon.engine.utils.OpenglUtils;
 import com.paleon.engine.world.BuildingGuiBh;
-import com.paleon.engine.world.Button;
 import com.paleon.engine.world.SettlerPf;
-import org.joml.Vector3f;
 
 /**
  * Created by Rick on 06.10.2016.
@@ -28,6 +28,8 @@ import org.joml.Vector3f;
 public class Game implements IScene {
 
     World world;
+    
+    public static TexturePack texturePack;
 
     @Override
     public void loadResources() {
@@ -100,14 +102,16 @@ public class Game implements IScene {
         OpenglUtils.cullFace(true);
 
         /*** Terrain ***/
-        TexturePack texturePack = new TexturePack(
-                ResourceManager.getTexture("blendmap"),
+        TerrainGenerator generator = new TerrainGenerator();
+        texturePack = new TexturePack(
+        		generator.getHeightMap(),
+                generator.getBlendMapTexture(),
                 ResourceManager.getTexture("grass"),
                 ResourceManager.getTexture("grass"),
                 ResourceManager.getTexture("ground"),
                 ResourceManager.getTexture("sand"));
 
-        Terrain terrain = new Terrain(0, 0, "/heightmap.png", texturePack);
+        Terrain terrain = new Terrain(0, 0, texturePack);
         world.addTerrain(terrain);
 
         for(int x = 0; x < 256; x++) {
