@@ -61,7 +61,7 @@ public class TextureLoader {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -0.4f);
         
-        return new Texture(id, image.getWidth(), image.getHeight());
+        return new Texture(id, image.getWidth(), image.getHeight(), image);
 	}
 	
     public static Texture load(String textureName) throws Exception {

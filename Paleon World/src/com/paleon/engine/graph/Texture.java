@@ -1,5 +1,7 @@
 package com.paleon.engine.graph;
 
+import java.awt.image.BufferedImage;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
@@ -7,11 +9,17 @@ public class Texture {
 
 	private int id;
 	private int width, height;
+	private BufferedImage image;
 	
-	public Texture(int id, int width, int height) {
+	public Texture(int id, int width, int height, BufferedImage buffer) {
 		this.id = id;
 		this.width = width;
 		this.height = height;
+		this.image = buffer;
+	}
+	
+	public Texture(int id, int width, int height) {
+		this(id, width, height, null);
 	}
 	
 	public int getID() {
@@ -24,6 +32,10 @@ public class Texture {
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public BufferedImage getBufferedImage() {
+		return image;
 	}
 	
 	public void bind(int unit) {

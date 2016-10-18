@@ -1,5 +1,7 @@
 package com.paleon.engine.world;
 
+import java.awt.image.BufferedImage;
+
 import org.joml.Vector3f;
 
 import com.paleon.engine.behaviours.Behaviour;
@@ -9,8 +11,12 @@ import com.paleon.engine.core.ResourceManager;
 import com.paleon.engine.input.Key;
 import com.paleon.engine.input.Keyboard;
 import com.paleon.engine.input.Mouse;
+import com.paleon.engine.loaders.TextureLoader;
 import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.scenegraph.World;
+import com.paleon.engine.scenes.Game;
+import com.paleon.engine.utils.CellInfo;
+import com.paleon.engine.utils.Color;
 import com.paleon.engine.utils.MousePicker;
 
 /**
@@ -64,10 +70,6 @@ public class BuildingGuiBh extends Behaviour {
 
     @Override
     public void update(float deltaTime) {
-    	if(Keyboard.isKeyDown(Key.K)) {
-    		
-    	}
-    	
         if(house_ui.isOverMouse()) {
             world.onGuiLayer = true;
         } else if(wheat_ui.isOverMouse()) {
@@ -169,16 +171,40 @@ public class BuildingGuiBh extends Behaviour {
         			}
 
         			if(Mouse.isButtonUp(0)) {
+        				
+        				BufferedImage image = Game.texturePack.blendMap.getBufferedImage();
+        				
         				if(cellSize != null) {
+        					int totalState = 0;
+        					
 	        				for(int x = 0; x < cellSize.length; x++) {        						
 	    						for(int z = 0; z < cellSize[0].length; z++) {
-	    							world.cells.get(cellSize[x][z].position.x + "," + 
-	    									cellSize[x][z].position.z).state = 1;
+	    							CellInfo cellInfo = world.cells.get(cellSize[x][z].position.x + "," + 
+	    									cellSize[x][z].position.z);
+	    							
+	    							if(cellInfo.state == 1) {
+	    								totalState = 1;
+	    							}	    							
+	    							
 	    							cellSize[x][z].remove();
 	    						}
 	        				}
+	        				
+	        				if(totalState == 0) {
+		        				for(int x = 0; x < cellSize.length; x++) {        						
+		    						for(int z = 0; z < cellSize[0].length; z++) {
+		    							CellInfo cellInfo = world.cells.get(cellSize[x][z].position.x + "," + 
+		    									cellSize[x][z].position.z);		    							
+		    							
+		    							image.setRGB(cellInfo.getX(), cellInfo.getZ(), Color.BLUE.toHex());
+		    							cellInfo.state = 1;
+		    						}
+		        				}
+	        				}
         				}
         				cellSize = null;
+        				
+        				Game.texturePack.blendMap = TextureLoader.load(image);
         			}
         		}
         	}
@@ -248,6 +274,7 @@ public class BuildingGuiBh extends Behaviour {
         						cellSize[x][z].remove();
         					}
         				}
+        				cellSize = null;
         			}
         		}
         	}
