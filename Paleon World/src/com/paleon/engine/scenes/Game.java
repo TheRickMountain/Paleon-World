@@ -18,6 +18,7 @@ import com.paleon.engine.terrain.TerrainGenerator;
 import com.paleon.engine.terrain.TexturePack;
 import com.paleon.engine.utils.CellInfo;
 import com.paleon.engine.utils.Color;
+import com.paleon.engine.utils.MousePicker;
 import com.paleon.engine.utils.OpenglUtils;
 import com.paleon.engine.world.Birch;
 import com.paleon.engine.world.BuildingGuiBh;
@@ -32,9 +33,17 @@ public class Game implements IScene {
     World world;
     
     public static TexturePack texturePack;
+    
+    private Birch birch;
 
     @Override
     public void loadResources() {
+    	/*** Barn ***/
+    	ResourceManager.loadTexture("/buildings/barn/barn_icon.png", "barn_ui");
+    	ResourceManager.loadTexture("/buildings/barn/barn.png", "barn");
+        ResourceManager.loadMesh("/buildings/barn/barn.obj", "barn");
+    	/*** *** ***/
+    	
     	/*** Birch ***/
     	ResourceManager.loadTexture("/models/birch/trunk.png", "birch_trunk");
         ResourceManager.loadMesh("/models/birch/trunk.obj", "birch_trunk");
@@ -52,9 +61,7 @@ public class Game implements IScene {
         /*** *** ***/
     	
         ResourceManager.loadTexture("/textures/rock.png", "rock");
-        ResourceManager.loadMesh("/models/rock/rock_1.obj", "rock");
-        
-        ResourceManager.loadTexture("/textures/house.png", "house");
+        ResourceManager.loadMesh("/models/rock/rock_1.obj", "rock");       
 
         ResourceManager.loadTexture("/terrainTextures/blendmap.png", "blendmap");
         ResourceManager.loadTexture("/terrainTextures/ground.png", "ground");
@@ -110,10 +117,6 @@ public class Game implements IScene {
 
         ResourceManager.loadTexture("/models/plane/plane.png", "plane");
         ResourceManager.loadMesh("/models/plane/plane.obj", "plane");
-
-        ResourceManager.loadTexture("/models/house/house.png", "house");
-        ResourceManager.loadMaterial(new Material(ResourceManager.getTexture("house"), new Color(1.0f, 1.0f, 1.0f)), "house");
-        ResourceManager.loadMesh("/models/house/house.obj", "house");
     }
 
     @Override
@@ -193,7 +196,7 @@ public class Game implements IScene {
         rock.scale.set(0.65f);
         /*** *** ***/
         
-        Birch birch = new Birch(world);
+        birch = new Birch(world);
         birch.position.set(125 * 3 + 1.5f, world.getTerrainHeight(125 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
         
         Conifer conifer1 = new Conifer(world);
@@ -207,6 +210,13 @@ public class Game implements IScene {
 
     @Override
     public void update(float deltaTime) {
+    	Vector3f ray = MousePicker.getRay(50);
+    	if(ray != null) {
+    		birch.position.x = ray.x;
+    		birch.position.y = ray.y;
+    		birch.position.z = ray.z;
+    	}
+    	
         world.update(deltaTime);
         world.render();
     }

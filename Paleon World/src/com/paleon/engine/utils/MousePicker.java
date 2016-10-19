@@ -91,7 +91,7 @@ public class MousePicker {
 		}
 	}
 
-	private static boolean intersectionInRange(float start, float finish, Vector3f ray) {
+	public static boolean intersectionInRange(float start, float finish, Vector3f ray) {
 		Vector3f startPoint = getPointOnRay(ray, start);
 		Vector3f endPoint = getPointOnRay(ray, finish);
 		if (!isUnderGround(startPoint) && isUnderGround(endPoint)) {
@@ -115,10 +115,14 @@ public class MousePicker {
 		}
 	}
 
-	private static Vector3f getPointOnRay(Vector3f ray, float distance) {
+	public static Vector3f getPointOnRay(Vector3f ray, float distance) {
 		Vector3f start = new Vector3f(camera.getPosition());
 		Vector3f scaledRay = new Vector3f(ray.x * distance, ray.y * distance, ray.z * distance);
 		return start.add(scaledRay, new Vector3f());
+	}
+	
+	public static Vector3f getRay(float range) {
+		return getPointOnRay(currentRay, range);
 	}
 
 	private static Vector3f calculateMouseRayCamera() {

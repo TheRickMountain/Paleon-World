@@ -32,7 +32,7 @@ public class BuildingGuiBh extends Behaviour {
 		NONE
 	}
 	
-    private Button house_ui;
+    private Button barn_ui;
     private Button wheat_ui;
     private Button gathering_ui;
 
@@ -57,17 +57,17 @@ public class BuildingGuiBh extends Behaviour {
     public void start() {
     	this.world = parent.getWorld();
     	
-    	house_ui = new Button(world, "House Button", ResourceManager.getTexture("house_ui"));
-        house_ui.scale.x = 48;
-        house_ui.scale.y = 48;
-        house_ui.position.x = Display.getWidth() - house_ui.scale.x - 5;
-        house_ui.position.y = Display.getHeight() - house_ui.scale.y - 5;
+    	barn_ui = new Button(world, "Barn Button", ResourceManager.getTexture("barn_ui"));
+        barn_ui.scale.x = 48;
+        barn_ui.scale.y = 48;
+        barn_ui.position.x = Display.getWidth() - barn_ui.scale.x - 5;
+        barn_ui.position.y = Display.getHeight() - barn_ui.scale.y - 5;
         
         wheat_ui = new Button(world, "Wheat Button", ResourceManager.getTexture("wheat_ui"));
         wheat_ui.scale.x = 48;
         wheat_ui.scale.y = 48;
-        wheat_ui.position.x = house_ui.position.x - wheat_ui.scale.x - 5;
-        wheat_ui.position.y = house_ui.position.y;
+        wheat_ui.position.x = barn_ui.position.x - wheat_ui.scale.x - 5;
+        wheat_ui.position.y = barn_ui.position.y;
         
         gathering_ui = new Button(world, "Gathering Button", ResourceManager.getTexture("gathering_ui"));
         gathering_ui.scale.x = 48;
@@ -78,7 +78,7 @@ public class BuildingGuiBh extends Behaviour {
 
     @Override
     public void update(float deltaTime) {
-        if(house_ui.isOverMouse()) {
+        if(barn_ui.isOverMouse()) {
             world.onGuiLayer = true;
         } else if(wheat_ui.isOverMouse()) {
         	world.onGuiLayer = true;
@@ -86,9 +86,9 @@ public class BuildingGuiBh extends Behaviour {
             world.onGuiLayer = false;
         }
         
-        if(house_ui.isPressedDown(0)) {
+        if(barn_ui.isPressedDown(0)) {
         	craft = Craft.BUILDING;
-            building = new House(world);
+            building = new Barn(world);
             cellSize = new Plane[7][7];
 
             for(int x = 0; x < cellSize.length; x++) {
