@@ -1,6 +1,6 @@
 package com.paleon.engine.graph.transform;
 
-import com.paleon.engine.scenegraph.Entity;
+import com.paleon.engine.scenegraph.Entity3D;
 import com.paleon.engine.utils.MathUtils;
 
 /**
@@ -15,7 +15,7 @@ public class Transform3D extends Transform {
     public void update() {
         MathUtils.getModelMatrix(modelMatrix, position, rotation, scale);
 
-        Entity pp = parent.getParent();
+        Entity3D pp = parent.getParent();
         if (pp != null) {
             pp.getTransform().getModelMatrix().mul(modelMatrix, modelMatrix);
         }

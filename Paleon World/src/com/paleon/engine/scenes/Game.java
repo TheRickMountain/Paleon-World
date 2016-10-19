@@ -11,7 +11,7 @@ import com.paleon.engine.graph.Camera;
 import com.paleon.engine.graph.render.GUIRenderer;
 import com.paleon.engine.graph.transform.Transform2D;
 import com.paleon.engine.graph.transform.Transform3D;
-import com.paleon.engine.scenegraph.Entity;
+import com.paleon.engine.scenegraph.Entity3D;
 import com.paleon.engine.scenegraph.World;
 import com.paleon.engine.terrain.Terrain;
 import com.paleon.engine.terrain.TerrainGenerator;
@@ -19,6 +19,7 @@ import com.paleon.engine.terrain.TexturePack;
 import com.paleon.engine.utils.CellInfo;
 import com.paleon.engine.utils.Color;
 import com.paleon.engine.utils.OpenglUtils;
+import com.paleon.engine.world.Birch;
 import com.paleon.engine.world.BuildingGuiBh;
 import com.paleon.engine.world.SettlerPf;
 
@@ -33,14 +34,26 @@ public class Game implements IScene {
 
     @Override
     public void loadResources() {
+    	/*** Birch ***/
+    	ResourceManager.loadTexture("/models/birch/trunk.png", "birch_trunk");
+        ResourceManager.loadMesh("/models/birch/trunk.obj", "birch_trunk");
+        
+        ResourceManager.loadTexture("/models/birch/leaves.png", "birch_leaves");
+        ResourceManager.loadMesh("/models/birch/leaves.obj", "birch_leaves");
+        /*** *** ***/
+    	
         ResourceManager.loadTexture("/textures/rock.png", "rock");
+        ResourceManager.loadMesh("/models/rock/rock_1.obj", "rock");
+        
         ResourceManager.loadTexture("/textures/house.png", "house");
 
         ResourceManager.loadTexture("/terrainTextures/blendmap.png", "blendmap");
         ResourceManager.loadTexture("/terrainTextures/ground.png", "ground");
         ResourceManager.loadTexture("/terrainTextures/grass.png", "grass");
         ResourceManager.loadTexture("/terrainTextures/sand.png", "sand");
-
+        ResourceManager.loadTexture("/terrainTextures/dry_grass.png", "dry_grass");
+        ResourceManager.loadTexture("/terrainTextures/dry_ground.png", "dry_ground");
+        
         ResourceManager.loadSkybox("sunny");
 
         ResourceManager.loadMaterial(new Material(ResourceManager.getTexture("rock"), Color.WHITE), "rock");
@@ -66,8 +79,8 @@ public class Game implements IScene {
         ResourceManager.loadMaterial(eyesMaterial, "eyes");
         ResourceManager.loadMesh("/settler/eyes.obj", "eyes");
 
-        ResourceManager.loadTexture("/grass/diffuse.png", "diffuse");
-        Material grassMaterial = new Material(ResourceManager.getTexture("diffuse"));
+        ResourceManager.loadTexture("/grass/grass.png", "grass");
+        Material grassMaterial = new Material(ResourceManager.getTexture("grass"));
         grassMaterial.setNumberOfRows(2);
         grassMaterial.useFakeLighting = true;
         grassMaterial.transparency = true;
@@ -106,8 +119,8 @@ public class Game implements IScene {
         texturePack = new TexturePack(
         		generator.getHeightMap(),
                 generator.getBlendMapTexture(),
-                ResourceManager.getTexture("grass"),
-                ResourceManager.getTexture("grass"),
+                ResourceManager.getTexture("dry_ground"),
+                ResourceManager.getTexture("dry_grass"),
                 ResourceManager.getTexture("ground"),
                 ResourceManager.getTexture("sand"));
 
@@ -135,26 +148,42 @@ public class Game implements IScene {
 
         /*** Grass ***/
         for(int i = 0; i < 2; i++) {
-            Entity grass = new Entity(world, "Grass");
+            Entity3D grass = new Entity3D(world, "Grass");
             grass.addComponent(new Model(ResourceManager.getMesh("grass")));
             grass.addComponent(ResourceManager.getMaterial("grass"));
             grass.setTransform(new Transform3D());
             grass.position.set(400 + i * 3, world.getTerrainHeight(400 + i * 3, 400), 400);
             grass.scale.set(2.5f, 2.5f, 2.5f);
-            grass.textureIndex = i * 2;
+            if(i == 1) {
+            	grass.textureIndex = 3;
+            } else {
+            	grass.textureIndex = 1;
+            }
         }
         /*** *** ***/
 
         /*** Text ***/
-        Entity text = new Entity(world, "Text");
+        Entity3D text = new Entity3D(world, "Text");
         text.addComponent(new Text("PALEON 0.1.0", GUIRenderer.primitiveFont, 1f, Color.WHITE));
         text.setTransform(new Transform2D());
         /*** *** ***/
 
         /*** GUI ***/
-        Entity building = new Entity(world, "Building");
+        Entity3D building = new Entity3D(world, "Building");
         building.addBehaviour(new BuildingGuiBh());
         /*** *** ***/
+        
+        /*** Rock ***/
+        Entity3D rock = new Entity3D(world, "Rock");
+        rock.addComponent(new Model(ResourceManager.getMesh("rock")));
+        rock.addComponent(new Material(ResourceManager.getTexture("rock")));
+        rock.setTransform(new Transform3D());
+        rock.position.set(129 * 3 + 1.5f, world.getTerrainHeight(129 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
+        rock.scale.set(0.65f);
+        /*** *** ***/
+        
+        Birch birch = new Birch(world);
+        birch.position.set(125 * 3 + 1.5f, world.getTerrainHeight(125 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.paleon.engine.components;
 
+import com.paleon.engine.graph.Mesh;
 import com.paleon.engine.graph.font.FontType;
 import com.paleon.engine.graph.font.TextMeshData;
 import com.paleon.engine.utils.Color;

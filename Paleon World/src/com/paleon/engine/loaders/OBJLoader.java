@@ -1,6 +1,6 @@
 package com.paleon.engine.loaders;
 
-import com.paleon.engine.components.Mesh;
+import com.paleon.engine.graph.Mesh;
 import com.paleon.engine.utils.Utils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;

@@ -6,10 +6,10 @@ import com.paleon.engine.components.Text;
 import com.paleon.engine.graph.font.FontType;
 import com.paleon.engine.core.Display;
 import com.paleon.engine.core.ResourceManager;
-import com.paleon.engine.components.Mesh;
+import com.paleon.engine.graph.Mesh;
 import com.paleon.engine.graph.Texture;
 import com.paleon.engine.graph.shader.ShaderProgram;
-import com.paleon.engine.scenegraph.Entity;
+import com.paleon.engine.scenegraph.Entity3D;
 import com.paleon.engine.utils.Color;
 import com.paleon.engine.utils.MathUtils;
 import com.paleon.engine.utils.OpenglUtils;
@@ -76,7 +76,7 @@ public class GUIRenderer {
 
                 Texture texture = image.texture;
                 Color color = image.color;
-                Entity entity = image.parent;
+                Entity3D entity = image.parent;
 
                 shader.setUniform("spriteColor", color);
                 shader.setUniform("MP", projectionMatrix.mul(entity.getTransform().getModelMatrix(), modelProjectionMatrix));
@@ -95,7 +95,7 @@ public class GUIRenderer {
 
             if(gui.type.equals(Component.Type.TEXT)) {
                 Text text = (Text) gui;
-                Entity parent = text.parent;
+                Entity3D parent = text.parent;
                 text.font.getTextureAtlas().bind(0);
 
                 shader.setUniform("mode", 2);

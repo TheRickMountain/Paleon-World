@@ -1,4 +1,4 @@
-package com.paleon.engine.components;
+package com.paleon.engine.graph;
 
 import com.paleon.engine.utils.OpenglUtils;
 import org.lwjgl.opengl.GL11;

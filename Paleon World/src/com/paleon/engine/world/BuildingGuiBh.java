@@ -12,7 +12,7 @@ import com.paleon.engine.input.Key;
 import com.paleon.engine.input.Keyboard;
 import com.paleon.engine.input.Mouse;
 import com.paleon.engine.loaders.TextureLoader;
-import com.paleon.engine.scenegraph.Entity;
+import com.paleon.engine.scenegraph.Entity3D;
 import com.paleon.engine.scenegraph.World;
 import com.paleon.engine.scenes.Game;
 import com.paleon.engine.utils.CellInfo;
@@ -34,7 +34,7 @@ public class BuildingGuiBh extends Behaviour {
     private Button house_ui;
     private Button wheat_ui;
 
-    private Entity building;
+    private Entity3D building;
     
     private Craft craft = Craft.NONE;
 
@@ -204,6 +204,7 @@ public class BuildingGuiBh extends Behaviour {
         				}
         				cellSize = null;
         				
+        				Game.texturePack.blendMap.cleanup();
         				Game.texturePack.blendMap = TextureLoader.load(image);
         			}
         		}

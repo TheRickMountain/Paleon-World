@@ -3,7 +3,7 @@ package com.paleon.engine.graph.render;
 import com.paleon.engine.core.Display;
 import com.paleon.engine.core.ResourceManager;
 import com.paleon.engine.graph.Camera;
-import com.paleon.engine.components.Mesh;
+import com.paleon.engine.graph.Mesh;
 import com.paleon.engine.graph.shader.ShaderProgram;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;

@@ -4,6 +4,7 @@ import com.paleon.engine.behaviours.Behaviour;
 import com.paleon.engine.components.*;
 import com.paleon.engine.graph.Camera;
 import com.paleon.engine.graph.Light;
+import com.paleon.engine.graph.Mesh;
 import com.paleon.engine.graph.render.GUIRenderer;
 import com.paleon.engine.graph.render.MeshRenderer;
 import com.paleon.engine.graph.render.SkyboxRenderer;
@@ -39,9 +40,9 @@ public class World {
 
     private final TerrainBlock[][] terrainGrid;
 
-    private final List<Entity> entities = new ArrayList<>();
+    private final List<Entity3D> entities = new ArrayList<>();
     private final List<Component> guis = new ArrayList<>();
-    private final Map<Mesh, List<Entity>> meshes = new HashMap<>();
+    private final Map<Mesh, List<Entity3D>> meshes = new HashMap<>();
 
     private final List<Behaviour> behaviours = new ArrayList<>();
     private final List<Behaviour> behavioursToAdd = new ArrayList<>();
@@ -152,16 +153,16 @@ public class World {
         terrains.put(terrain, terrainBlocks);
     }
 
-    public void addEntity(Entity entity) {
+    public void addEntity(Entity3D entity) {
         entities.add(entity);
     }
 
-    public void removeEntity(Entity entity) {
+    public void removeEntity(Entity3D entity) {
         entities.remove(entity);
     }
 
-    public Entity getEntityByName(String name) {
-        for (Entity e:
+    public Entity3D getEntityByName(String name) {
+        for (Entity3D e:
                 entities) {
             if(e.name.equals(name)) return e;
         }
@@ -172,11 +173,11 @@ public class World {
         if(component.type.equals(Component.Type.MODEL)) {
             Model model = (Model) component;
             Mesh mesh = model.mesh;
-            List<Entity> batch = meshes.get(mesh);
+            List<Entity3D> batch = meshes.get(mesh);
             if(batch != null) {
                 batch.add(model.parent);
             } else {
-                List<Entity> newBatch = new ArrayList<Entity>();
+                List<Entity3D> newBatch = new ArrayList<Entity3D>();
                 newBatch.add(model.parent);
                 meshes.put(mesh, newBatch);
             }
@@ -193,7 +194,7 @@ public class World {
         if(component.type.equals(Component.Type.MODEL)) {
             Model model = (Model) component;
             Mesh mesh = model.mesh;
-            List<Entity> batch = meshes.get(mesh);
+            List<Entity3D> batch = meshes.get(mesh);
             batch.remove(model.parent);
             if(batch.isEmpty()) {
                 meshes.remove(mesh);

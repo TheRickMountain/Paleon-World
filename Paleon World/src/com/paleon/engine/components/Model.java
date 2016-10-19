@@ -1,5 +1,7 @@
 package com.paleon.engine.components;
 
+import com.paleon.engine.graph.Mesh;
+
 /**
  * Created by Rick on 14.10.2016.
  */
