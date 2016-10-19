@@ -121,8 +121,12 @@ public class MousePicker {
 		return start.add(scaledRay, new Vector3f());
 	}
 	
-	public static Vector3f getRay(float range) {
+	public static Vector3f getRayDirection(float range) {
 		return getPointOnRay(currentRay, range);
+	}
+	
+	public static Vector3f getRayOrigin() {
+		return camera.getPosition();
 	}
 
 	private static Vector3f calculateMouseRayCamera() {

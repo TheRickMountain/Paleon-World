@@ -18,7 +18,6 @@ import com.paleon.engine.terrain.TerrainGenerator;
 import com.paleon.engine.terrain.TexturePack;
 import com.paleon.engine.utils.CellInfo;
 import com.paleon.engine.utils.Color;
-import com.paleon.engine.utils.MousePicker;
 import com.paleon.engine.utils.OpenglUtils;
 import com.paleon.engine.world.Birch;
 import com.paleon.engine.world.BuildingGuiBh;
@@ -33,8 +32,6 @@ public class Game implements IScene {
     World world;
     
     public static TexturePack texturePack;
-    
-    private Birch birch;
 
     @Override
     public void loadResources() {
@@ -196,13 +193,13 @@ public class Game implements IScene {
         rock.scale.set(0.65f);
         /*** *** ***/
         
-        birch = new Birch(world);
+        Birch birch = new Birch(world);
         birch.position.set(125 * 3 + 1.5f, world.getTerrainHeight(125 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
         
         Conifer conifer1 = new Conifer(world);
         conifer1.position.set(135 * 3 + 1.5f, world.getTerrainHeight(135 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
-        Conifer conifer2 = new Conifer(world);
-        
+
+        Conifer conifer2 = new Conifer(world);        
         conifer2.position.set(140 * 3 + 1.5f, world.getTerrainHeight(140 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
         conifer2.scale.set(1.8f);
         conifer2.rotation.y = 90;
@@ -210,13 +207,6 @@ public class Game implements IScene {
 
     @Override
     public void update(float deltaTime) {
-    	Vector3f ray = MousePicker.getRay(50);
-    	if(ray != null) {
-    		birch.position.x = ray.x;
-    		birch.position.y = ray.y;
-    		birch.position.z = ray.z;
-    	}
-    	
         world.update(deltaTime);
         world.render();
     }
