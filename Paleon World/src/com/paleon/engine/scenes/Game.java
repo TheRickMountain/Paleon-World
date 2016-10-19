@@ -146,7 +146,7 @@ public class Game implements IScene {
                 if(height < 3.9f)
                     cellState = 1;
 
-                world.cells.put(x + "," + z, 
+                world.cells.put(x + " " + z, 
                 		new CellInfo(new Vector3f(x * 3 + 1.5f, height, z * 3 + 1.5f), cellState, world));
             }
         }
@@ -189,18 +189,21 @@ public class Game implements IScene {
         rock.addComponent(new Model(ResourceManager.getMesh("rock")));
         rock.addComponent(new Material(ResourceManager.getTexture("rock")));
         rock.setTransform(new Transform3D());
-        rock.position.set(world.cells.get(129 + "," + 128).position);
+        world.cells.get(129 + " " + 128).setState(2);
+        rock.position.set(world.cells.get(129 + " " + 128).position);
         rock.scale.set(0.65f);
         /*** *** ***/
         
         Birch birch = new Birch(world);
-        birch.position.set(world.cells.get(125 + "," + 128).position);
+        birch.position.set(world.cells.get(125 + " " + 128).position);
         
         Conifer conifer1 = new Conifer(world);
-        conifer1.position.set(world.cells.get(135 + "," + 128).position);
+        world.cells.get(135 + " " + 128).setState(2);
+        conifer1.position.set(world.cells.get(135 + " " + 128).position);
         
-        Conifer conifer2 = new Conifer(world);        
-        conifer2.position.set(world.cells.get(140 + "," + 128).position);
+        Conifer conifer2 = new Conifer(world);    
+        world.cells.get(140 + " " + 128).setState(2);
+        conifer2.position.set(world.cells.get(140 + " " + 128).position);
         conifer2.scale.set(1.8f);
         conifer2.rotation.y = 90;
     }

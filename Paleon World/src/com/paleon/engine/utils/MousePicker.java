@@ -1,18 +1,21 @@
 package com.paleon.engine.utils;
 
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector2i;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import com.paleon.engine.core.Display;
 import com.paleon.engine.graph.Camera;
 import com.paleon.engine.input.Mouse;
 import com.paleon.engine.scenegraph.World;
 import com.paleon.engine.terrain.TerrainBlock;
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 public class MousePicker {
 
 	private static Vector3f currentTerrainPoint;
+	private static Vector2i currentGridPoint;
 	private static Vector3f currentRay = new Vector3f();
 
 	private static final int RECURSION_COUNT = 21;
@@ -26,12 +29,14 @@ public class MousePicker {
 	public static void setUpMousePicker(World w, Camera c) {
 		world = w;
 		camera = c;
+		
+		currentGridPoint = new Vector2i();
 
 		projectionMatrix = new Matrix4f();
 		projectionMatrix = camera.getProjectionMatrix();
 	}
-
-	public static Vector3f getCurrentTerrainPoint() {
+	
+	public static Vector2i getGridPoint() {
 		if(currentTerrainPoint != null) {
 			currentTerrainPoint.x += 1.5f;
 			currentTerrainPoint.z += 1.5f;
@@ -43,7 +48,15 @@ public class MousePicker {
 			currentTerrainPoint.z *= 3;
 			currentTerrainPoint.x -= 1.5f;
 			currentTerrainPoint.z -= 1.5f;
+			
+			currentGridPoint.x = ((int) currentTerrainPoint.x) / 3;
+			currentGridPoint.y = ((int) currentTerrainPoint.z) / 3;
 		}
+		
+		return currentGridPoint;
+	}
+
+	public static Vector3f getCurrentTerrainPoint() {
 		return currentTerrainPoint;
 	}
 

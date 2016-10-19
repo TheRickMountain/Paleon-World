@@ -1,9 +1,13 @@
 package com.paleon.engine.world;
 
+import org.joml.Vector2i;
+
 import com.paleon.engine.behaviours.Behaviour;
 import com.paleon.engine.core.Display;
 import com.paleon.engine.core.ResourceManager;
+import com.paleon.engine.input.Mouse;
 import com.paleon.engine.scenegraph.World;
+import com.paleon.engine.utils.MousePicker;
 
 /**
  * Created by Rick on 17.10.2016.
@@ -23,6 +27,14 @@ public class BuildingGuiBh extends Behaviour {
     private Button gathering_ui;
     
     private Craft craft = Craft.NONE;
+    
+    private Vector2i[][] positions;
+    
+    private int lastX;
+    private int lastY;
+    
+    private int firstX;
+    private int firstY;
     
     public BuildingGuiBh() {
     	
@@ -54,7 +66,7 @@ public class BuildingGuiBh extends Behaviour {
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void update(float deltaTime) {    	
         if(barn_ui.isOverMouse()) {
             world.onGuiLayer = true;
         } else if(wheat_ui.isOverMouse()) {
@@ -77,16 +89,24 @@ public class BuildingGuiBh extends Behaviour {
         	craft = Craft.GATHERING;
         }
 
-        if(craft.equals(Craft.BUILDING)) {
-        	building();    
-        }
-        
-        if(craft.equals(Craft.AGRICULTURE)) {
-        	agriculture();
-        }
-        
-        if(craft.equals(Craft.GATHERING)) {
-        	gathering();
+        switch(craft) {
+	        case BUILDING:
+	        	if(!world.onGuiLayer) {
+	        		building();    
+	        	}
+	        	break;
+	        case AGRICULTURE:
+	        	if(!world.onGuiLayer) {
+	        		agriculture();    
+	        	}
+	        	break;
+	        case GATHERING:
+	        	if(!world.onGuiLayer) {
+	        		gathering();    
+	        	}
+	        	break;
+			default:
+				break;
         }
     }
     
@@ -99,7 +119,64 @@ public class BuildingGuiBh extends Behaviour {
     }
     
     private void gathering() {
+    	Vector2i currentCell = MousePicker.getGridPoint();
     	
+    	if(Mouse.isButtonDown(0)) {
+	    	firstX = currentCell.x;
+	    	firstY = currentCell.y;
+    	}
+    	
+    	if(Mouse.isButton(0)) {
+    		int currX = currentCell.x;
+    		int currY = currentCell.y;
+    		
+    		if(lastX != currX || lastY != currY) {
+    			lastX = currX;
+    			lastY = currY;
+    			
+	    		if(positions != null) {
+	    			for(int x = 0; x < positions.length; x++) {
+	        			for(int y = 0; y <  positions[0].length; y++) {
+	        				world.cells.get(positions[x][y].x + " " + positions[x][y].y).hide();
+	        			}
+	        		}
+	    		}
+	    		
+	    		positions = new Vector2i[Math.abs(firstX - currX) + 1][Math.abs(firstY - currY) + 1];
+	    		
+	    		for(int x = 0; x < positions.length; x++) {
+	    			for(int y = 0; y <  positions[0].length; y++) {
+	    				positions[x][y] = new Vector2i();
+	    				
+	    				if(currX <  firstX)
+	    					positions[x][y].x = firstX - x;
+	    				else
+	    					positions[x][y].x = firstX + x;
+	    				   				
+	    				if(currY <  firstY)
+	    					positions[x][y].y = firstY - y;
+	    				else
+	    					positions[x][y].y = firstY + y;
+	    			}
+	    		}
+	    		
+	    		for(int x = 0; x < positions.length; x++) {
+	    			for(int y = 0; y <  positions[0].length; y++) {
+	    				world.cells.get(positions[x][y].x + " " + positions[x][y].y).show();
+	    			}
+	    		}
+    		}
+    	}
+    	
+    	if(Mouse.isButtonUp(0)) {
+    		for(int x = 0; x < positions.length; x++) {
+    			for(int y = 0; y <  positions[0].length; y++) {
+    				if(world.cells.get(positions[x][y].x + " " + positions[x][y].y).getState() != 2) {
+    					world.cells.get(positions[x][y].x + " " + positions[x][y].y).hide();
+    				}
+    			}
+    		}
+    	}
     }
 
     @Override
