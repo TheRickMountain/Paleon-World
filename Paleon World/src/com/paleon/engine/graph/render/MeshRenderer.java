@@ -5,7 +5,7 @@ import com.paleon.engine.core.ResourceManager;
 import com.paleon.engine.graph.*;
 import com.paleon.engine.components.Material;
 import com.paleon.engine.graph.shader.ShaderProgram;
-import com.paleon.engine.scenegraph.Entity3D;
+import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.utils.OpenglUtils;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public class MeshRenderer {
         shader.setUniform("image", 0, true);
     }
 
-    public void render(Map<Mesh, List<Entity3D>> entities, Light light, Camera camera) {
+    public void render(Map<Mesh, List<Entity>> entities, Light light, Camera camera) {
         if(Display.wasResized()) {
             shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
         }
@@ -63,8 +63,8 @@ public class MeshRenderer {
         for(Mesh mesh :entities.keySet()) {
             mesh.startRender();
 
-            List<Entity3D> batch = entities.get(mesh);
-            for(Entity3D entity : batch) {
+            List<Entity> batch = entities.get(mesh);
+            for(Entity entity : batch) {
                 shader.setUniform("model", entity.getTransform().getModelMatrix());
 
                 Material material = entity.getComponent(Material.class);

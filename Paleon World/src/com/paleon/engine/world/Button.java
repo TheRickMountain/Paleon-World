@@ -3,14 +3,14 @@ package com.paleon.engine.world;
 import com.paleon.engine.components.Image;
 import com.paleon.engine.graph.Texture;
 import com.paleon.engine.graph.transform.Transform2D;
-import com.paleon.engine.scenegraph.Entity3D;
+import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.scenegraph.World;
 import com.paleon.engine.utils.Color;
 
 /**
  * Created by Rick on 17.10.2016.
  */
-public class Button extends Entity3D {
+public class Button extends Entity {
 
     private ButtonBh buttonBh;
 

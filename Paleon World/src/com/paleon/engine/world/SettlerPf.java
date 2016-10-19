@@ -4,13 +4,13 @@ import com.paleon.engine.components.Model;
 import com.paleon.engine.graph.transform.Transform3D;
 import com.paleon.engine.core.ResourceManager;
 import com.paleon.engine.graph.Camera;
-import com.paleon.engine.scenegraph.Entity3D;
+import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.scenegraph.World;
 
 /**
  * Created by Rick on 08.10.2016.
  */
-public class SettlerPf extends Entity3D {
+public class SettlerPf extends Entity {
 
     public SettlerPf(World world, Camera camera) {
         super(world, "Settler");
@@ -20,14 +20,14 @@ public class SettlerPf extends Entity3D {
         setTransform(new Transform3D());
         position.set(400, world.getTerrainHeight(400, 400), 400);
 
-        Entity3D head = new Entity3D(world, "Head");
+        Entity head = new Entity(world, "Head");
         head.addComponent(new Model(ResourceManager.getMesh("head")));
         head.addComponent(ResourceManager.getMaterial("skin"));
         head.setTransform(new Transform3D());
         head.position.set(0, 0.85f, 0);
         addChild(head);
 
-        Entity3D eyes = new Entity3D(world, "Eyes");
+        Entity eyes = new Entity(world, "Eyes");
         eyes.addComponent(new Model(ResourceManager.getMesh("eyes")));
         eyes.addComponent(ResourceManager.getMaterial("eyes"));
         eyes.setTransform(new Transform3D());
@@ -35,7 +35,7 @@ public class SettlerPf extends Entity3D {
         eyes.rotation.set(0, 180, 0);
         addChild(eyes);
 
-        Entity3D rightArm = new Entity3D(world, "Right Arm");
+        Entity rightArm = new Entity(world, "Right Arm");
         rightArm.addComponent(new Model(ResourceManager.getMesh("rightArm")));
         rightArm.addComponent(ResourceManager.getMaterial("skin"));
         rightArm.setTransform(new Transform3D());
@@ -43,7 +43,7 @@ public class SettlerPf extends Entity3D {
         addChild(rightArm);
 
         {
-            Entity3D rightForearm = new Entity3D(world, "Right Forearm");
+            Entity rightForearm = new Entity(world, "Right Forearm");
             rightForearm.addComponent(new Model(ResourceManager.getMesh("rightForearm")));
             rightForearm.addComponent(ResourceManager.getMaterial("skin"));
             rightForearm.setTransform(new Transform3D());
@@ -51,7 +51,7 @@ public class SettlerPf extends Entity3D {
             rightArm.addChild(rightForearm);
         }
 
-        Entity3D leftArm = new Entity3D(world, "Left Arm");
+        Entity leftArm = new Entity(world, "Left Arm");
         leftArm.addComponent(new Model(ResourceManager.getMesh("leftArm")));
         leftArm.addComponent(ResourceManager.getMaterial("skin"));
         leftArm.setTransform(new Transform3D());
@@ -59,7 +59,7 @@ public class SettlerPf extends Entity3D {
         addChild(leftArm);
 
         {
-            Entity3D leftForearm = new Entity3D(world, "Left Forearm");
+            Entity leftForearm = new Entity(world, "Left Forearm");
             leftForearm.addComponent(new Model(ResourceManager.getMesh("leftForearm")));
             leftForearm.addComponent(ResourceManager.getMaterial("skin"));
             leftForearm.setTransform(new Transform3D());
@@ -67,7 +67,7 @@ public class SettlerPf extends Entity3D {
             leftArm.addChild(leftForearm);
         }
 
-        Entity3D leftHip = new Entity3D(world, "Left Hip");
+        Entity leftHip = new Entity(world, "Left Hip");
         leftHip.addComponent(new Model(ResourceManager.getMesh("hip")));
         leftHip.addComponent(ResourceManager.getMaterial("skin"));
         leftHip.setTransform(new Transform3D());
@@ -75,7 +75,7 @@ public class SettlerPf extends Entity3D {
         addChild(leftHip);
 
         {
-            Entity3D leftShin = new Entity3D(world, "Left Shin");
+            Entity leftShin = new Entity(world, "Left Shin");
             leftShin.addComponent(new Model(ResourceManager.getMesh("shin")));
             leftShin.addComponent(ResourceManager.getMaterial("skin"));
             leftShin.setTransform(new Transform3D());
@@ -83,7 +83,7 @@ public class SettlerPf extends Entity3D {
             leftHip.addChild(leftShin);
         }
 
-        Entity3D rightHip = new Entity3D(world, "Right Hip");
+        Entity rightHip = new Entity(world, "Right Hip");
         rightHip.addComponent(new Model(ResourceManager.getMesh("hip")));
         rightHip.addComponent(ResourceManager.getMaterial("skin"));
         rightHip.setTransform(new Transform3D());
@@ -91,7 +91,7 @@ public class SettlerPf extends Entity3D {
         addChild(rightHip);
 
         {
-            Entity3D rightShin = new Entity3D(world, "Right Shin");
+            Entity rightShin = new Entity(world, "Right Shin");
             rightShin.addComponent(new Model(ResourceManager.getMesh("shin")));
             rightShin.addComponent(ResourceManager.getMaterial("skin"));
             rightShin.setTransform(new Transform3D());

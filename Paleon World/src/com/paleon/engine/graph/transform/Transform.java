@@ -1,6 +1,6 @@
 package com.paleon.engine.graph.transform;
 
-import com.paleon.engine.scenegraph.Entity3D;
+import com.paleon.engine.scenegraph.Entity;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -9,7 +9,7 @@ import org.joml.Vector3f;
  */
 public abstract class Transform {
 
-    public Entity3D parent;
+    public Entity parent;
 
     protected final Matrix4f modelMatrix;
 
@@ -17,7 +17,7 @@ public abstract class Transform {
     protected Vector3f rotation;
     protected Vector3f scale;
 
-    public void setParent(Entity3D parent) {
+    public void setParent(Entity parent) {
         this.parent = parent;
 
         this.position = parent.position;

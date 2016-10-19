@@ -12,7 +12,7 @@ import com.paleon.engine.input.Key;
 import com.paleon.engine.input.Keyboard;
 import com.paleon.engine.input.Mouse;
 import com.paleon.engine.loaders.TextureLoader;
-import com.paleon.engine.scenegraph.Entity3D;
+import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.scenegraph.World;
 import com.paleon.engine.scenes.Game;
 import com.paleon.engine.utils.CellInfo;
@@ -28,13 +28,15 @@ public class BuildingGuiBh extends Behaviour {
 	public enum Craft {
 		BUILDING,
 		AGRICULTURE,
+		GATHERING,
 		NONE
 	}
 	
     private Button house_ui;
     private Button wheat_ui;
+    private Button gathering_ui;
 
-    private Entity3D building;
+    private Entity building;
     
     private Craft craft = Craft.NONE;
 
@@ -66,6 +68,12 @@ public class BuildingGuiBh extends Behaviour {
         wheat_ui.scale.y = 48;
         wheat_ui.position.x = house_ui.position.x - wheat_ui.scale.x - 5;
         wheat_ui.position.y = house_ui.position.y;
+        
+        gathering_ui = new Button(world, "Gathering Button", ResourceManager.getTexture("gathering_ui"));
+        gathering_ui.scale.x = 48;
+        gathering_ui.scale.y = 48;
+        gathering_ui.position.x = wheat_ui.position.x - gathering_ui.scale.x - 5;
+        gathering_ui.position.y = wheat_ui.position.y;
     }
 
     @Override
@@ -97,190 +105,209 @@ public class BuildingGuiBh extends Behaviour {
         	craft = Craft.AGRICULTURE;
         }
         
-        if(craft.equals(Craft.AGRICULTURE)) {
-        	if(!world.onGuiLayer) {
-        		Vector3f ctp = MousePicker.getCurrentTerrainPoint();
-        		if(ctp != null) {
-
-        			if(Mouse.isButtonDown(0)) {
-        				firstCell = new Vector3f(ctp.x, 0, ctp.z);
-        			}
-
-        			if(Mouse.isButton(0)) {
-        				int ccX = (int)(((ctp.x - firstCell.x) / 3));
-        				int ccZ = (int)(((ctp.z - firstCell.z) / 3));
-        				
-        				if(ccX < 0) {
-        					ccX--;
-        				} else {
-        					ccX++;
-        				}
-        				       				
-        				if(ccZ < 0) {
-        					ccZ--;
-        				} else {
-        					ccZ++;
-        				}
-        				
-        				if(lastCCX != ccX || lastCCZ != ccZ) {
-        					lastCCX = ccX;
-        					lastCCZ = ccZ;
-        					
-        					
-        					if(cellSize != null) {
-	        					for(int x = 0; x < cellSize.length; x++) {        						
-	        						for(int z = 0; z < cellSize[0].length; z++) {
-	        							if(cellSize[x][z] != null) {
-	        								cellSize[x][z].remove();
-	        							}
-	        						}
-	        					}
-        					}
-        					
-        					cellSize = new Plane[Math.abs(ccX)][Math.abs(ccZ)];
-        					
-        					for(int x = 0; x < Math.abs(ccX); x++) {        						
-        						for(int z = 0; z < Math.abs(ccZ); z++) {
-        							Plane plane = new Plane(world);
-        							if(ccX < 0)
-        								plane.position.x = firstCell.x - x * 3;
-        							else
-        								plane.position.x = firstCell.x + x * 3;
-        							
-        							if(ccZ < 0)
-        								plane.position.z = firstCell.z - z * 3;
-        							else
-        								plane.position.z = firstCell.z + z * 3;
-        							
-        							
-        							plane.position.y = ctp.y + 0.1f;
-        							
-        							int state = world.cells.get(plane.position.x + "," + plane.position.z).state;
-        							
-        							if(state == 0) {
-        								plane.getComponent(Material.class).color.set(0.0f, 1.0f, 0.0f);
-        							} else {
-        								plane.getComponent(Material.class).color.set(1.0f, 0.0f, 0.0f);
-        							}
-        							
-        							cellSize[x][z] = plane;
-        						}       						
-        					}
-        				}
-        				
-        			}
-
-        			if(Mouse.isButtonUp(0)) {
-        				
-        				BufferedImage image = Game.texturePack.blendMap.getBufferedImage();
-        				
-        				if(cellSize != null) {
-        					int totalState = 0;
-        					
-	        				for(int x = 0; x < cellSize.length; x++) {        						
-	    						for(int z = 0; z < cellSize[0].length; z++) {
-	    							CellInfo cellInfo = world.cells.get(cellSize[x][z].position.x + "," + 
-	    									cellSize[x][z].position.z);
-	    							
-	    							if(cellInfo.state == 1) {
-	    								totalState = 1;
-	    							}	    							
-	    							
-	    							cellSize[x][z].remove();
-	    						}
-	        				}
-	        				
-	        				if(totalState == 0) {
-		        				for(int x = 0; x < cellSize.length; x++) {        						
-		    						for(int z = 0; z < cellSize[0].length; z++) {
-		    							CellInfo cellInfo = world.cells.get(cellSize[x][z].position.x + "," + 
-		    									cellSize[x][z].position.z);		    							
-		    							
-		    							image.setRGB(cellInfo.getX(), cellInfo.getZ(), Color.BLUE.toHex());
-		    							cellInfo.state = 1;
-		    						}
-		        				}
-	        				}
-        				}
-        				cellSize = null;
-        				
-        				Game.texturePack.blendMap.cleanup();
-        				Game.texturePack.blendMap = TextureLoader.load(image);
-        			}
-        		}
-        	}
+        if(gathering_ui.isPressedDown(0)) {
+        	craft = Craft.GATHERING;
         }
 
         if(craft.equals(Craft.BUILDING)) {
-        	if(!world.onGuiLayer) {
-        		if(Keyboard.isKeyDown(Key.R)) {
-        			building.rotation.y += 90;
-        		}
-
-        		Vector3f ctp = MousePicker.getCurrentTerrainPoint();
-        		if (ctp != null) {
-        			building.position.set(ctp);
-
-        			int xS = cellSize.length;
-        			int zS = cellSize[0].length;
-
-        			int halfXS = xS / 2;
-        			int halfZS = zS / 2;
-
-        			for(int x = -halfXS; x < cellSize.length - halfXS; x++) {
-        				for(int z = -halfZS; z < cellSize[0].length - halfZS; z++) {
-        					float ctpX = ctp.x + x * 3f;
-        					float ctpZ = ctp.z + z * 3f;
-
-        					cellSize[x + halfXS][z + halfZS].position.x = ctpX;
-        					cellSize[x + halfXS][z + halfZS].position.z = ctpZ;
-        					cellSize[x + halfXS][z + halfZS].position.y = ctp.y + 0.1f;
-
-        					if(world.cells.get(String.valueOf(ctpX) + "," + String.valueOf(ctpZ)).state == 0) {
-        						cellSize[x + halfXS][z + halfZS].getComponent(Material.class).color.set(0.0f, 1.0f, 0.0f);
-        					} else {
-        						cellSize[x + halfXS][z + halfZS].getComponent(Material.class).color.set(1.0f, 0.0f, 0.0f);
-        					}
-
-        				}
-        			}
-
-
-        		}
-
-        		if(Mouse.isButtonDown(0)) {
-        			int state = 0;
-
-        			for(int x = 0; x < cellSize.length; x++) {
-        				for(int z = 0; z < cellSize[0].length; z++) {
-        					if(world.cells.get(
-        							String.valueOf(cellSize[x][z].position.x) + 
-        							"," + 
-        							String.valueOf(cellSize[x][z].position.z)).state == 1) {
-        						state = 1;
-        					}
-        				}
-        			}
-
-        			if(state != 1) {
-        				building = null;
-        				craft = Craft.NONE;
-
-        				for(int x = 0; x < cellSize.length; x++) {
-        					for(int z = 0; z < cellSize[0].length; z++) {
-        						world.cells.get(
-        								String.valueOf(cellSize[x][z].position.x) + 
-        								"," + 
-        								String.valueOf(cellSize[x][z].position.z)).state = 1;
-        						cellSize[x][z].remove();
-        					}
-        				}
-        				cellSize = null;
-        			}
-        		}
-        	}
-	     
+        	building();    
         }
+        
+        if(craft.equals(Craft.AGRICULTURE)) {
+        	agriculture();
+        }
+        
+        if(craft.equals(Craft.GATHERING)) {
+        	gathering();
+        }
+    }
+    
+    public void gathering() {
+    	
+    }
+    
+    public void building() {
+    	if(!world.onGuiLayer) {
+    		if(Keyboard.isKeyDown(Key.R)) {
+    			building.rotation.y += 90;
+    		}
+
+    		Vector3f ctp = MousePicker.getCurrentTerrainPoint();
+    		if (ctp != null) {
+    			building.position.set(ctp);
+
+    			int xS = cellSize.length;
+    			int zS = cellSize[0].length;
+
+    			int halfXS = xS / 2;
+    			int halfZS = zS / 2;
+
+    			for(int x = -halfXS; x < cellSize.length - halfXS; x++) {
+    				for(int z = -halfZS; z < cellSize[0].length - halfZS; z++) {
+    					float ctpX = ctp.x + x * 3f;
+    					float ctpZ = ctp.z + z * 3f;
+
+    					cellSize[x + halfXS][z + halfZS].position.x = ctpX;
+    					cellSize[x + halfXS][z + halfZS].position.z = ctpZ;
+    					cellSize[x + halfXS][z + halfZS].position.y = ctp.y + 0.1f;
+
+    					if(world.cells.get(String.valueOf(ctpX) + "," + String.valueOf(ctpZ)).state == 0) {
+    						cellSize[x + halfXS][z + halfZS].getComponent(Material.class).color.set(0.0f, 1.0f, 0.0f);
+    					} else {
+    						cellSize[x + halfXS][z + halfZS].getComponent(Material.class).color.set(1.0f, 0.0f, 0.0f);
+    					}
+
+    				}
+    			}
+
+
+    		}
+
+    		if(Mouse.isButtonDown(0)) {
+    			int state = 0;
+
+    			for(int x = 0; x < cellSize.length; x++) {
+    				for(int z = 0; z < cellSize[0].length; z++) {
+    					if(world.cells.get(
+    							String.valueOf(cellSize[x][z].position.x) + 
+    							"," + 
+    							String.valueOf(cellSize[x][z].position.z)).state == 1) {
+    						state = 1;
+    					}
+    				}
+    			}
+
+    			if(state != 1) {
+    				building = null;
+    				craft = Craft.NONE;
+
+    				for(int x = 0; x < cellSize.length; x++) {
+    					for(int z = 0; z < cellSize[0].length; z++) {
+    						world.cells.get(
+    								String.valueOf(cellSize[x][z].position.x) + 
+    								"," + 
+    								String.valueOf(cellSize[x][z].position.z)).state = 1;
+    						cellSize[x][z].remove();
+    					}
+    				}
+    				cellSize = null;
+    			}
+    		}
+    	} 
+    }
+    
+    public void agriculture() {
+    	if(!world.onGuiLayer) {
+    		Vector3f ctp = MousePicker.getCurrentTerrainPoint();
+    		if(ctp != null) {
+
+    			if(Mouse.isButtonDown(0)) {
+    				firstCell = new Vector3f(ctp.x, 0, ctp.z);
+    			}
+
+    			if(Mouse.isButton(0)) {
+    				int ccX = (int)(((ctp.x - firstCell.x) / 3));
+    				int ccZ = (int)(((ctp.z - firstCell.z) / 3));
+    				
+    				if(ccX < 0) {
+    					ccX--;
+    				} else {
+    					ccX++;
+    				}
+    				       				
+    				if(ccZ < 0) {
+    					ccZ--;
+    				} else {
+    					ccZ++;
+    				}
+    				
+    				if(lastCCX != ccX || lastCCZ != ccZ) {
+    					lastCCX = ccX;
+    					lastCCZ = ccZ;
+    					
+    					
+    					if(cellSize != null) {
+        					for(int x = 0; x < cellSize.length; x++) {        						
+        						for(int z = 0; z < cellSize[0].length; z++) {
+        							if(cellSize[x][z] != null) {
+        								cellSize[x][z].remove();
+        							}
+        						}
+        					}
+    					}
+    					
+    					cellSize = new Plane[Math.abs(ccX)][Math.abs(ccZ)];
+    					
+    					for(int x = 0; x < Math.abs(ccX); x++) {        						
+    						for(int z = 0; z < Math.abs(ccZ); z++) {
+    							Plane plane = new Plane(world);
+    							if(ccX < 0)
+    								plane.position.x = firstCell.x - x * 3;
+    							else
+    								plane.position.x = firstCell.x + x * 3;
+    							
+    							if(ccZ < 0)
+    								plane.position.z = firstCell.z - z * 3;
+    							else
+    								plane.position.z = firstCell.z + z * 3;
+    							
+    							
+    							plane.position.y = ctp.y + 0.1f;
+    							
+    							int state = world.cells.get(plane.position.x + "," + plane.position.z).state;
+    							
+    							if(state == 0) {
+    								plane.getComponent(Material.class).color.set(0.0f, 1.0f, 0.0f);
+    							} else {
+    								plane.getComponent(Material.class).color.set(1.0f, 0.0f, 0.0f);
+    							}
+    							
+    							cellSize[x][z] = plane;
+    						}       						
+    					}
+    				}
+    				
+    			}
+
+    			if(Mouse.isButtonUp(0)) {
+    				
+    				BufferedImage image = Game.texturePack.blendMap.getBufferedImage();
+    				
+    				if(cellSize != null) {
+    					int totalState = 0;
+    					
+        				for(int x = 0; x < cellSize.length; x++) {        						
+    						for(int z = 0; z < cellSize[0].length; z++) {
+    							CellInfo cellInfo = world.cells.get(cellSize[x][z].position.x + "," + 
+    									cellSize[x][z].position.z);
+    							
+    							if(cellInfo.state == 1) {
+    								totalState = 1;
+    							}	    							
+    							
+    							cellSize[x][z].remove();
+    						}
+        				}
+        				
+        				if(totalState == 0) {
+	        				for(int x = 0; x < cellSize.length; x++) {        						
+	    						for(int z = 0; z < cellSize[0].length; z++) {
+	    							CellInfo cellInfo = world.cells.get(cellSize[x][z].position.x + "," + 
+	    									cellSize[x][z].position.z);		    							
+	    							
+	    							image.setRGB(cellInfo.getX(), cellInfo.getZ(), Color.BLUE.toHex());
+	    							cellInfo.state = 1;
+	    						}
+	        				}
+        				}
+    				}
+    				cellSize = null;
+    				
+    				Game.texturePack.blendMap.cleanup();
+    				Game.texturePack.blendMap = TextureLoader.load(image);
+    			}
+    		}
+    	}
     }
 
     @Override

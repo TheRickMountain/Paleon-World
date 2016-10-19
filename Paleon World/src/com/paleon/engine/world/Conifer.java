@@ -7,19 +7,19 @@ import com.paleon.engine.graph.transform.Transform3D;
 import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.scenegraph.World;
 
-public class Birch extends Entity {
+public class Conifer extends Entity {
 
-	public Birch(World world) {
-		super(world, "Birch");
+	public Conifer(World world) {
+		super(world, "Conifer");
 		
-		addComponent(new Model(ResourceManager.getMesh("birch_trunk")));
-		addComponent(new Material(ResourceManager.getTexture("birch_trunk")));
+		addComponent(new Model(ResourceManager.getMesh("conifer_trunk")));
+		addComponent(new Material(ResourceManager.getTexture("conifer_trunk")));
 		setTransform(new Transform3D());
-		scale.set(2.5f);
+		scale.set(2f);
 		
 		Entity leaves = new Entity(world, "");
-		leaves.addComponent(new Model(ResourceManager.getMesh("birch_leaves")));
-		leaves.addComponent(new Material(ResourceManager.getTexture("birch_leaves")));
+		leaves.addComponent(new Model(ResourceManager.getMesh("conifer_leaves")));
+		leaves.addComponent(new Material(ResourceManager.getTexture("conifer_leaves")));
 		leaves.setTransform(new Transform3D());
 		
 		addChild(leaves);

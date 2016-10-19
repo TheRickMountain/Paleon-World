@@ -1,14 +1,14 @@
 package com.paleon.engine.behaviours;
 
-import com.paleon.engine.scenegraph.Entity3D;
+import com.paleon.engine.scenegraph.Entity;
 
 public abstract class Behaviour {
 
     public boolean enabled = true;
 	
-	public Entity3D parent;
+	public Entity parent;
 	
-	public void setParent(Entity3D parent) {
+	public void setParent(Entity parent) {
 		this.parent = parent;
 	}
 	

@@ -1,21 +1,21 @@
 package com.paleon.engine.world;
 
 import com.paleon.engine.behaviours.Behaviour;
-import com.paleon.engine.scenegraph.Entity3D;
+import com.paleon.engine.scenegraph.Entity;
 
 /**
  * Created by Rick on 08.10.2016.
  */
 public class AnimBh extends Behaviour {
 
-    private Entity3D rightArm;
-    private Entity3D leftArm;
-    private Entity3D rightHip;
-    private Entity3D leftHip;
-    private Entity3D leftForearm;
-    private Entity3D rightForearm;
-    private Entity3D leftShin;
-    private Entity3D rightShin;
+    private Entity rightArm;
+    private Entity leftArm;
+    private Entity rightHip;
+    private Entity leftHip;
+    private Entity leftForearm;
+    private Entity rightForearm;
+    private Entity leftShin;
+    private Entity rightShin;
 
     private boolean extremitiesState = false;
 
@@ -80,7 +80,7 @@ public class AnimBh extends Behaviour {
         resetRotationX(rightShin, dt);
     }
 
-    private void resetRotationX(Entity3D entity, float dt) {
+    private void resetRotationX(Entity entity, float dt) {
         if(entity.rotation.x > 2) {
             entity.rotation.x -= animSpeed * dt;
         } else if(entity.rotation.x < -2) {
