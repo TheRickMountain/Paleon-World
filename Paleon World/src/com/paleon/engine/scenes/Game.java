@@ -68,7 +68,6 @@ public class Game implements IScene {
         ResourceManager.loadTexture("/terrainTextures/dry_ground.png", "dry_ground");
         
         ResourceManager.loadSkybox("sunny");
-        ResourceManager.loadSkybox("cloudy");
 
         ResourceManager.loadMaterial(new Material(ResourceManager.getTexture("rock"), Color.WHITE), "rock");
         ResourceManager.loadMaterial(new Material(ResourceManager.getTexture("sand"), Color.YELLOW), "sand");
@@ -147,7 +146,8 @@ public class Game implements IScene {
                 if(height < 3.9f)
                     cellState = 1;
 
-                world.cells.put(String.valueOf(x * 3 + 1.5f) + "," + String.valueOf(z * 3 + 1.5f), new CellInfo(x, z, cellState));
+                world.cells.put(x + "," + z, 
+                		new CellInfo(new Vector3f(x * 3 + 1.5f, height, z * 3 + 1.5f), cellState, world));
             }
         }
         /*** *** ***/
@@ -189,18 +189,18 @@ public class Game implements IScene {
         rock.addComponent(new Model(ResourceManager.getMesh("rock")));
         rock.addComponent(new Material(ResourceManager.getTexture("rock")));
         rock.setTransform(new Transform3D());
-        rock.position.set(129 * 3 + 1.5f, world.getTerrainHeight(129 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
+        rock.position.set(world.cells.get(129 + "," + 128).position);
         rock.scale.set(0.65f);
         /*** *** ***/
         
         Birch birch = new Birch(world);
-        birch.position.set(125 * 3 + 1.5f, world.getTerrainHeight(125 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
+        birch.position.set(world.cells.get(125 + "," + 128).position);
         
         Conifer conifer1 = new Conifer(world);
-        conifer1.position.set(135 * 3 + 1.5f, world.getTerrainHeight(135 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
-
+        conifer1.position.set(world.cells.get(135 + "," + 128).position);
+        
         Conifer conifer2 = new Conifer(world);        
-        conifer2.position.set(140 * 3 + 1.5f, world.getTerrainHeight(140 * 3 + 1.5f, 128 * 3 + 1.5f), 128 * 3 + 1.5f);
+        conifer2.position.set(world.cells.get(140 + "," + 128).position);
         conifer2.scale.set(1.8f);
         conifer2.rotation.y = 90;
     }

@@ -8,7 +8,7 @@ import com.paleon.engine.scenegraph.Entity;
 
 public abstract class Component {
 
-    public boolean enabled = true;
+    public boolean active = true;
 
     public Type type;
 

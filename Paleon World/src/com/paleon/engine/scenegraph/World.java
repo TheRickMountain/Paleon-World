@@ -83,7 +83,8 @@ public class World {
         MousePicker.update();
 
         for(Behaviour bh : behaviours) {
-            bh.update(dt);
+        	if(bh.active)
+        		bh.update(dt);
         }
 
         if(!behavioursToAdd.isEmpty()) {
@@ -101,7 +102,8 @@ public class World {
         }
 
         for(Transform tr : transforms) {
-            tr.update();
+        	if(tr.active)
+        		tr.update();
         }
 
         if(!transformsToAdd.isEmpty()) {

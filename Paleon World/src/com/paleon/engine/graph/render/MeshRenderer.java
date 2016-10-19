@@ -65,32 +65,34 @@ public class MeshRenderer {
 
             List<Entity> batch = entities.get(mesh);
             for(Entity entity : batch) {
-                shader.setUniform("model", entity.getTransform().getModelMatrix());
-
-                Material material = entity.getComponent(Material.class);
-
-                shader.setUniform("color", material.color);
-                int numberOfRows = material.getNumberOfRows();
-                shader.setUniform("numberOfRows", numberOfRows);
-                if(numberOfRows != 1) {
-                    shader.setUniform("offset", entity.getTextureXOffset(), entity.getTextureYOffset());
-                }
-                shader.setUniform("useFakeLighting", material.useFakeLighting);
-                shader.setUniform("useSpecular", material.useSpecular);
-
-                if(material.transparency) {
-                    OpenglUtils.cullFace(false);
-                }
-
-                Texture texture = material.texture;
-
-                texture.bind(0);
-
-                mesh.render();
-
-                texture.unbind();
-
-                OpenglUtils.cullFace(true);
+            	if(entity.isActive()) {
+	                shader.setUniform("model", entity.getTransform().getModelMatrix());
+	
+	                Material material = entity.getComponent(Material.class);
+	
+	                shader.setUniform("color", material.color);
+	                int numberOfRows = material.getNumberOfRows();
+	                shader.setUniform("numberOfRows", numberOfRows);
+	                if(numberOfRows != 1) {
+	                    shader.setUniform("offset", entity.getTextureXOffset(), entity.getTextureYOffset());
+	                }
+	                shader.setUniform("useFakeLighting", material.useFakeLighting);
+	                shader.setUniform("useSpecular", material.useSpecular);
+	
+	                if(material.transparency) {
+	                    OpenglUtils.cullFace(false);
+	                }
+	
+	                Texture texture = material.texture;
+	
+	                texture.bind(0);
+	
+	                mesh.render();
+	
+	                texture.unbind();
+	
+	                OpenglUtils.cullFace(true);
+            	}
             }
 
             mesh.endRender();

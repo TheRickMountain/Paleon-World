@@ -10,6 +10,8 @@ import org.joml.Vector3f;
 public abstract class Transform {
 
     public Entity parent;
+    
+    public boolean active = true;
 
     protected final Matrix4f modelMatrix;
 

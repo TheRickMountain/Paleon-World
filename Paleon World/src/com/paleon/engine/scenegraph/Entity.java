@@ -27,7 +27,7 @@ public class Entity {
 
     public String name;
 
-    private boolean selected;
+    private boolean active = true;
 
     private final List<Component> components;
     private final List<Behaviour> behaviours;
@@ -179,11 +179,36 @@ public class Entity {
         return (float) row / (float)material.getNumberOfRows();
     }
 
-    public boolean isSelected() {
-        return selected;
+    public boolean isActive() {
+    	return active;
+    }
+    
+    public void activate() {
+    	this.active = true;
+    	
+    	for(Component component : components) {
+    		component.active = true;
+    	}
+    	
+    	for(Behaviour behaviour : behaviours) {
+    		behaviour.active = true;
+    	}
+    	
+    	transform.active = true;
     }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    public void deactivate() {
+    	this.active = false;
+    	
+    	for(Component component : components) {
+    		component.active = false;
+    	}
+    	
+    	for(Behaviour behaviour : behaviours) {
+    		behaviour.active = false;
+    	}
+    	
+    	transform.active = false;
     }
+    
 }

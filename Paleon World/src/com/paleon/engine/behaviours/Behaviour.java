@@ -4,7 +4,7 @@ import com.paleon.engine.scenegraph.Entity;
 
 public abstract class Behaviour {
 
-    public boolean enabled = true;
+    public boolean active = true;
 	
 	public Entity parent;
 	
