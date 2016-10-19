@@ -64,6 +64,7 @@ public class Game implements IScene {
         ResourceManager.loadTexture("/terrainTextures/dry_ground.png", "dry_ground");
         
         ResourceManager.loadSkybox("sunny");
+        ResourceManager.loadSkybox("cloudy");
 
         ResourceManager.loadMaterial(new Material(ResourceManager.getTexture("rock"), Color.WHITE), "rock");
         ResourceManager.loadMaterial(new Material(ResourceManager.getTexture("sand"), Color.YELLOW), "sand");
