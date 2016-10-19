@@ -3,6 +3,7 @@
 in vec2 UV;
 in vec3 FragPos;
 in vec3 Normal;
+in float Visibility;
 
 uniform sampler2D image;
 uniform vec4 color;
@@ -50,5 +51,6 @@ void main() {
     }
 
     out_Color = vec4(result, 1.0f) * objectColor * color;
+    out_Color = mix(vec4(1.0f, 1.0f, 1.0f, 1.0f), out_Color, Visibility);
     //out_Color = vec4(out_Color.x, 1, out_Color.z, 1);
 }
