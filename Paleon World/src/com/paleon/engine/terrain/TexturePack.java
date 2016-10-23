@@ -1,33 +1,42 @@
 package com.paleon.engine.terrain;
 
-import java.awt.image.BufferedImage;
+import com.paleon.engine.ResourceManager;
+import com.paleon.engine.graph.Texture2D;
 
-import com.paleon.engine.graph.Texture;
-
-/**
- * Created by Rick on 08.10.2016.
- */
 public class TexturePack {
 
-	private final BufferedImage heightMap;
-    public Texture blendMap;
-    public Texture redTexture;
-    public Texture greenTexture;
-    public Texture blueTexture;
-    public Texture alphaTexture;
-
-    public TexturePack(BufferedImage heightMap, Texture blendMap, Texture redTexture, 
-    		Texture greenTexture, Texture blueTexture, Texture alphaTexture) {
-    	this.heightMap = heightMap;
-        this.blendMap = blendMap;
-        this.redTexture = redTexture;
-        this.greenTexture = greenTexture;
-        this.blueTexture = blueTexture;
-        this.alphaTexture = alphaTexture;
-    }
-
-	public BufferedImage getHeightMap() {
-		return heightMap;
+	Texture2D blendMap;
+	Texture2D aTexture;
+	Texture2D rTexture;
+	Texture2D gTexture;
+	Texture2D bTexture;
+	
+	public TexturePack(String blendMap, String alpha, String red, String green, String blue) {
+		this.blendMap = ResourceManager.getTexture(blendMap);
+		this.aTexture = ResourceManager.getTexture(alpha);
+		this.rTexture = ResourceManager.getTexture(red);
+		this.gTexture = ResourceManager.getTexture(green);
+		this.bTexture = ResourceManager.getTexture(blue);
 	}
-    
+
+	public Texture2D getBlendMap() {
+		return blendMap;
+	}
+
+	public Texture2D getaTexture() {
+		return aTexture;
+	}
+
+	public Texture2D getrTexture() {
+		return rTexture;
+	}
+
+	public Texture2D getgTexture() {
+		return gTexture;
+	}
+
+	public Texture2D getbTexture() {
+		return bTexture;
+	}
+	
 }

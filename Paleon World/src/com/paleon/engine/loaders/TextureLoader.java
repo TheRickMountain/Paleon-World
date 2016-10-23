@@ -15,21 +15,24 @@ import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-import de.matthiasmann.twl.utils.PNGDecoder;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 
-import com.paleon.engine.graph.Texture;
+import com.paleon.engine.graph.Texture2D;
+
+import de.matthiasmann.twl.utils.PNGDecoder;
+import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class TextureLoader {
 	
-	public static Texture load(BufferedImage image) {
+	public static int load(BufferedImage image) {
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 		
@@ -53,21 +56,25 @@ public class TextureLoader {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
         // Upload the texture data
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, 
-        		GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         
         // Generate Mip Map
         glGenerateMipmap(GL_TEXTURE_2D);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -0.4f);
         
-        return new Texture(id, image.getWidth(), image.getHeight(), image);
+        return id;
 	}
 	
-    public static Texture load(String textureName) throws Exception {
+    public static Texture2D load(String textureName) {
     	InputStream is = TextureLoader.class.getResourceAsStream(textureName);
     	// Load Texture file
-        PNGDecoder decoder = new PNGDecoder(is);
+        PNGDecoder decoder = null;
+		try {
+			decoder = new PNGDecoder(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
         int width = decoder.getWidth();
         int height = decoder.getHeight();
@@ -75,7 +82,11 @@ public class TextureLoader {
         // Load texture contents into a byte buffer
         ByteBuffer buf = ByteBuffer.allocateDirect(
                 4 * decoder.getWidth() * decoder.getHeight());
-		decoder.decode(buf, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
+        try {
+			decoder.decode(buf, decoder.getWidth() * 4, Format.RGBA);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         buf.flip();
 
         // Create a new OpenGL texture 
@@ -93,13 +104,17 @@ public class TextureLoader {
         glGenerateMipmap(GL_TEXTURE_2D);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -0.4f);
-
-		is.close();
         
-        return new Texture(id, width, height);
+        try {
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+        return new Texture2D(id, width, height);
     }
 	
-    public static Texture loadCubemap(String skyboxName) throws Exception {
+    public static Texture2D loadCubemap(String skyboxName) throws Exception {
     	int id = GL11.glGenTextures();
     	GL13.glActiveTexture(GL13.GL_TEXTURE0);
     	GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, id);
@@ -117,7 +132,7 @@ public class TextureLoader {
     	GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
     	GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
     	GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-    	return new Texture(id, 0, 0);
+    	return new Texture2D(id, 0, 0);
     }
     
     private static TextureData decodeTextureFile(String fileName) {
@@ -130,7 +145,7 @@ public class TextureLoader {
     		width = decoder.getWidth();
     		height = decoder.getHeight();
     		buffer = ByteBuffer.allocateDirect(4 * width * height);
-    		decoder.decode(buffer, width * 4, PNGDecoder.Format.RGBA);
+    		decoder.decode(buffer, width * 4, Format.RGBA);
     		buffer.flip();
     		is.close();
     	} catch (Exception e) {
@@ -140,29 +155,5 @@ public class TextureLoader {
     	}
     	return new TextureData(buffer, width, height);
     }
-
-	private static class TextureData {
-		private int width;
-		private int height;
-		private ByteBuffer buffer;
-
-		public TextureData(ByteBuffer buffer, int width, int height) {
-			this.buffer = buffer;
-			this.width = width;
-			this.height = height;
-		}
-
-		public int getWidth() {
-			return width;
-		}
-
-		public int getHeight() {
-			return height;
-		}
-
-		public ByteBuffer getBuffer() {
-			return buffer;
-		}
-	}
     
 }

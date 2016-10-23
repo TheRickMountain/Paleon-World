@@ -1,11 +1,11 @@
 package com.paleon.engine.terrain;
 
-import org.joml.Vector3f;
+import com.paleon.maths.vecmath.Vector3f;
 
 public class TerrainVertex {
 
 	private float height;
-    private Vector3f normal;
+	private Vector3f normal;
 
 	protected TerrainVertex(float height, Vector3f normal) {
 		this.height = height;

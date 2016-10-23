@@ -1,6 +1,9 @@
 package com.paleon.engine.graph.font;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +39,7 @@ public class MetaFile {
      * @param file
      *            - the font file.
      */
-    protected MetaFile(String file) {
+    protected MetaFile(File file) {
         this.aspectRatio = (double) 1024 / (double) 600;
         openFile(file);
         loadPaddingData();
@@ -123,9 +126,9 @@ public class MetaFile {
      * @param file
      *            - the font file.
      */
-    private void openFile(String file) {
+    private void openFile(File file) {
         try {
-            reader = new BufferedReader(new InputStreamReader(MetaFile.class.getClass().getResourceAsStream(file)));
+            reader = new BufferedReader(new FileReader(file));
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Couldn't read font meta file!");

@@ -1,5 +1,4 @@
 package com.paleon.engine.graph.font;
-
 public class TextMeshData {
      
     private float[] vertexPositions;

@@ -1,10 +1,11 @@
 package com.paleon.engine.graph.font;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.paleon.engine.components.Text;
-import com.paleon.engine.utils.Utils;
+import com.paleon.engine.toolbox.MathUtils;
 
 public class TextMeshCreator {
 
@@ -13,7 +14,7 @@ public class TextMeshCreator {
  
     private MetaFile metaData;
  
-    protected TextMeshCreator(String metaFile) {
+    protected TextMeshCreator(File metaFile) {
         metaData = new MetaFile(metaFile);
     }
  
@@ -26,7 +27,7 @@ public class TextMeshCreator {
     private List<Line> createStructure(Text text) {
         char[] chars = text.text.toCharArray();
         List<Line> lines = new ArrayList<Line>();
-        Line currentLine = new Line(metaData.getSpaceWidth(), text.size, 1f);
+        Line currentLine = new Line(metaData.getSpaceWidth(), text.size, text.lineMaxSize);
         Word currentWord = new Word(text.size);
         for (char c : chars) {
             int ascii = (int) c;
@@ -34,7 +35,7 @@ public class TextMeshCreator {
                 boolean added = currentLine.attemptToAddWord(currentWord);
                 if (!added) {
                     lines.add(currentLine);
-                    currentLine = new Line(metaData.getSpaceWidth(), text.size, 1f);
+                    currentLine = new Line(metaData.getSpaceWidth(), text.size, text.lineMaxSize);
                     currentLine.attemptToAddWord(currentWord);
                 }
                 currentWord = new Word(text.size);
@@ -51,7 +52,7 @@ public class TextMeshCreator {
         boolean added = currentLine.attemptToAddWord(currentWord);
         if (!added) {
             lines.add(currentLine);
-            currentLine = new Line(metaData.getSpaceWidth(), text.size, 1f);
+            currentLine = new Line(metaData.getSpaceWidth(), text.size, text.lineMaxSize);
             currentLine.attemptToAddWord(currentWord);
         }
         lines.add(currentLine);
@@ -64,9 +65,9 @@ public class TextMeshCreator {
         List<Float> vertices = new ArrayList<Float>();
         List<Float> textureCoords = new ArrayList<Float>();
         for (Line line : lines) {
-            /*if (text.centered) {
+            if (text.centered) {
                 curserX = (line.getMaxLength() - line.getLineLength()) / 2;
-            }*/
+            }
             for (Word word : line.getWords()) {
                 for (Character letter : word.getCharacters()) {
                     addVerticesForCharacter(curserX, curserY, letter, text.size, vertices);
@@ -80,7 +81,7 @@ public class TextMeshCreator {
             curserY += LINE_HEIGHT * text.size;
         }      
         
-        return new TextMeshData(Utils.joinArrays(listToArray(vertices), listToArray(textureCoords)));
+        return new TextMeshData(MathUtils.joinArrays(listToArray(vertices), listToArray(textureCoords)));
     }
  
     private void addVerticesForCharacter(double curserX, double curserY, Character character, double fontSize,

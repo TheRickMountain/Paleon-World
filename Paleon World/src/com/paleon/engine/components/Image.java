@@ -1,18 +1,16 @@
 package com.paleon.engine.components;
 
-
-import com.paleon.engine.graph.Texture;
-import com.paleon.engine.utils.Color;
+import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.toolbox.Color;
 
 public class Image extends Component {
 
-	public Texture texture;
+	public Texture2D texture;
 	public Color color;
 	
-	public Image(Texture texture, Color color) {
+	public Image(Texture2D texture, Color color) {
 		this.texture = texture;
 		this.color = color;
-		type = Type.IMAGE;
 	}
 	
 }

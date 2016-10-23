@@ -3,11 +3,84 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="resource"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/jar/lwjgl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/native"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-bgfx.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-bgfx-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-bgfx-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-bgfx-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-egl.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-egl-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-egl-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-glfw.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-glfw-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-glfw-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-glfw-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-jawt.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-jawt-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-jawt-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-jemalloc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-jemalloc-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-jemalloc-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-jemalloc-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-lmdb.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-lmdb-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-lmdb-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-lmdb-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nanovg.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nanovg-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nanovg-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nanovg-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nfd.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nfd-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nfd-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nfd-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nuklear.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nuklear-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nuklear-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-nuklear-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-openal.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-openal-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-openal-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-openal-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-opencl.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-opencl-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-opencl-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-opengl.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-opengles.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-opengles-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-opengles-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-opengl-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-opengl-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-ovr.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-ovr-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-ovr-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-ovr-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-par.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-par-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-par-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-par-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-sse.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-sse-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-sse-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-sse-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-stb.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-stb-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-stb-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-stb-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-tinyfd.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-tinyfd-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-tinyfd-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-tinyfd-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-vulkan.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-vulkan-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-vulkan-sources.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-xxhash.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-xxhash-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-xxhash-natives-windows.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/Paleon-World/Paleon World/libs/lwjgl/lwjgl-xxhash-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

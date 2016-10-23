@@ -1,6 +1,6 @@
 package com.paleon.engine.loaders;
 
-import org.joml.Vector3f;
+import com.paleon.maths.vecmath.Vector3f;
 
 public class Vertex {
 

@@ -1,24 +1,34 @@
 package com.paleon.engine.graph.font;
 
+import java.io.File;
+
 import com.paleon.engine.components.Text;
-import com.paleon.engine.core.ResourceManager;
-import com.paleon.engine.graph.Texture;
+import com.paleon.engine.graph.Texture2D;
 
 public class FontType {
  
-    private Texture textureAtlas;
+    private Texture2D textureAtlas;
     private TextMeshCreator loader;
-
-    public FontType(String font) {
-        ResourceManager.loadTexture("/fonts/" + font + ".png", font);
-        this.textureAtlas = ResourceManager.getTexture(font);
-        this.loader = new TextMeshCreator("/fonts/" + font + ".fnt");
+ 
+    /**
+     * Creates a new font and loads up the data about each character from the
+     * font file.
+     * 
+     * @param textureAtlas
+     *            - the ID of the font atlas texture.
+     * @param fontFile
+     *            - the font file containing information about each character in
+     *            the texture atlas.
+     */
+    public FontType(Texture2D textureAtlas, File fontFile) {
+        this.textureAtlas = textureAtlas;
+        this.loader = new TextMeshCreator(fontFile);
     }
  
     /**
      * @return The font texture atlas.
      */
-    public Texture getTextureAtlas() {
+    public Texture2D getTextureAtlas() {
         return textureAtlas;
     }
  
