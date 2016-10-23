@@ -6,7 +6,7 @@ public class Material {
 	
 	public Color color;
 	
-	private Texture2D texture;
+	private Texture texture;
 	
 	private float shineDamper = 1;
 	private float reflectivity = 0;
@@ -16,7 +16,7 @@ public class Material {
 	
 	private int numberOfRows = 1;
 	
-	public Material(Texture2D texture) {
+	public Material(Texture texture) {
 		this.texture = texture;
 	}
 
@@ -24,11 +24,11 @@ public class Material {
         return this.texture != null;
     }
 
-    public Texture2D getTexture() {
+    public Texture getTexture() {
         return texture;
     }
 
-    public void setTexture(Texture2D texture) {
+    public void setTexture(Texture texture) {
         this.texture = texture;
     }
 

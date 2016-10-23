@@ -3,12 +3,12 @@ package com.paleon.engine.graph;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
-public class Texture2D {
+public class Texture {
 
 	private int id;
 	private int width, height;
 	
-	public Texture2D(int id, int width, int height) {
+	public Texture(int id, int width, int height) {
 		this.id = id;
 		this.width = width;
 		this.height = height;

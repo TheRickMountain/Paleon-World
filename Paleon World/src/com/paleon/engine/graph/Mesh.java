@@ -9,130 +9,103 @@ import com.paleon.engine.toolbox.OpenglUtils;
 
 public class Mesh {
 
-	private int vaoId;
-	
-	private int vVboId;
-	private int uvVboId;
-	private int nVboId;
-	private int tVboId;
-	
-	private int vertexCount;
-	
-	private Material material;
-	
-	private float[] vertices;
-	private float[] uvs;
-	private float[] normals;
-	private int[] triangles;
-	
-	private float furthestPoint = 0;
-	
-	public Mesh() {
-		
-	}
-	
-	public Mesh(float[] vertices, float[] uvs, float[] normals, int[] triangles) {
-		this.vertices = vertices;
-		this.uvs = uvs;
-		this.normals = normals;
-		this.triangles = triangles;
-		
-		this.vertexCount = triangles.length;
-		 
-		vaoId = GL30.glGenVertexArrays();
-		GL30.glBindVertexArray(vaoId);
-		
-		vVboId = GL15.glGenBuffers();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vVboId);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, OpenglUtils.dataToFloatBuffer(vertices), GL15.GL_STATIC_DRAW);
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-		
-		uvVboId = GL15.glGenBuffers();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, uvVboId);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, OpenglUtils.dataToFloatBuffer(uvs), GL15.GL_STATIC_DRAW);
-		GL20.glVertexAttribPointer(1, 2, GL11.GL_FLOAT, false, 0, 0);
-		
-		nVboId = GL15.glGenBuffers();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, nVboId);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, OpenglUtils.dataToFloatBuffer(normals), GL15.GL_STATIC_DRAW);
-		GL20.glVertexAttribPointer(2, 3, GL11.GL_FLOAT, false, 0, 0);
-		
-		tVboId = GL15.glGenBuffers();
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, tVboId);
-		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, OpenglUtils.dataToIntBuffer(triangles), GL15.GL_STATIC_DRAW);
-		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		GL30.glBindVertexArray(0);
-		
-		furthestPoint = getFurthestPoint(vertices);
-	}
-	
-	public Mesh(float[] data, int subMeshCount){
-		set(data, subMeshCount);
-	}
-	
-	public void set(float[] data, int subMeshCount) {
-		this.vertices = data;
-		
-		this.vertexCount = data.length / subMeshCount;
-		
-		vaoId = GL30.glGenVertexArrays();
-		GL30.glBindVertexArray(vaoId);
-		
-		vVboId = GL15.glGenBuffers();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vVboId);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, OpenglUtils.dataToFloatBuffer(data), GL15.GL_STATIC_DRAW);
-		GL20.glVertexAttribPointer(0, subMeshCount, GL11.GL_FLOAT, false, 0, 0);
-		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		GL30.glBindVertexArray(0);
-		
-		//furthestPoint = getFurthestPoint(data);
-	}
-	
-	public void setVertices(float[] vertices) {
-		this.vertices = vertices;
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vVboId);
-		GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, OpenglUtils.dataToFloatBuffer(vertices));
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		
-		furthestPoint = getFurthestPoint(vertices);
-	}
-	
-	public void setUVs(float[] uvs) {
-		this.uvs = uvs;
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, uvVboId);
-		GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, OpenglUtils.dataToFloatBuffer(uvs));
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-	}
-	
-	public void setNormals(float[] normals) {
-		this.normals = normals;
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, nVboId);
-		GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, OpenglUtils.dataToFloatBuffer(normals));
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-	}
-	
-	public void setTriangles(int[] triangles) {
-		this.triangles = triangles;
-		this.vertexCount = triangles.length;
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, tVboId);
-		GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, OpenglUtils.dataToIntBuffer(triangles));
-	}
-	
-	public int getVaoId() {
-        return vaoId;
+	private int VAO;
+    private int VBO;
+    private int EBO;
+
+    private int vertexCount;
+    
+    private float furthestPoint = 0;
+    
+    private Material material;
+    
+    public Mesh() {
+    	
+    }
+
+    public Mesh(float[] vertices, float[] uvs, float[] normals, int[] triangles) {
+        set(vertices, uvs, normals, triangles);
+    }
+
+    public Mesh(float[] vertices, int dimension) {
+        set(vertices, dimension);
+    }
+
+    public void set(float[] vertices, float[] uvs, float[] normals, int[] triangles) {
+        cleanup();
+
+        furthestPoint = getFurthesPoint(vertices);
+        
+        VAO = OpenglUtils.createVAO();
+
+        vertexCount = triangles.length;
+
+        int vertexByteCount = 4 * (3 + 2 + 3);
+
+        VBO = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBO);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, OpenglUtils.dataToFloatBuffer(vertices, uvs, normals), GL15.GL_STATIC_DRAW);
+
+        GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, vertexByteCount, 0);
+        GL20.glVertexAttribPointer(1, 2, GL11.GL_FLOAT, false, vertexByteCount, 4 * 3);
+        GL20.glVertexAttribPointer(2, 3, GL11.GL_FLOAT, false, vertexByteCount, 4 * (3 + 2));
+
+        EBO = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, EBO);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, OpenglUtils.dataToIntBuffer(triangles), GL15.GL_STATIC_DRAW);
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        GL30.glBindVertexArray(0);
+    }
+
+    public void set(float[] vertices, int dimension) {
+        cleanup();
+        
+        VAO = OpenglUtils.createVAO();
+
+        vertexCount = vertices.length / dimension;
+
+        VBO = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBO);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, OpenglUtils.dataToFloatBuffer(vertices), GL15.GL_STATIC_DRAW);
+
+        int vertexByteCount = 4 * dimension;
+
+        GL20.glVertexAttribPointer(0, dimension, GL11.GL_FLOAT, false, vertexByteCount, 0);
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        GL30.glBindVertexArray(0);
+    }
+
+    public int getVAO() {
+        return VAO;
     }
 
     public int getVertexCount() {
         return vertexCount;
     }
 
-    public void setVertexCount(int vertexCount) {
-		this.vertexCount = vertexCount;
-	}
+    public void startRender() {
+        GL30.glBindVertexArray(VAO);
 
-	public Material getMaterial() {
+        GL20.glEnableVertexAttribArray(0);
+        GL20.glEnableVertexAttribArray(1);
+        GL20.glEnableVertexAttribArray(2);
+    }
+
+    public void render() {
+        GL11.glDrawElements(GL11.GL_TRIANGLES, vertexCount, GL11.GL_UNSIGNED_INT, 0);
+    }
+
+    public void endRender() {
+        GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
+        GL20.glDisableVertexAttribArray(2);
+
+        GL30.glBindVertexArray(0);
+    }
+
+    public Material getMaterial() {
 		return material;
 	}
 
@@ -140,27 +113,17 @@ public class Mesh {
 		this.material = material;
 	}
 
-	public float[] getVertices() {
-		return vertices;
-	}
+	public void cleanup() {
+        GL20.glDisableVertexAttribArray(0);
 
-	public float[] getUVs() {
-		return uvs;
-	}
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        GL15.glDeleteBuffers(VBO);
 
-	public float[] getNormals() {
-		return normals;
-	}
-
-	public int[] getTriangles() {
-		return triangles;
-	}
-	
-	public float getFurthestPoint() {
-		return furthestPoint;
-	}
-	
-	private float getFurthestPoint(float[] vertices) {
+        GL30.glBindVertexArray(0);
+        GL30.glDeleteVertexArrays(VAO);
+    }
+    
+    private float getFurthesPoint(float[] vertices) {
 		float maxX = 0;
 		float maxY = 0;
 		float maxZ = 0;
@@ -204,17 +167,8 @@ public class Mesh {
 		}
 		return Math.max(maxX, maxZ);
 	}
-
-	public void cleanup() {
-        GL20.glDisableVertexAttribArray(0);
-
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-        GL15.glDeleteBuffers(vVboId);
-        GL15.glDeleteBuffers(uvVboId);
-        GL15.glDeleteBuffers(nVboId);
-        GL15.glDeleteBuffers(tVboId);
-
-        GL30.glBindVertexArray(0);
-        GL30.glDeleteVertexArrays(vaoId);
+    
+    public float getFurthestPoint() {
+    	return furthestPoint;
     }
 }

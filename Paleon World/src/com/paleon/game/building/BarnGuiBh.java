@@ -7,7 +7,7 @@ import com.paleon.engine.Display;
 import com.paleon.engine.ResourceManager;
 import com.paleon.engine.behaviour.Behaviour;
 import com.paleon.engine.components.Text;
-import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.graph.Texture;
 import com.paleon.engine.graph.gui.Button;
 import com.paleon.engine.graph.gui.Item;
 import com.paleon.engine.graph.gui.ItemDatabase;
@@ -25,8 +25,8 @@ public class BarnGuiBh extends Behaviour {
 	private boolean showInventory;
 	private Rect slotsRect;
 	
-	private Texture2D slotSkin = ResourceManager.getTexture("ui_slot");
-	private Texture2D closeSkin = ResourceManager.getTexture("ui_close");
+	private Texture slotSkin = ResourceManager.getTexture("ui_slot");
+	private Texture closeSkin = ResourceManager.getTexture("ui_close");
 	
 	private Text stackText;
 	

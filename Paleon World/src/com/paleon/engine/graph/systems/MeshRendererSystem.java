@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL30;
 
 import com.paleon.engine.Display;
 import com.paleon.engine.ResourceManager;
-import com.paleon.engine.components.MeshFilter;
+import com.paleon.engine.components.Model;
 import com.paleon.engine.graph.Material;
 import com.paleon.engine.graph.Mesh;
 import com.paleon.engine.graph.RenderEngine;
@@ -80,7 +80,7 @@ public class MeshRendererSystem {
 				Transform transform = gameItem.transform;
 				
 				if(camera.getFrusutmCuller().testEntityInView(gameItem)) {
-					MeshFilter meshFilter = gameItem.getComponent(MeshFilter.class);
+					Model meshFilter = gameItem.getComponent(Model.class);
 					if(meshFilter != null) {
 						if(meshFilter.enabled) {
 							Mesh mesh = meshFilter.mesh;	
@@ -90,7 +90,7 @@ public class MeshRendererSystem {
 							shader.setUniform("colorMode", 1);
 							shader.setUniform("objectColor", MathUtils.getColorById(gameItem.getID()));
 							
-							GL30.glBindVertexArray(mesh.getVaoId());
+							GL30.glBindVertexArray(mesh.getVAO());
 							GL20.glEnableVertexAttribArray(0);		
 							GL20.glEnableVertexAttribArray(1);
 							GL20.glEnableVertexAttribArray(2);
@@ -128,7 +128,7 @@ public class MeshRendererSystem {
 			Transform transform = gameItem.transform;
 			
 			if(camera.getFrusutmCuller().testEntityInView(gameItem)) {
-				MeshFilter meshFilter = gameItem.getComponent(MeshFilter.class);
+				Model meshFilter = gameItem.getComponent(Model.class);
 				if(meshFilter != null) {
 					if(meshFilter.enabled) {
 						shader.setUniform("modelMatrix", transform.getModelMatrix());
@@ -154,7 +154,7 @@ public class MeshRendererSystem {
 						
 						shader.setUniform("useFakeLighting", material.isUseFakeLighting());
 						
-						GL30.glBindVertexArray(mesh.getVaoId());
+						GL30.glBindVertexArray(mesh.getVAO());
 						GL20.glEnableVertexAttribArray(0);		
 						GL20.glEnableVertexAttribArray(1);
 						GL20.glEnableVertexAttribArray(2);

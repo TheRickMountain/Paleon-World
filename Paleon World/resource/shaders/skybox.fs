@@ -10,7 +10,7 @@ uniform vec4 fogColor;
 out vec4 out_Color;
 
 const float lowerLimit = 0.0f;
-const float upperLimit = 220.0f;
+const float upperLimit = 100.0f;
 
 void main() {
 	vec4 cubemap_1 = texture(sampler_cube_1, pass_TextureCoord);

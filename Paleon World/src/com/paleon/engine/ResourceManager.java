@@ -7,14 +7,14 @@ import java.util.Map.Entry;
 import com.paleon.engine.graph.Material;
 import com.paleon.engine.graph.Mesh;
 import com.paleon.engine.graph.ShaderProgram;
-import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.graph.Texture;
 import com.paleon.engine.loaders.OBJLoader;
 import com.paleon.engine.loaders.TextureLoader;
 
 public class ResourceManager {
 
 	private static Map<String, ShaderProgram> shaders = new HashMap<String, ShaderProgram>();
-	private static Map<String, Texture2D> textures = new HashMap<String, Texture2D>();
+	private static Map<String, Texture> textures = new HashMap<String, Texture>();
 	private static Map<String, Mesh> meshes = new HashMap<String, Mesh>();
 	
 	public static ShaderProgram loadShader(String shaderName) {
@@ -37,8 +37,8 @@ public class ResourceManager {
 		return shaders.get(shaderName);
 	}
 	
-	public static Texture2D loadTexture(String texturePath, String textureName) {
-		Texture2D texture = null;
+	public static Texture loadTexture(String texturePath, String textureName) {
+		Texture texture = null;
 		try {
 			texture = TextureLoader.load(texturePath);
 			textures.put(textureName, texture);
@@ -50,12 +50,12 @@ public class ResourceManager {
 		return null;
 	}
 	
-	public static Texture2D getTexture(String textureName) {
+	public static Texture getTexture(String textureName) {
 		return textures.get(textureName);
 	}
 	
 	public static int loadSkybox(String skyboxName) {
-		Texture2D texture = null;
+		Texture texture = null;
 		try {
 			texture = TextureLoader.loadCubemap(skyboxName);
 			textures.put(skyboxName, texture);
@@ -93,7 +93,7 @@ public class ResourceManager {
 		for(Entry<String, ShaderProgram> entry : shaders.entrySet()) {
 			entry.getValue().cleanup();
 		}
-		for(Entry<String, Texture2D> entry : textures.entrySet()) {
+		for(Entry<String, Texture> entry : textures.entrySet()) {
 			entry.getValue().cleanup();
 		}
 		for(Entry<String, Mesh> entry : meshes.entrySet()) {

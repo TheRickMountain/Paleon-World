@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.paleon.engine.behaviour.Behaviour;
 import com.paleon.engine.components.Component;
-import com.paleon.engine.components.MeshFilter;
+import com.paleon.engine.components.Model;
 import com.paleon.engine.graph.Material;
 import com.paleon.engine.graph.Transform;
 import com.paleon.engine.toolbox.MathUtils;
@@ -115,14 +115,14 @@ public class Entity {
 	}
 	
 	public float getTextureXOffset(){
-		Material material = getComponent(MeshFilter.class).mesh.getMaterial();
+		Material material = getComponent(Model.class).mesh.getMaterial();
 		
 		int column = textureIndex % material.getNumberOfRows();
 		return (float) column / (float) material.getNumberOfRows();
 	}
 	
 	public float getTextureYOffset(){
-		Material material = getComponent(MeshFilter.class).mesh.getMaterial();
+		Material material = getComponent(Model.class).mesh.getMaterial();
 		
 		int row = textureIndex / material.getNumberOfRows();
 		return (float) row / (float)material.getNumberOfRows();

@@ -13,7 +13,7 @@ import com.paleon.engine.components.Image;
 import com.paleon.engine.components.Text;
 import com.paleon.engine.graph.Mesh;
 import com.paleon.engine.graph.ShaderProgram;
-import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.graph.Texture;
 import com.paleon.engine.graph.font.FontType;
 import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.toolbox.Color;
@@ -70,7 +70,7 @@ public class GUIRendererSystem {
 				Image image = gameObject.getComponent(Image.class);
 				if(image != null) {
 					if(image.enabled) {
-						Texture2D textureId = image.texture;
+						Texture textureId = image.texture;
 						Color color = image.color;
 						
 						shader.setUniform("spriteColor", color);
@@ -87,7 +87,7 @@ public class GUIRendererSystem {
 							shader.setUniform("mode", 0);
 						}
 						
-						GL30.glBindVertexArray(mesh.getVaoId());
+						GL30.glBindVertexArray(mesh.getVAO());
 						GL20.glEnableVertexAttribArray(0);
 						GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 						GL20.glDisableVertexAttribArray(0);
@@ -110,7 +110,7 @@ public class GUIRendererSystem {
 			        	
 			        	shader.setUniform("spriteColor", text.color);
 			        	
-			            GL30.glBindVertexArray(text.mesh.getVaoId());
+			            GL30.glBindVertexArray(text.mesh.getVAO());
 			            GL20.glEnableVertexAttribArray(0);
 			            GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, text.mesh.getVertexCount());
 			            GL20.glDisableVertexAttribArray(0);
@@ -129,11 +129,11 @@ public class GUIRendererSystem {
 		OpenglUtils.depthTest(true);
 	}
 	
-	public static void render(Rect rect, Texture2D textureId) {
+	public static void render(Rect rect, Texture textureId) {
 		render(rect.x, rect.y, rect.width, rect.height, textureId);
 	}
 	
-	public static void render(float x, float y, float width, float height, Texture2D textureId) {
+	public static void render(float x, float y, float width, float height, Texture textureId) {
 		shader.setUniform("spriteColor", Color.WHITE);
 		shader.setUniform("MP", 
 				Matrix4f.mul(projectionMatrix, 
@@ -147,7 +147,7 @@ public class GUIRendererSystem {
 			shader.setUniform("mode", 0);
 		}
 		
-		GL30.glBindVertexArray(mesh.getVaoId());
+		GL30.glBindVertexArray(mesh.getVAO());
 		GL20.glEnableVertexAttribArray(0);
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 		GL20.glDisableVertexAttribArray(0);
@@ -169,7 +169,7 @@ public class GUIRendererSystem {
     	
     	shader.setUniform("spriteColor", text.color);
     	
-        GL30.glBindVertexArray(text.mesh.getVaoId());
+        GL30.glBindVertexArray(text.mesh.getVAO());
         GL20.glEnableVertexAttribArray(0);
         GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, text.mesh.getVertexCount());
         GL20.glDisableVertexAttribArray(0);

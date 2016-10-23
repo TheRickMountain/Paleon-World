@@ -2,7 +2,7 @@ package com.paleon.scenes;
 
 import com.paleon.engine.IScene;
 import com.paleon.engine.ResourceManager;
-import com.paleon.engine.components.MeshFilter;
+import com.paleon.engine.components.Model;
 import com.paleon.engine.graph.Material;
 import com.paleon.engine.graph.gui.ItemDatabase;
 import com.paleon.engine.instances.Camera;
@@ -160,7 +160,7 @@ public class Game implements IScene {
 		Material grassMaterial = new Material(ResourceManager.loadTexture("/prefabs/grass/diffuse.png", "diffuse"));
 		grassMaterial.setHasTransparency(true);
 		grassMaterial.setUseFakeLighting(true);
-		grassMaterial.setNumberOfRows(4);
+		grassMaterial.setNumberOfRows(2);
 		ResourceManager.loadMesh("/prefabs/grass/grass.obj", "grass", grassMaterial);
 		/*** *** ***/
 		
@@ -218,7 +218,7 @@ public class Game implements IScene {
 		
 		world = new World(camera);
 		
-		TexturePack texturePack = new TexturePack("blendMap", "sand", "grass", "dirt", "grass");		
+		TexturePack texturePack = new TexturePack("blendMap", "sand", "dirt", "dirt", "grass");		
 		Terrain terrain1 = new Terrain(0, 0, "/biomes/heightmap.png", texturePack);
 		world.addTerrain(terrain1);
 		
@@ -244,7 +244,7 @@ public class Game implements IScene {
 			float z = MyRandom.nextFloat(800);
 			if(world.getTerrainHeight(x,  z) > 3) {
 				Entity gameObject = new Entity(world);
-				gameObject.addComponent(new MeshFilter(ResourceManager.getMesh("fern")));
+				gameObject.addComponent(new Model(ResourceManager.getMesh("fern")));
 				gameObject.position.set(x, world.getTerrainHeight(x, z), z);
 				gameObject.scale.set(1);
 				gameObject.setTextureIndex(MyRandom.nextInt(4));
@@ -259,7 +259,7 @@ public class Game implements IScene {
 			float z = MyRandom.nextFloat(800);
 			if(world.getTerrainHeight(x,  z) > 3) {
 				Entity gameObject = new Entity(world);
-				gameObject.addComponent(new MeshFilter(ResourceManager.getMesh("rock")));
+				gameObject.addComponent(new Model(ResourceManager.getMesh("rock")));
 				gameObject.position.set(x, world.getTerrainHeight(x, z), z);
 				gameObject.scale.set(0.8f);
 				gameObject.setFurthestPoint(ResourceManager.getMesh("rock").getFurthestPoint());
@@ -273,7 +273,7 @@ public class Game implements IScene {
 			float z = MyRandom.nextFloat(800);
 			if(world.getTerrainHeight(x,  z) > 3) {
 				Entity gameItem = new Entity(world);
-				gameItem.addComponent(new MeshFilter(ResourceManager.getMesh("flint")));
+				gameItem.addComponent(new Model(ResourceManager.getMesh("flint")));
 				gameItem.position.set(x, world.getTerrainHeight(x, z), z);
 				gameItem.scale.set(0.5f);
 				gameItem.setID(MathUtils.genID());
@@ -292,17 +292,17 @@ public class Game implements IScene {
 				switch(MyRandom.nextInt(3) + 1){
 				case 1:
 					gameItem = new Entity(world);
-					gameItem.addComponent(new MeshFilter(ResourceManager.getMesh("shroom_1")));
+					gameItem.addComponent(new Model(ResourceManager.getMesh("shroom_1")));
 					gameItem.setFurthestPoint(ResourceManager.getMesh("shroom_1").getFurthestPoint());
 					break;
 				case 2:
 					gameItem = new Entity(world);
-					gameItem.addComponent(new MeshFilter(ResourceManager.getMesh("shroom_2")));
+					gameItem.addComponent(new Model(ResourceManager.getMesh("shroom_2")));
 					gameItem.setFurthestPoint(ResourceManager.getMesh("shroom_2").getFurthestPoint());
 					break;
 				case 3:
 					gameItem = new Entity(world);
-					gameItem.addComponent(new MeshFilter(ResourceManager.getMesh("shroom_3")));
+					gameItem.addComponent(new Model(ResourceManager.getMesh("shroom_3")));
 					gameItem.setFurthestPoint(ResourceManager.getMesh("shroom_3").getFurthestPoint());
 					break;
 				}
@@ -320,7 +320,7 @@ public class Game implements IScene {
 			float z = MyRandom.nextFloat(800);
 			if(world.getTerrainHeight(x,  z) > 3) {
 				Entity gameItem = new Entity(world);
-				gameItem.addComponent(new MeshFilter(ResourceManager.getMesh("stick")));
+				gameItem.addComponent(new Model(ResourceManager.getMesh("stick")));
 				gameItem.position.set(x, world.getTerrainHeight(x, z), z);
 				gameItem.scale.set(1.5f);
 				gameItem.setID(MathUtils.genID());
@@ -336,7 +336,7 @@ public class Game implements IScene {
 			float z = MyRandom.nextFloat(800);
 			if(world.getTerrainHeight(x,  z) > 3) {
 				Entity gameItem = new Entity(world);
-				gameItem.addComponent(new MeshFilter(ResourceManager.getMesh("wheat")));
+				gameItem.addComponent(new Model(ResourceManager.getMesh("wheat")));
 				gameItem.setUseWaving(true);
 				gameItem.position.set(x, world.getTerrainHeight(x, z), z);
 				gameItem.scale.set(1.5f);
@@ -355,7 +355,7 @@ public class Game implements IScene {
 			float z = MyRandom.nextFloat(800);
 			if(world.getTerrainHeight(x,  z) > 3) {
 				Entity bark = new Entity("Tree", world);
-				bark.addComponent(new MeshFilter(ResourceManager.getMesh("bark")));
+				bark.addComponent(new Model(ResourceManager.getMesh("bark")));
 				bark.position.set(x, world.getTerrainHeight(x, z), z);
 				bark.scale.set(3f);
 				bark.setFurthestPoint(ResourceManager.getMesh("bark").getFurthestPoint());
@@ -363,7 +363,7 @@ public class Game implements IScene {
 				world.addEntity(bark);
 				
 				Entity leaves = new Entity(world);
-				leaves.addComponent(new MeshFilter(ResourceManager.getMesh("leaves")));
+				leaves.addComponent(new Model(ResourceManager.getMesh("leaves")));
 				leaves.setFurthestPoint(ResourceManager.getMesh("leaves").getFurthestPoint());
 				leaves.setID(id);
 				bark.addChild(leaves);
@@ -376,11 +376,12 @@ public class Game implements IScene {
 			float z = MyRandom.nextFloat(800);
 			if(world.getTerrainHeight(x,  z) > 3) {
 				Entity grass = new Entity(world);
-				grass.addComponent(new MeshFilter(ResourceManager.getMesh("grass")));
+				grass.addComponent(new Model(ResourceManager.getMesh("grass")));
 				grass.position.set(x, world.getTerrainHeight(x, z), z);
 				grass.scale.set(3);
-				grass.setTextureIndex(MyRandom.nextInt(9));
+				grass.setTextureIndex(MyRandom.nextInt(3));
 				grass.setFurthestPoint(ResourceManager.getMesh("grass").getFurthestPoint());
+				grass.setUseWaving(true);
 				world.addEntity(grass);
 			}
 		}

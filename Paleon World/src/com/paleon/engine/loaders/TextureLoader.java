@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 
-import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.graph.Texture;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
@@ -66,7 +66,7 @@ public class TextureLoader {
         return id;
 	}
 	
-    public static Texture2D load(String textureName) {
+    public static Texture load(String textureName) {
     	InputStream is = TextureLoader.class.getResourceAsStream(textureName);
     	// Load Texture file
         PNGDecoder decoder = null;
@@ -111,10 +111,10 @@ public class TextureLoader {
 			e.printStackTrace();
 		}
         
-        return new Texture2D(id, width, height);
+        return new Texture(id, width, height);
     }
 	
-    public static Texture2D loadCubemap(String skyboxName) throws Exception {
+    public static Texture loadCubemap(String skyboxName) throws Exception {
     	int id = GL11.glGenTextures();
     	GL13.glActiveTexture(GL13.GL_TEXTURE0);
     	GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, id);
@@ -132,7 +132,7 @@ public class TextureLoader {
     	GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
     	GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
     	GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-    	return new Texture2D(id, 0, 0);
+    	return new Texture(id, 0, 0);
     }
     
     private static TextureData decodeTextureFile(String fileName) {

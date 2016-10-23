@@ -1,14 +1,14 @@
 package com.paleon.engine.graph.gui;
 
 import com.paleon.engine.ResourceManager;
-import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.graph.Texture;
 
 public class Item {
 
 	public String itemName;
 	public int itemID;
 	public String itemDesc;
-	public Texture2D itemIcon;
+	public Texture itemIcon;
 	public int stack;
 	
 	public enum ItemType {

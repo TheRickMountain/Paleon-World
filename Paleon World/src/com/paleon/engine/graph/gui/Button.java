@@ -4,7 +4,7 @@ import com.paleon.engine.ResourceManager;
 import com.paleon.engine.behaviour.ButtonBh;
 import com.paleon.engine.components.Image;
 import com.paleon.engine.components.Text;
-import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.graph.Texture;
 import com.paleon.engine.graph.systems.GUIRendererSystem;
 import com.paleon.engine.scenegraph.Entity;
 import com.paleon.engine.scenegraph.World;
@@ -38,7 +38,7 @@ public class Button extends Entity {
 		addBehaviour(buttonBh);
 	}
 	
-	public Button(int width, int height, Texture2D texture, World world) {
+	public Button(int width, int height, Texture texture, World world) {
 		super(world);
 		this.width = width;
 		this.height = height;

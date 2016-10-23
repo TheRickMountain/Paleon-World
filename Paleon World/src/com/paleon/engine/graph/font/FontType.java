@@ -3,11 +3,11 @@ package com.paleon.engine.graph.font;
 import java.io.File;
 
 import com.paleon.engine.components.Text;
-import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.graph.Texture;
 
 public class FontType {
  
-    private Texture2D textureAtlas;
+    private Texture textureAtlas;
     private TextMeshCreator loader;
  
     /**
@@ -20,7 +20,7 @@ public class FontType {
      *            - the font file containing information about each character in
      *            the texture atlas.
      */
-    public FontType(Texture2D textureAtlas, File fontFile) {
+    public FontType(Texture textureAtlas, File fontFile) {
         this.textureAtlas = textureAtlas;
         this.loader = new TextMeshCreator(fontFile);
     }
@@ -28,7 +28,7 @@ public class FontType {
     /**
      * @return The font texture atlas.
      */
-    public Texture2D getTextureAtlas() {
+    public Texture getTextureAtlas() {
         return textureAtlas;
     }
  

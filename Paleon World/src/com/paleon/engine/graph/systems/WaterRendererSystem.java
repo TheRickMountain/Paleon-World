@@ -11,7 +11,7 @@ import com.paleon.engine.Display;
 import com.paleon.engine.ResourceManager;
 import com.paleon.engine.graph.Mesh;
 import com.paleon.engine.graph.ShaderProgram;
-import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.graph.Texture;
 import com.paleon.engine.instances.Camera;
 import com.paleon.engine.instances.Light;
 import com.paleon.engine.instances.WaterTile;
@@ -28,8 +28,8 @@ public class WaterRendererSystem {
 	private ShaderProgram shader;
 	private Mesh mesh;
 	
-	private Texture2D dudvMap;
-	private Texture2D normalMap;
+	private Texture dudvMap;
+	private Texture normalMap;
 	
 	private float moveFactor = 0;
 	
@@ -109,7 +109,7 @@ public class WaterRendererSystem {
 		normalMap.bind(3);
 		GL13.glActiveTexture(GL13.GL_TEXTURE4);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionDepthTexture());
-		GL30.glBindVertexArray(mesh.getVaoId());
+		GL30.glBindVertexArray(mesh.getVAO());
 		GL20.glEnableVertexAttribArray(0);
 		
 		GL11.glEnable(GL11.GL_BLEND);

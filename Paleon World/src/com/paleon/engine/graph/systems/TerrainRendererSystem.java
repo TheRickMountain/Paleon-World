@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL32;
 
 import com.paleon.engine.Display;
@@ -81,9 +82,9 @@ public class TerrainRendererSystem {
 			for(TerrainBlock terrainBlock : batch) {
 				if(camera.getFrusutmCuller().testTerrainInView(terrainBlock)) {
 					int[] indexInfo = terrainBlock.getIndicesVBOInfo();
-					OpenglUtils.bindIndicesVBO(indexInfo[0]);
+					GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexInfo[0]);
 					render(terrainBlock.getIndex(), indexInfo[1]);
-					OpenglUtils.unbindIndicesVBO();
+					GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 				}
 			}
 			OpenglUtils.unbindVAO();

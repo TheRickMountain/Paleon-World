@@ -9,7 +9,7 @@ import com.paleon.engine.behaviour.Behaviour;
 import com.paleon.engine.behaviour.SettlerBh;
 import com.paleon.engine.components.Image;
 import com.paleon.engine.components.Text;
-import com.paleon.engine.graph.Texture2D;
+import com.paleon.engine.graph.Texture;
 import com.paleon.engine.graph.gui.Button;
 import com.paleon.engine.graph.systems.GUIRendererSystem;
 import com.paleon.engine.input.Mouse;
@@ -23,12 +23,12 @@ public class ProfessionGuiBh extends Behaviour {
 	private boolean showSettlersList = false;
 	private List<Entity> settlers = new ArrayList<Entity>();
 	
-	private Texture2D buttonSkin = ResourceManager.getTexture("ui_button");
-	private Texture2D slotSkin = ResourceManager.getTexture("ui_slot");
-	private Texture2D closeSkin = ResourceManager.getTexture("ui_close");
-	private Texture2D questionSkin = ResourceManager.getTexture("ui_question");
-	private Texture2D settlerSkin = ResourceManager.getTexture("ui_settler");
-	private Texture2D stoneAxeSkin = ResourceManager.getTexture("ui_stone axe");
+	private Texture buttonSkin = ResourceManager.getTexture("ui_button");
+	private Texture slotSkin = ResourceManager.getTexture("ui_slot");
+	private Texture closeSkin = ResourceManager.getTexture("ui_close");
+	private Texture questionSkin = ResourceManager.getTexture("ui_question");
+	private Texture settlerSkin = ResourceManager.getTexture("ui_settler");
+	private Texture stoneAxeSkin = ResourceManager.getTexture("ui_stone axe");
 	
 	private Button close;
 	
