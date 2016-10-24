@@ -32,6 +32,7 @@ import com.wfe.math.Vector4f;
 import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainBlock;
 import com.wfe.utils.Color;
+import com.wfe.utils.GameTime;
 import com.wfe.utils.OpenglUtils;
 
 /**
@@ -78,7 +79,7 @@ public class World {
     private Vector4f refractionClipPlane = new Vector4f(0, -1, 0, WaterTile.HEIGHT);
     private Vector4f normalClipPlane = new Vector4f(0, -1, 0, 15);
 
-    public World(Camera camera) {
+    public World(Camera camera) throws Exception {
     	OpenglUtils.depthTest(true);
         OpenglUtils.cullFace(true);
     	
@@ -96,9 +97,13 @@ public class World {
         //MousePicker.setUpMousePicker(this, camera);
 
         light = new DirectionalLight(new Vector3f(384, 1000, 1500), new Color(255, 255, 200));
+        
+        GameTime.init();
     }
 
     public void update(float dt) {
+    	GameTime.update();
+    	
         camera.update();
         camera.rotate(dt);
         camera.move(dt);

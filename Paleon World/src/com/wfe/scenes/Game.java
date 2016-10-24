@@ -20,6 +20,7 @@ import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainGenerator;
 import com.wfe.terrain.TexturePack;
 import com.wfe.utils.Color;
+import com.wfe.utils.GameTime;
 
 public class Game implements IScene {
 	
@@ -27,7 +28,6 @@ public class Game implements IScene {
 	
 	@Override
 	public void loadResources() {
-		ResourceManager.loadShader("entity");
 		ResourceManager.loadTexture("rock", "rock");
 		ResourceManager.loadMesh("box", "box");
 		
@@ -38,10 +38,6 @@ public class Game implements IScene {
 		/*** Water Textures ***/
 		ResourceManager.loadTexture("water/dudvMap", "dudvMap");
 		ResourceManager.loadTexture("water/normalMap", "normalMap");
-		
-		/*** Skyboxes ***/
-		ResourceManager.loadSkybox("sunny");
-		/*** *** ***/
 		
 		/*** Settler ***/
 		ResourceManager.loadTexture("models/settler/skin", "skin");
@@ -167,6 +163,8 @@ public class Game implements IScene {
         
         Palm palm = new Palm(world);
         palm.position.set(395, world.getTerrainHeight(395, 410), 410);
+        
+        GameTime.setTime(23, 00);
 	}
 
 	@Override

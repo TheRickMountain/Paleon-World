@@ -97,7 +97,7 @@ public class TextureLoader {
         return new Texture(id, width, height);
     }
 	
-    public static Texture loadCubemap(String skyboxName) throws Exception {
+    public static int loadCubemap(String skyboxName) throws Exception {
     	int id = GL11.glGenTextures();
     	GL13.glActiveTexture(GL13.GL_TEXTURE0);
     	GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, id);
@@ -115,7 +115,7 @@ public class TextureLoader {
     	GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
     	GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
     	GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-    	return new Texture(id, 0, 0);
+    	return id;
     }
     
     private static TextureData decodeTextureFile(String fileName) {
@@ -138,29 +138,5 @@ public class TextureLoader {
     	}
     	return new TextureData(buffer, width, height);
     }
-
-	private static class TextureData {
-		private int width;
-		private int height;
-		private ByteBuffer buffer;
-
-		public TextureData(ByteBuffer buffer, int width, int height) {
-			this.buffer = buffer;
-			this.width = width;
-			this.height = height;
-		}
-
-		public int getWidth() {
-			return width;
-		}
-
-		public int getHeight() {
-			return height;
-		}
-
-		public ByteBuffer getBuffer() {
-			return buffer;
-		}
-	}
     
 }

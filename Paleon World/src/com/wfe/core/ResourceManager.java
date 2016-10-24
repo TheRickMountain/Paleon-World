@@ -47,21 +47,6 @@ public class ResourceManager {
 	public static Texture getTexture(String textureName) {
 		return textures.get(textureName);
 	}
-	
-	public static Texture loadSkybox(String skyboxName) {
-        try {
-        	Texture texture = TextureLoader.loadCubemap(skyboxName);
-            textures.put(skyboxName, texture);
-            return texture;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-	
-	public static int getSkybox(String skyboxName) {
-		return textures.get(skyboxName).getID();
-	}
 
     public static Mesh loadMesh(String meshPath, String meshName) {
         try {
