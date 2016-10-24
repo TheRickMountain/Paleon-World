@@ -13,12 +13,17 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
+uniform vec4 plane;
+
 const float density = 0.003f;
 const float gradient = 5.0f;
 
 void main() {
 
     vec4 mPos = model * vec4(position, 1.0f);
+    
+    gl_ClipDistance[0] = dot(mPos, plane);
+    
     vec4 mvPos = view * mPos;
     gl_Position = projection * mvPos;
     UV = uv;

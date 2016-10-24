@@ -14,6 +14,7 @@ import com.wfe.graph.processing.LodCalculator;
 import com.wfe.graph.shaders.ShaderProgram;
 import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
+import com.wfe.math.Vector4f;
 import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainBlock;
 import com.wfe.terrain.TexturePack;
@@ -56,15 +57,20 @@ public class TerrainRenderer {
         shader.setUniform("bTexture", 4, true);
         shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
 
+        shader.createUniform("plane");
+        
         modelMatrix = new Matrix4f();
     }
 
-    public void render(Map<Terrain, List<TerrainBlock>> terrainBatches, DirectionalLight light, Camera camera) {
+    public void render(Map<Terrain, List<TerrainBlock>> terrainBatches, DirectionalLight light, Camera camera,
+    		Vector4f plane) {
         if(Display.wasResized()) {
             shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
         }
 
         shader.bind();
+        
+        shader.setUniform("plane", plane);
 
         for (List<TerrainBlock> blocks : terrainBatches.values()) {
             for (TerrainBlock block : blocks) {

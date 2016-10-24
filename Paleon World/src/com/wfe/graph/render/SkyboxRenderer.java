@@ -48,7 +48,14 @@ public class SkyboxRenderer {
             SIZE, SIZE, SIZE,
             SIZE, SIZE, SIZE,
             SIZE, -SIZE, SIZE,
-            -SIZE, -SIZE, SIZE
+            -SIZE, -SIZE, SIZE,
+            
+            -SIZE,  SIZE, -SIZE,
+   	     	SIZE,  SIZE, -SIZE,
+   	     	SIZE,  SIZE,  SIZE,
+   	     	SIZE,  SIZE,  SIZE,
+   	     	-SIZE,  SIZE,  SIZE,
+   	     	-SIZE,  SIZE, -SIZE,
     };
 
     private ShaderProgram shader;

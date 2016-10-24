@@ -1,20 +1,15 @@
-package com.wfe.entities;
+package com.wfe.graph.water;
 
 public class WaterTile {
 	
 	public static final float TILE_SIZE = 60;
-	
-	private float height;
+	public static final float HEIGHT = 1;
+
 	private float x,z;
 	
-	public WaterTile(float centerX, float centerZ, float height){
+	public WaterTile(float centerX, float centerZ){
 		this.x = centerX;
 		this.z = centerZ;
-		this.height = height;
-	}
-
-	public float getHeight() {
-		return height;
 	}
 
 	public float getX() {

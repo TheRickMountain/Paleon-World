@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 import com.wfe.behaviours.Behaviour;
 import com.wfe.components.Component;
@@ -13,7 +14,6 @@ import com.wfe.components.Image;
 import com.wfe.components.Model;
 import com.wfe.components.Text;
 import com.wfe.core.ResourceManager;
-import com.wfe.entities.WaterTile;
 import com.wfe.graph.Camera;
 import com.wfe.graph.DirectionalLight;
 import com.wfe.graph.Mesh;
@@ -23,9 +23,12 @@ import com.wfe.graph.render.SkyboxRenderer;
 import com.wfe.graph.render.TerrainRenderer;
 import com.wfe.graph.render.WaterRenderer;
 import com.wfe.graph.transform.Transform;
+import com.wfe.graph.water.WaterFrameBuffers;
+import com.wfe.graph.water.WaterTile;
 import com.wfe.input.Key;
 import com.wfe.input.Keyboard;
 import com.wfe.math.Vector3f;
+import com.wfe.math.Vector4f;
 import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainBlock;
 import com.wfe.utils.Color;
@@ -36,6 +39,7 @@ import com.wfe.utils.OpenglUtils;
  */
 public class World {
 
+	public final WaterFrameBuffers fbos;
     private final MeshRenderer meshRenderer;
     private final TerrainRenderer terrainRenderer;
     private final SkyboxRenderer skyboxRenderer;
@@ -69,6 +73,10 @@ public class World {
 
     private boolean wireframeMode = false;
     public boolean onGuiLayer = false;
+    
+    private Vector4f reflectionClipPlane = new Vector4f(0, 1, 0, -WaterTile.HEIGHT);
+    private Vector4f refractionClipPlane = new Vector4f(0, -1, 0, WaterTile.HEIGHT);
+    private Vector4f normalClipPlane = new Vector4f(0, -1, 0, 15);
 
     public World(Camera camera) {
     	OpenglUtils.depthTest(true);
@@ -76,10 +84,11 @@ public class World {
     	
         this.camera = camera;
 
+        fbos = new WaterFrameBuffers();
         meshRenderer = new MeshRenderer(camera);
         terrainRenderer = new TerrainRenderer(camera);
         skyboxRenderer = new SkyboxRenderer(camera);
-        waterRenderer = new WaterRenderer(camera);
+        waterRenderer = new WaterRenderer(camera, fbos);
         guiRenderer = new GUIRenderer();
 
         terrainGrid = new TerrainBlock[WORLD_TILE_WIDTH][WORLD_TILE_WIDTH];
@@ -139,13 +148,41 @@ public class World {
             OpenglUtils.wireframeMode(wireframeMode);
         }
     }
+    
+    public void clear() {
+    	GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+    }
 
     public void render() {
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+    
+    	GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
+    	
+        fbos.bindReflectionFrameBuffer();
+        float distance = 2 * (camera.getPosition().y - WaterTile.HEIGHT);
+        camera.getPosition().y -= distance;
+        camera.invertPitch();
+        clear();
+        camera.updateViewMatrix();
+        meshRenderer.render(meshes, light, camera, reflectionClipPlane);
+        terrainRenderer.render(terrains, light, camera, reflectionClipPlane);
+        skyboxRenderer.render(camera);
+        camera.getPosition().y += distance;
+        camera.invertPitch();
         
-        meshRenderer.render(meshes, light, camera);
-        terrainRenderer.render(terrains, light, camera);
+        fbos.bindRefractionFrameBuffer();
+        clear();
+        camera.updateViewMatrix();
+        meshRenderer.render(meshes, light, camera, refractionClipPlane);
+        terrainRenderer.render(terrains, light, camera, refractionClipPlane);
+        skyboxRenderer.render(camera);
+        
+        GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
+        fbos.unbindCurrentFrameBuffer();
+        
+        clear();
+        meshRenderer.render(meshes, light, camera, normalClipPlane);
+        terrainRenderer.render(terrains, light, camera, normalClipPlane);
         skyboxRenderer.render(camera);
         waterRenderer.render(waters);
         guiRenderer.render(guis);
@@ -250,6 +287,7 @@ public class World {
         meshRenderer.cleanup();
         terrainRenderer.cleanup();
         skyboxRenderer.cleanup();
+        fbos.cleanup();
         waterRenderer.cleanup();
         guiRenderer.cleanup();
         ResourceManager.cleanup();

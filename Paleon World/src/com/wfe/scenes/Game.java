@@ -8,11 +8,11 @@ import com.wfe.core.ResourceManager;
 import com.wfe.entities.DesertHouse;
 import com.wfe.entities.Palm;
 import com.wfe.entities.Settler;
-import com.wfe.entities.WaterTile;
 import com.wfe.graph.Camera;
 import com.wfe.graph.render.GUIRenderer;
 import com.wfe.graph.transform.Transform2D;
 import com.wfe.graph.transform.Transform3D;
+import com.wfe.graph.water.WaterTile;
 import com.wfe.math.Vector3f;
 import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
@@ -116,7 +116,7 @@ public class Game implements IScene {
 		
 		for(int i = 60; i < 840; i+= 120) {
 			for(int j = 60; j < 840; j+= 120) {
-				world.addWaterTile(new WaterTile(j, i, 1f));
+				world.addWaterTile(new WaterTile(j, i));
 			}
 		}
 		

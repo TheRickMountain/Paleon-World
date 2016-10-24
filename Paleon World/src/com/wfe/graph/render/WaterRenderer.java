@@ -3,15 +3,17 @@ package com.wfe.graph.render;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import com.wfe.core.Display;
 import com.wfe.core.ResourceManager;
-import com.wfe.entities.WaterTile;
 import com.wfe.graph.Camera;
 import com.wfe.graph.Mesh;
 import com.wfe.graph.shaders.ShaderProgram;
+import com.wfe.graph.water.WaterFrameBuffers;
+import com.wfe.graph.water.WaterTile;
 import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
 import com.wfe.utils.MathUtils;
@@ -23,8 +25,12 @@ public class WaterRenderer {
 	private Mesh quad;
 	private ShaderProgram shader;
 	private Matrix4f modelMatrix;
+	
+	private WaterFrameBuffers fbos;
 
-	public WaterRenderer(Camera camera) {
+	public WaterRenderer(Camera camera, WaterFrameBuffers fbos) {
+		this.fbos = fbos;
+		
 		this.camera = camera;
 		
 		this.shader = ResourceManager.loadShader("water");
@@ -32,6 +38,12 @@ public class WaterRenderer {
 		shader.createUniform("projectionMatrix");
 		shader.createUniform("modelMatrix");
 		shader.createUniform("viewMatrix");
+		
+		shader.createUniform("reflectionTexture");
+		shader.createUniform("refractionTexture");
+		
+		shader.setUniform("reflectionTexture", 0, true);
+		shader.setUniform("refractionTexture", 1, true);
 		
 		setUpVAO();
 		
@@ -44,7 +56,7 @@ public class WaterRenderer {
 		prepareRender();	
 		for (WaterTile tile : water) {
 			MathUtils.getEulerModelMatrix(modelMatrix,
-					new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), new Vector3f(0, 0, 0),
+					new Vector3f(tile.getX(), WaterTile.HEIGHT, tile.getZ()), new Vector3f(0, 0, 0),
 					WaterTile.TILE_SIZE);
 			shader.setUniform("modelMatrix", modelMatrix);
 			GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, quad.getVertexCount());
@@ -62,6 +74,10 @@ public class WaterRenderer {
 		shader.setUniform("viewMatrix", camera.getViewMatrix());
 		GL30.glBindVertexArray(quad.getVAO());
 		GL20.glEnableVertexAttribArray(0);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getReflectionTexture());
+		GL13.glActiveTexture(GL13.GL_TEXTURE1);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionTexture());
 	}
 	
 	private void unbind(){

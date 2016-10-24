@@ -62,12 +62,16 @@ public class Camera {
         return position;
     }
 
+    public void invertPitch() {
+    	this.pitch = -pitch;
+    }
+    
     public void update() {
         if(Display.wasResized()) {
             MathUtils.getPerspProjectionMatrix(projectionMatrix, FOV, Display.getWidth(), Display.getHeight(), Z_NEAR, Z_FAR);
         }
 
-        viewMatrix = MathUtils.getViewMatrix(viewMatrix, this);
+        //viewMatrix = MathUtils.getViewMatrix(viewMatrix, this);
         
         frustum.updatePlanes();
     }
@@ -185,6 +189,10 @@ public class Camera {
     
     public Matrix4f getViewMatrix() {
         return viewMatrix;
+    }
+    
+    public void updateViewMatrix(){
+    	viewMatrix = MathUtils.getViewMatrix(viewMatrix, this);
     }
     
     public boolean testTerrainInView(TerrainBlock block) {
