@@ -11,11 +11,11 @@ import com.wfe.core.Display;
  
 public class WaterFrameBuffers {
  
-    protected static final int REFLECTION_WIDTH = 320;
-    private static final int REFLECTION_HEIGHT = 180;
+    protected static final int REFLECTION_WIDTH = 288;
+    private static final int REFLECTION_HEIGHT = 162;
      
-    protected static final int REFRACTION_WIDTH = 1280;
-    private static final int REFRACTION_HEIGHT = 720;
+    protected static final int REFRACTION_WIDTH = 1152;
+    private static final int REFRACTION_HEIGHT = 648;
  
     private int reflectionFrameBuffer;
     private int reflectionTexture;

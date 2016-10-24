@@ -74,7 +74,7 @@ public class World {
     private boolean wireframeMode = false;
     public boolean onGuiLayer = false;
     
-    private Vector4f reflectionClipPlane = new Vector4f(0, 1, 0, -WaterTile.HEIGHT);
+    private Vector4f reflectionClipPlane = new Vector4f(0, 1, 0, -WaterTile.HEIGHT + 1f);
     private Vector4f refractionClipPlane = new Vector4f(0, -1, 0, WaterTile.HEIGHT);
     private Vector4f normalClipPlane = new Vector4f(0, -1, 0, 15);
 
@@ -102,6 +102,9 @@ public class World {
         camera.update();
         camera.rotate(dt);
         camera.move(dt);
+        
+        skyboxRenderer.update(dt);
+        waterRenderer.update(dt);
 
         //MousePicker.update();
 
@@ -184,7 +187,7 @@ public class World {
         meshRenderer.render(meshes, light, camera, normalClipPlane);
         terrainRenderer.render(terrains, light, camera, normalClipPlane);
         skyboxRenderer.render(camera);
-        waterRenderer.render(waters);
+        waterRenderer.render(waters, light);
         guiRenderer.render(guis);
     }
 

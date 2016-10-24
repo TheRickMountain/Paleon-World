@@ -10,16 +10,21 @@ import org.lwjgl.opengl.GL30;
 import com.wfe.core.Display;
 import com.wfe.core.ResourceManager;
 import com.wfe.graph.Camera;
+import com.wfe.graph.DirectionalLight;
 import com.wfe.graph.Mesh;
+import com.wfe.graph.Texture;
 import com.wfe.graph.shaders.ShaderProgram;
 import com.wfe.graph.water.WaterFrameBuffers;
 import com.wfe.graph.water.WaterTile;
 import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
 import com.wfe.utils.MathUtils;
+import com.wfe.utils.OpenglUtils;
 
 public class WaterRenderer {
 
+	private static final float WAVE_SPEED = 0.03f;
+	
 	private Camera camera;
 	
 	private Mesh quad;
@@ -27,11 +32,21 @@ public class WaterRenderer {
 	private Matrix4f modelMatrix;
 	
 	private WaterFrameBuffers fbos;
+	
+	private Texture dudvMap;
+	private Texture normalMap;
+	
+	private float moveFactor = 0;
 
 	public WaterRenderer(Camera camera, WaterFrameBuffers fbos) {
 		this.fbos = fbos;
 		
 		this.camera = camera;
+		
+		this.modelMatrix = new Matrix4f();
+		
+		dudvMap = ResourceManager.getTexture("dudvMap");
+		normalMap = ResourceManager.getTexture("normalMap");
 		
 		this.shader = ResourceManager.loadShader("water");
 		
@@ -41,19 +56,35 @@ public class WaterRenderer {
 		
 		shader.createUniform("reflectionTexture");
 		shader.createUniform("refractionTexture");
+		shader.createUniform("dudvMap");
+		shader.createUniform("normalMap");
+		shader.createUniform("depthMap");
 		
-		shader.setUniform("reflectionTexture", 0, true);
-		shader.setUniform("refractionTexture", 1, true);
+		shader.createUniform("moveFactor");
+		shader.createUniform("cameraPosition");
+		shader.createUniform("lightPosition");
+		shader.createUniform("lightColor");
+		
+		shader.bind();
+		shader.setUniform("reflectionTexture", 0);
+		shader.setUniform("refractionTexture", 1);
+		shader.setUniform("dudvMap", 2);
+		shader.setUniform("normalMap", 3);
+		shader.setUniform("depthMap", 4);
+		shader.unbind();
 		
 		setUpVAO();
 		
-		modelMatrix = new Matrix4f();
-		
 		shader.setUniform("projectionMatrix", camera.getProjectionMatrix(), true);
 	}
+	
+	public void update(float dt) {
+		moveFactor += WAVE_SPEED * dt;
+		moveFactor %= 1;
+	}
 
-	public void render(List<WaterTile> water) {
-		prepareRender();	
+	public void render(List<WaterTile> water, DirectionalLight sun) {
+		prepareRender(sun);	
 		for (WaterTile tile : water) {
 			MathUtils.getEulerModelMatrix(modelMatrix,
 					new Vector3f(tile.getX(), WaterTile.HEIGHT, tile.getZ()), new Vector3f(0, 0, 0),
@@ -64,23 +95,37 @@ public class WaterRenderer {
 		unbind();
 	}
 	
-	private void prepareRender(){
+	private void prepareRender(DirectionalLight sun){
 		shader.bind();
 		
 		if(Display.wasResized()) {
 			shader.setUniform("projectionMatrix", camera.getProjectionMatrix());
 		}
 		
+		shader.setUniform("cameraPosition", camera.getPosition());
+		
+		shader.setUniform("lightPosition", sun.position);
+		shader.setUniform("lightColor", sun.color.getRf(), sun.color.getGf(), sun.color.getBf());
+		
 		shader.setUniform("viewMatrix", camera.getViewMatrix());
+		shader.setUniform("moveFactor", moveFactor);
 		GL30.glBindVertexArray(quad.getVAO());
 		GL20.glEnableVertexAttribArray(0);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getReflectionTexture());
 		GL13.glActiveTexture(GL13.GL_TEXTURE1);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionTexture());
+		dudvMap.bind(2);
+		normalMap.bind(3);
+		GL13.glActiveTexture(GL13.GL_TEXTURE4);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionDepthTexture());
+		
+		OpenglUtils.alphaBlending(true);
 	}
 	
 	private void unbind(){
+		OpenglUtils.alphaBlending(false);
+		
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
 		shader.unbind();

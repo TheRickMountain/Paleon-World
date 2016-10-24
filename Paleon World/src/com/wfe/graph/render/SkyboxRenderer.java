@@ -11,6 +11,7 @@ import com.wfe.graph.Camera;
 import com.wfe.graph.Mesh;
 import com.wfe.graph.shaders.ShaderProgram;
 import com.wfe.math.Matrix4f;
+import com.wfe.utils.MathUtils;
 
 /**
  * Created by Rick on 11.10.2016.
@@ -65,6 +66,9 @@ public class SkyboxRenderer {
     private Matrix4f viewMatrix;
 
     int skyBoxTexture;
+    
+    private static final float ROTATE_SPEED = 0.5f;
+	private float rotation = 0;
 
     public SkyboxRenderer(Camera camera) {
         this.camera = camera;
@@ -86,6 +90,10 @@ public class SkyboxRenderer {
         skyBoxTexture = ResourceManager.getSkybox("sunny");
     }
 
+    public void update(float dt) {
+		rotation += ROTATE_SPEED * dt;
+	}
+    
     public void render(Camera camera) {
         if(Display.wasResized()) {
             shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
@@ -96,6 +104,7 @@ public class SkyboxRenderer {
         viewMatrix.m30 = 0;
         viewMatrix.m31 = 0;
         viewMatrix.m32 = 0;
+        Matrix4f.rotate((float)Math.toRadians(rotation), MathUtils.AXIS_Y, viewMatrix, viewMatrix);
         shader.setUniform("view", viewMatrix);
         GL30.glBindVertexArray(mesh.getVAO());
         GL20.glEnableVertexAttribArray(0);

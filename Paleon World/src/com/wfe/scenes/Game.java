@@ -31,13 +31,13 @@ public class Game implements IScene {
 		ResourceManager.loadTexture("rock", "rock");
 		ResourceManager.loadMesh("box", "box");
 		
-		/*** Terrain Textures ***/
-		ResourceManager.loadTexture("terrainTextures/dry_ground", "dry_ground");
-		ResourceManager.loadTexture("terrainTextures/dry_grass", "dry_grass");
-		ResourceManager.loadTexture("terrainTextures/ground", "ground");
-		ResourceManager.loadTexture("terrainTextures/sand", "sand");
-		
+		/*** Terrain Textures ***/;
+		ResourceManager.loadTexture("terrain/sand", "sand");
 		/*** *** ***/
+		
+		/*** Water Textures ***/
+		ResourceManager.loadTexture("water/dudvMap", "dudvMap");
+		ResourceManager.loadTexture("water/normalMap", "normalMap");
 		
 		/*** Skyboxes ***/
 		ResourceManager.loadSkybox("sunny");
