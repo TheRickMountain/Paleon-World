@@ -13,6 +13,8 @@ uniform vec3 lightPosition;
 
 uniform vec3 viewPosition;
 
+uniform vec4 fogColor;
+
 uniform int useFakeLighting;
 uniform int transparency;
 uniform int useSpecular;
@@ -53,5 +55,5 @@ void main() {
     }
 
     out_Color = vec4(result, 1.0f) * objectColor * color;
-    out_Color = mix(vec4(0.85f, 0.85f, 1.0f, 1.0f), out_Color, Visibility);
+    out_Color = mix(fogColor, out_Color, Visibility);
 }

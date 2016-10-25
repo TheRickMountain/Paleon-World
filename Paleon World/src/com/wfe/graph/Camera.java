@@ -2,6 +2,7 @@ package com.wfe.graph;
 
 import com.wfe.core.Display;
 import com.wfe.graph.processing.Frustum;
+import com.wfe.graph.water.WaterTile;
 import com.wfe.input.Key;
 import com.wfe.input.Keyboard;
 import com.wfe.input.Mouse;
@@ -201,6 +202,10 @@ public class Camera {
     
     public boolean testEntityInView(Entity entity) {
     	return frustum.testEntityInView(entity);
+    }
+    
+    public boolean testWaterInView(WaterTile water) {
+    	return frustum.testWaterTileInView(water);
     }
 
 }

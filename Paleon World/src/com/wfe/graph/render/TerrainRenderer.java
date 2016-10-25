@@ -18,6 +18,7 @@ import com.wfe.math.Vector4f;
 import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainBlock;
 import com.wfe.terrain.TexturePack;
+import com.wfe.utils.Color;
 import com.wfe.utils.MathUtils;
 import com.wfe.utils.OpenglUtils;
 
@@ -49,26 +50,32 @@ public class TerrainRenderer {
 
         shader.createUniform("lightPosition");
         shader.createUniform("lightColor");
-
-        shader.setUniform("blendMap", 0, true);
-        shader.setUniform("aTexture", 1, true);
-        shader.setUniform("rTexture", 2, true);
-        shader.setUniform("gTexture", 3, true);
-        shader.setUniform("bTexture", 4, true);
-        shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
-
+        
+        shader.createUniform("fogColor");
+        
         shader.createUniform("plane");
+
+        shader.bind();
+        shader.setUniform("blendMap", 0);
+        shader.setUniform("aTexture", 1);
+        shader.setUniform("rTexture", 2);
+        shader.setUniform("gTexture", 3);
+        shader.setUniform("bTexture", 4);
+        shader.setUniform("projection", this.camera.getProjectionMatrix());
+        shader.unbind();
         
         modelMatrix = new Matrix4f();
     }
 
-    public void render(Map<Terrain, List<TerrainBlock>> terrainBatches, DirectionalLight light, Camera camera,
+    public void render(Map<Terrain, List<TerrainBlock>> terrainBatches, DirectionalLight light, Camera camera, Color fogColor,
     		Vector4f plane) {
         if(Display.wasResized()) {
             shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
         }
 
         shader.bind();
+        
+        shader.setUniform("fogColor", fogColor);
         
         shader.setUniform("plane", plane);
 

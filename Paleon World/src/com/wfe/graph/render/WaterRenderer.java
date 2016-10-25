@@ -18,6 +18,7 @@ import com.wfe.graph.water.WaterFrameBuffers;
 import com.wfe.graph.water.WaterTile;
 import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
+import com.wfe.utils.Color;
 import com.wfe.utils.MathUtils;
 import com.wfe.utils.OpenglUtils;
 
@@ -65,6 +66,8 @@ public class WaterRenderer {
 		shader.createUniform("lightPosition");
 		shader.createUniform("lightColor");
 		
+		shader.createUniform("fogColor");
+		
 		shader.bind();
 		shader.setUniform("reflectionTexture", 0);
 		shader.setUniform("refractionTexture", 1);
@@ -83,24 +86,28 @@ public class WaterRenderer {
 		moveFactor %= 1;
 	}
 
-	public void render(List<WaterTile> water, DirectionalLight sun) {
-		prepareRender(sun);	
+	public void render(List<WaterTile> water, DirectionalLight sun, Color fogColor) {
+		prepareRender(sun, fogColor);	
 		for (WaterTile tile : water) {
-			MathUtils.getEulerModelMatrix(modelMatrix,
-					new Vector3f(tile.getX(), WaterTile.HEIGHT, tile.getZ()), new Vector3f(0, 0, 0),
-					WaterTile.TILE_SIZE);
-			shader.setUniform("modelMatrix", modelMatrix);
-			GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, quad.getVertexCount());
+			if(camera.testWaterInView(tile)) {
+				MathUtils.getEulerModelMatrix(modelMatrix,
+						new Vector3f(tile.getX(), WaterTile.HEIGHT, tile.getZ()), new Vector3f(0, 0, 0),
+						WaterTile.TILE_SIZE);
+				shader.setUniform("modelMatrix", modelMatrix);
+				GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, quad.getVertexCount());
+			}
 		}
 		unbind();
 	}
 	
-	private void prepareRender(DirectionalLight sun){
+	private void prepareRender(DirectionalLight sun, Color fogColor){
 		shader.bind();
 		
 		if(Display.wasResized()) {
 			shader.setUniform("projectionMatrix", camera.getProjectionMatrix());
 		}
+		
+		shader.setUniform("fogColor", fogColor);
 		
 		shader.setUniform("cameraPosition", camera.getPosition());
 		

@@ -2,6 +2,7 @@ package com.wfe.graph.processing;
 
 import com.wfe.core.Display;
 import com.wfe.graph.Camera;
+import com.wfe.graph.water.WaterTile;
 import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
 import com.wfe.math.Vector4f;
@@ -86,6 +87,25 @@ public class Frustum {
 				}
 			}
 		}
+		return render;
+	}
+	
+	public boolean testWaterTileInView(WaterTile tile) {
+		boolean render = true;
+		float waterX = tile.getX();
+		float waterZ = tile.getZ();
+		if(MathUtils.getDistanceBetweenPoints(waterX, waterZ, 
+				cameraX, cameraZ) >= 350) {
+			render = false;
+		} else {
+			Vector3f point = new Vector3f(waterX, WaterTile.HEIGHT, waterZ);
+			for(Plane plane : frustum) {
+				float distance = plane.getSignedDistance(point);
+				if(distance < -(WaterTile.TILE_SIZE * 1.6f) * HALF_DIAGONAL) {
+					render = false;
+				}
+			}
+		}	
 		return render;
 	}
 	

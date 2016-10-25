@@ -12,6 +12,7 @@ import com.wfe.graph.Mesh;
 import com.wfe.graph.TextureLoader;
 import com.wfe.graph.shaders.ShaderProgram;
 import com.wfe.math.Matrix4f;
+import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
 import com.wfe.utils.MathUtils;
 
@@ -100,10 +101,13 @@ public class SkyboxRenderer {
         
         shader.createUniform("blendFactor");
         
-        shader.setUniform("cubeMap0", 0, true);
-        shader.setUniform("cubeMap1", 1, true);
-
-        shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
+        shader.createUniform("fogColor");
+        
+        shader.bind();
+        shader.setUniform("cubeMap0", 0);
+        shader.setUniform("cubeMap1", 1);
+        shader.setUniform("projection", this.camera.getProjectionMatrix());
+        shader.unbind();
         
         viewMatrix = new Matrix4f();
     }
@@ -147,12 +151,13 @@ public class SkyboxRenderer {
 		} 
 	}
     
-    public void render(Camera camera) {
+    public void render(Camera camera, Color fogColor) {
         if(Display.wasResized()) {
             shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
         }
 
         shader.bind();
+        shader.setUniform("fogColor", fogColor);
         Matrix4f.load(camera.getViewMatrix(), viewMatrix);
         viewMatrix.m30 = 0;
         viewMatrix.m31 = 0;

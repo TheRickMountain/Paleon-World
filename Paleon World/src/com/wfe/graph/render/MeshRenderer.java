@@ -13,6 +13,7 @@ import com.wfe.graph.Texture;
 import com.wfe.graph.shaders.ShaderProgram;
 import com.wfe.math.Vector4f;
 import com.wfe.scenegraph.Entity;
+import com.wfe.utils.Color;
 import com.wfe.utils.OpenglUtils;
 
 /**
@@ -50,17 +51,23 @@ public class MeshRenderer {
         shader.createUniform("useSpecular");
         
         shader.createUniform("plane");
-
-        shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
-        shader.setUniform("image", 0, true);
+        
+        shader.createUniform("fogColor");
+        
+        shader.bind();
+        shader.setUniform("projection", this.camera.getProjectionMatrix());
+        shader.setUniform("image", 0);
+        shader.unbind();
     }
 
-    public void render(Map<Mesh, List<Entity>> entities, DirectionalLight light, Camera camera, Vector4f plane) {
+    public void render(Map<Mesh, List<Entity>> entities, DirectionalLight light, Camera camera, Color fogColor, Vector4f plane) {
         if(Display.wasResized()) {
             shader.setUniform("projection", this.camera.getProjectionMatrix(), true);
         }
         
         shader.bind();
+        
+        shader.setUniform("fogColor", fogColor);
 
         shader.setUniform("plane", plane);
         

@@ -78,6 +78,8 @@ public class World {
     private Vector4f reflectionClipPlane = new Vector4f(0, 1, 0, -WaterTile.HEIGHT + 1f);
     private Vector4f refractionClipPlane = new Vector4f(0, -1, 0, WaterTile.HEIGHT);
     private Vector4f normalClipPlane = new Vector4f(0, -1, 0, 15);
+    
+    private Color fogColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
     public World(Camera camera) throws Exception {
     	OpenglUtils.depthTest(true);
@@ -172,27 +174,27 @@ public class World {
         camera.invertPitch();
         clear();
         camera.updateViewMatrix();
-        meshRenderer.render(meshes, light, camera, reflectionClipPlane);
-        terrainRenderer.render(terrains, light, camera, reflectionClipPlane);
-        skyboxRenderer.render(camera);
+        meshRenderer.render(meshes, light, camera, fogColor, reflectionClipPlane);
+        terrainRenderer.render(terrains, light, camera, fogColor, reflectionClipPlane);
+        skyboxRenderer.render(camera, fogColor);
         camera.getPosition().y += distance;
         camera.invertPitch();
         
         fbos.bindRefractionFrameBuffer();
         clear();
         camera.updateViewMatrix();
-        meshRenderer.render(meshes, light, camera, refractionClipPlane);
-        terrainRenderer.render(terrains, light, camera, refractionClipPlane);
-        skyboxRenderer.render(camera);
+        meshRenderer.render(meshes, light, camera, fogColor, refractionClipPlane);
+        terrainRenderer.render(terrains, light, camera, fogColor, refractionClipPlane);
+        skyboxRenderer.render(camera, fogColor);
         
         GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
         fbos.unbindCurrentFrameBuffer();
         
         clear();
-        meshRenderer.render(meshes, light, camera, normalClipPlane);
-        terrainRenderer.render(terrains, light, camera, normalClipPlane);
-        skyboxRenderer.render(camera);
-        waterRenderer.render(waters, light);
+        meshRenderer.render(meshes, light, camera, fogColor, normalClipPlane);
+        terrainRenderer.render(terrains, light, camera, fogColor, normalClipPlane);
+        skyboxRenderer.render(camera, fogColor);
+        waterRenderer.render(waters, light, fogColor);
         guiRenderer.render(guis);
     }
 

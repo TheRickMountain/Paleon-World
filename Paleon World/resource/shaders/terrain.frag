@@ -13,7 +13,7 @@ uniform sampler2D bTexture;
 
 uniform vec4 lightColor;
 uniform vec3 lightPosition;
-//uniform vec4 fogColor;
+uniform vec4 fogColor;
 
 out vec4 out_Color;
 
@@ -44,5 +44,5 @@ void main() {
 
     vec4 result = vec4(ambient + diffuse, 1.0f);
     out_Color = result * totalColor;
-    out_Color = mix(vec4(0.85f, 0.85f, 1.0f, 1.0f), out_Color, Visibility);
+    out_Color = mix(fogColor, out_Color, Visibility);
 }

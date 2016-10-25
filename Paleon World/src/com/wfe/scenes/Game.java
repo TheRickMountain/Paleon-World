@@ -164,7 +164,7 @@ public class Game implements IScene {
         Palm palm = new Palm(world);
         palm.position.set(395, world.getTerrainHeight(395, 410), 410);
         
-        GameTime.setTime(23, 00);
+        GameTime.setTime(12, 00);
 	}
 
 	@Override
