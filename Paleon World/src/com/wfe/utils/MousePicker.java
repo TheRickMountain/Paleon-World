@@ -2,6 +2,7 @@ package com.wfe.utils;
 
 import com.wfe.graph.Camera;
 import com.wfe.math.Matrix4f;
+import com.wfe.math.Vector2f;
 import com.wfe.math.Vector3f;
 import com.wfe.math.Vector4f;
 import com.wfe.scenegraph.World;
@@ -10,6 +11,7 @@ import com.wfe.terrain.TerrainBlock;
 public class MousePicker {
 
 	private static Vector3f currentTerrainPoint;
+	private static Vector2f currentGridPoint = new Vector2f();
 	private static Vector3f currentRay = new Vector3f();
 
 	private static final int RECURSION_COUNT = 21;
@@ -25,9 +27,33 @@ public class MousePicker {
 		camera = c;
 		projectionMatrix = camera.getProjectionMatrix();
 	}
+	
+	public static Vector3f getRayOrigin() {
+		return camera.getPosition();
+	}
 
 	public static Vector3f getCurrentTerrainPoint() {
 		return currentTerrainPoint;
+	}
+	
+	public static Vector2f getGridPoint() {
+		if(currentTerrainPoint != null) {
+			currentTerrainPoint.x += 1.5f;
+			currentTerrainPoint.z += 1.5f;
+			currentTerrainPoint.x /= 3;
+			currentTerrainPoint.z /= 3;
+			currentTerrainPoint.x = (int) Math.round(currentTerrainPoint.x);
+			currentTerrainPoint.z = (int) Math.round(currentTerrainPoint.z);
+			currentTerrainPoint.x *= 3;
+			currentTerrainPoint.z *= 3;
+			currentTerrainPoint.x -= 1.5f;
+			currentTerrainPoint.z -= 1.5f;
+			
+			currentGridPoint.x = ((int) currentTerrainPoint.x) / 3;
+			currentGridPoint.y = ((int) currentTerrainPoint.z) / 3;
+		}
+		
+		return currentGridPoint;
 	}
 
 	public static Vector3f getCurrentRay() {
@@ -94,7 +120,7 @@ public class MousePicker {
 		}
 	}
 
-	private static Vector3f getPointOnRay(Vector3f ray, float distance) {
+	public static Vector3f getPointOnRay(Vector3f ray, float distance) {
 		Vector3f start = new Vector3f(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
 		Vector3f scaledRay = new Vector3f(ray.x * distance, ray.y * distance, ray.z * distance);
 		return Vector3f.add(start, scaledRay, null);

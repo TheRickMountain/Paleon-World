@@ -1,8 +1,10 @@
 package com.wfe.scenes;
 
+import com.wfe.components.Image;
 import com.wfe.components.Material;
 import com.wfe.components.Model;
 import com.wfe.components.Text;
+import com.wfe.core.Display;
 import com.wfe.core.IScene;
 import com.wfe.core.ResourceManager;
 import com.wfe.entities.DesertHouse;
@@ -19,6 +21,7 @@ import com.wfe.scenegraph.World;
 import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainGenerator;
 import com.wfe.terrain.TexturePack;
+import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
 
@@ -29,7 +32,8 @@ public class Game implements IScene {
 	@Override
 	public void loadResources() {
 		ResourceManager.loadTexture("rock", "rock");
-		ResourceManager.loadMesh("box", "box");
+		
+		ResourceManager.loadTexture("gui/crosshair", "ui_crosshair");
 		
 		/*** Terrain Textures ***/;
 		ResourceManager.loadTexture("terrain/sand", "sand");
@@ -96,6 +100,7 @@ public class Game implements IScene {
 		Camera camera = new Camera(new Vector3f(0, 0, 0));
 		world = new World(camera);
 		
+		/*** Terrain ***/
 		TerrainGenerator generator = new TerrainGenerator();
 		TexturePack texturePack = new TexturePack(
         		generator.getHeightMap(),
@@ -107,8 +112,21 @@ public class Game implements IScene {
 
         Terrain terrain = new Terrain(0, 0, texturePack);
         world.addTerrain(terrain);
-		
-		camera.playerPosition.set(395, world.getTerrainHeight(395, 400) + 1, 400);
+        
+        for(int x = 0; x < 256; x++) {
+            for(int z = 0; z < 256; z++) {
+                float height = world.getTerrainHeight((x * 3) + 1.5f, (z * 3) + 1.5f);
+
+                int cellState = 0;
+
+                if(height < 3.9f)
+                    cellState = 1;
+                
+                world.cells.put(x + " " + z, 
+                		new CellInfo(new Vector3f(x * 3 + 1.5f, height, z * 3 + 1.5f), cellState));
+            }
+        }
+        /*** *** ***/
 		
 		for(int i = 60; i < 840; i+= 120) {
 			for(int j = 60; j < 840; j+= 120) {
@@ -153,13 +171,14 @@ public class Game implements IScene {
         grass1.textureIndex = 3;
         grass1.scale.set(2.5f);
         
+        Entity crosshair = new Entity(world, "Crosshair");
+        crosshair.setTransform(new Transform2D());
+        crosshair.addComponent(new Image(ResourceManager.getTexture("ui_crosshair")));
+        crosshair.scale.set(32, 32);
+        crosshair.position.set(Display.getWidth() / 2 - 16, Display.getHeight() / 2 - 16);
+        
         DesertHouse desertHouse = new DesertHouse(world);
         desertHouse.position.set(410, world.getTerrainHeight(410, 410), 410);
-        desertHouse.rotation.y = 90;
-        
-        DesertHouse desertHouse1 = new DesertHouse(world);
-        desertHouse1.position.set(380, world.getTerrainHeight(380, 405), 405);
-        desertHouse1.rotation.y = 100;
         
         Palm palm = new Palm(world);
         palm.position.set(395, world.getTerrainHeight(395, 410), 410);

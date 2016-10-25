@@ -3,7 +3,9 @@ package com.wfe.behaviours;
 import com.wfe.graph.Camera;
 import com.wfe.input.Key;
 import com.wfe.input.Keyboard;
+import com.wfe.input.Mouse;
 import com.wfe.math.Vector3f;
+import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
 
 public class ControllingBh extends Behaviour {
@@ -30,6 +32,22 @@ public class ControllingBh extends Behaviour {
 
 	@Override
 	public void update(float dt) {	
+		/*Vector2f grid = MousePicker.getGridPoint();
+		if(grid != null) {
+			palm.position.set(world.cells.get((int)grid.x + " " + (int)grid.y).position);
+		}*/
+		
+		if(Mouse.isButtonDown(0)) {
+			for(Entity entity : world.entities) {
+				BoundingBoxBh bb = entity.getBehaviour(BoundingBoxBh.class);
+				if(bb != null) {
+					if(bb.intersect()) {
+						System.out.println(entity.name);
+					}
+				}
+			}
+		}
+		
 		moving(dt);
 	}
 

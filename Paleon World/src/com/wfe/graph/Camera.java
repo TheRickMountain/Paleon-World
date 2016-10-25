@@ -28,8 +28,8 @@ public class Camera {
     private float angleAroundPlayer = 180;
     private float zoomSpeed = 50;
 
-    private static final float MAX_PITCH = 90;
-    private static final float MIN_PITCH = 0;
+    private static final float MAX_PITCH = 85;
+    private static final float MIN_PITCH = -20;
     
     private Frustum frustum;
 

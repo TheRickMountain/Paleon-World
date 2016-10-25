@@ -29,6 +29,7 @@ import com.wfe.input.Keyboard;
 import com.wfe.math.Vector4f;
 import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainBlock;
+import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
 import com.wfe.utils.MousePicker;
@@ -54,7 +55,7 @@ public class World {
 
     private final TerrainBlock[][] terrainGrid;
 
-    private final List<Entity> entities = new ArrayList<>();
+    public final List<Entity> entities = new ArrayList<>();
     private final List<Component> guis = new ArrayList<>();
     private final Map<Mesh, List<Entity>> meshes = new HashMap<>();
     private final List<WaterTile> waters = new ArrayList<>();
@@ -69,7 +70,7 @@ public class World {
     
     private final Weather weather;
 
-    //public final Map<String, CellInfo> cells = new HashMap<>();
+    public final Map<String, CellInfo> cells = new HashMap<>();
 
     private Camera camera;
 
@@ -98,8 +99,7 @@ public class World {
         terrainGrid = new TerrainBlock[WORLD_TILE_WIDTH][WORLD_TILE_WIDTH];
 
         MousePicker.setUpMousePicker(this, camera);
-
-        
+    
         fogColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         
         weather = new Weather();
