@@ -31,6 +31,7 @@ import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainBlock;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
+import com.wfe.utils.MousePicker;
 import com.wfe.utils.OpenglUtils;
 import com.wfe.weather.Weather;
 
@@ -96,7 +97,7 @@ public class World {
 
         terrainGrid = new TerrainBlock[WORLD_TILE_WIDTH][WORLD_TILE_WIDTH];
 
-        //MousePicker.setUpMousePicker(this, camera);
+        MousePicker.setUpMousePicker(this, camera);
 
         
         fogColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -111,13 +112,13 @@ public class World {
     	weather.updateWeather(GameTime.getATime());
     	fogColor = weather.getFogColor();
     	
+    	MousePicker.update();
+    	
         camera.update();
         camera.rotate(dt);
         
         skyboxRenderer.update(dt);
         waterRenderer.update(dt);
-
-        //MousePicker.update();
 
         for(Behaviour bh : behaviours) {
         	if(bh.active)

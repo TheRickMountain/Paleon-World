@@ -29,7 +29,11 @@ public class ControllingBh extends Behaviour {
 	}
 
 	@Override
-	public void update(float dt) {
+	public void update(float dt) {	
+		moving(dt);
+	}
+
+	public void moving(float dt) {
 		move = false;
 		
 		Vector3f parentPos = parent.position;
@@ -37,7 +41,7 @@ public class ControllingBh extends Behaviour {
 		Vector3f parentRot = parent.rotation;
 		
 		camera.playerPosition.set(parentPos);
-		camera.playerPosition.y += 3.5f;
+		camera.playerPosition.y += 3.8f;
 		
 		float yaw = camera.getYaw();
 		
@@ -89,7 +93,7 @@ public class ControllingBh extends Behaviour {
 			anim.idleAnim(dt);
 		}
 	}
-
+	
 	@Override
 	public void onGUI() {
 		
