@@ -39,10 +39,14 @@ public class BoundingBoxBh extends Behaviour {
 		
 	}
 	
-	public boolean intersect(BoundingBoxBh bb) {
+	public boolean collisionDetection(BoundingBoxBh bb) {
 		return (bb.bounds[0].x <= bounds[1].x && bb.bounds[1].x >= bounds[0].x) &&
 				(bb.bounds[0].y <= bounds[1].y && bb.bounds[1].y >= bounds[0].y) &&
 				(bb.bounds[0].z <= bounds[1].z && bb.bounds[1].z >= bounds[0].z);
+	}
+	
+	public void collisionResponce(BoundingBoxBh bb) {
+		
 	}
 	
 	public boolean intersect() {

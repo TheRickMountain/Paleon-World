@@ -146,7 +146,7 @@ public class Game implements IScene {
         rock.scale.set(0.65f);
         
         Settler settler = new Settler(world, camera);
-        settler.position.set(400, world.getTerrainHeight(400, 400) + 2.2f, 400);
+        settler.position.set(420, world.getTerrainHeight(400, 400) + 2.2f, 400);
         settler.rotation.y = 180;
         
         Material grassMat = new Material(ResourceManager.getTexture("grass"));

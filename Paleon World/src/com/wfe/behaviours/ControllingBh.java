@@ -10,6 +10,11 @@ import com.wfe.scenegraph.World;
 
 public class ControllingBh extends Behaviour {
 
+	private static final float GRAVITY = -50.0f;
+	private static final float JUMP_POWER = 20.0f;
+	private float upwardSpeed = 0;
+	private boolean isInAir = false;
+	
 	private AnimBh anim;
 	private BoundingBoxBh playerBB;
 	
@@ -17,7 +22,7 @@ public class ControllingBh extends Behaviour {
 	
 	private Camera camera;
 	
-	private float speed = 10.0f;
+	public float speed = 10.0f;
 	
 	private World world;
 	
@@ -34,16 +39,16 @@ public class ControllingBh extends Behaviour {
 
 	@Override
 	public void update(float dt) {	
-		for(Entity entity : world.entities) {
-			if(entity.name != "Settler") {
-				BoundingBoxBh bb = entity.getBehaviour(BoundingBoxBh.class);
-				if(bb != null) {
-					if(bb.intersect(playerBB)) {
-						System.out.println("Collision Detected");
-					}
-				}
-			}
-		}
+		/*for(Entity entity : world.entities) {
+			 if(entity.name != "Settler") {
+				 BoundingBoxBh bb = entity.getBehaviour(BoundingBoxBh.class);
+				 if(bb != null) {
+					 if(bb.collisionDetection(playerBB)) {
+						 
+					 }
+				 }
+			 }
+		}*/
 		
 		if(Mouse.isButtonDown(0)) {
 			for(Entity entity : world.entities) {
@@ -57,13 +62,29 @@ public class ControllingBh extends Behaviour {
 		}
 		
 		moving(dt);
+		
+		Vector3f parentPos = parent.position;
+		upwardSpeed += GRAVITY * dt;
+		parentPos.y += upwardSpeed * dt;
+		float terrainHeight = world.getTerrainHeight(parentPos.x, parentPos.z) + 2.2f;
+		if(parentPos.y < terrainHeight) {
+			upwardSpeed = 0;
+			isInAir = false;
+			parentPos.y = terrainHeight;
+		}
+	}
+	
+	public void jump() {
+		if(!isInAir) {
+			this.upwardSpeed = JUMP_POWER;
+			isInAir = true;
+		}
 	}
 
 	public void moving(float dt) {
 		move = false;
 		
 		Vector3f parentPos = parent.position;
-		parentPos.y = world.getTerrainHeight(parentPos.x, parentPos.z) + 2.2f;
 		Vector3f parentRot = parent.rotation;
 		
 		camera.playerPosition.set(parentPos);
@@ -91,7 +112,7 @@ public class ControllingBh extends Behaviour {
 			parentPos.z += (float)Math.cos(Math.toRadians(yaw - 45))* speed * dt;
 			parentRot.y = -yaw + 45;
             move = true;
-		} else if(Keyboard.isKey(Key.W)) {
+		} else if(Keyboard.isKey(Key.W)) {	
 			parentPos.x += (float)Math.sin(Math.toRadians(yaw)) * -1.0f * -speed * dt;;
 			parentPos.z += (float)Math.cos(Math.toRadians(yaw))* -speed * dt;
 			parentRot.y = -yaw;
@@ -111,6 +132,10 @@ public class ControllingBh extends Behaviour {
 			parentPos.z += (float)Math.cos(Math.toRadians(yaw + 90))* -speed * dt;
 			parentRot.y = -yaw - 90;
             move = true;
+		}
+		
+		if(Keyboard.isKeyDown(Key.SPACE)) {
+			jump();
 		}
 		
 		if(move) {
