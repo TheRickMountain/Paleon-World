@@ -1,11 +1,25 @@
 package com.wfe.weather;
 
+import com.wfe.graph.DirectionalLight;
+import com.wfe.math.Vector3f;
 import com.wfe.utils.Color;
 
 public class Weather {
 
+	private static final float RELATIVE_HEIGHT_OF_ARC = 0.6f;// between 0 and 1
+	private static final float DAY_NIGHT_BALANCE = 0.75f;// between -1 and 1
+	private static final float SUN_DISTANCE = 1000000;
+
+	private static final float HEIGHT_OFFSET = (SUN_DISTANCE * RELATIVE_HEIGHT_OF_ARC)
+			* DAY_NIGHT_BALANCE;
+	
+	
+	public final DirectionalLight sun;
 	private Color fogColor;
-	private Color sunLightColor;
+	
+	public Weather() {
+		sun = new DirectionalLight(new Vector3f(384, 1000, 1500), new Color(255, 255, 200));
+	}
 	
 	private WeatherFrame[] weatherFrames = {
 			new WeatherFrame(0, new Color(0.05f, 0.05f, 0.1f), new Color(0f, 0f, 0.26f)),
@@ -21,6 +35,7 @@ public class Weather {
 	
 	public void updateWeather(float time) {
 		interpolateOtherVariables(time);
+		calculateSunPosition(time);
 	}
 	
 	private void interpolateOtherVariables(float time) {
@@ -40,20 +55,26 @@ public class Weather {
 		updateSunVariables(timeFactor, frame1, frame2);
 	}
 	
+	private void calculateSunPosition(float time) {
+		double radionTime = ((time * Math.PI) / 12000) - (Math.PI / 2);
+		float x = (float) (SUN_DISTANCE * Math.cos(radionTime));
+		float z = (float) ((1 - RELATIVE_HEIGHT_OF_ARC) * SUN_DISTANCE * Math.sin(radionTime));
+		float y = (float) (RELATIVE_HEIGHT_OF_ARC * SUN_DISTANCE * Math.sin(radionTime))
+				+ HEIGHT_OFFSET;
+		sun.position.set(x, y, z);
+	}
+	
 	private void updateFogVariables(float timeFactor, WeatherFrame frame1, WeatherFrame frame2) {
 		fogColor = WeatherFrame.getInterpolatedFogColor(frame1, frame2, timeFactor);
 	}
 	
-	private void updateSunVariables(float timeFactor, WeatherFrame frame1, WeatherFrame frame2) {
-		sunLightColor = WeatherFrame.getInterpolatedSunLightColour(frame1, frame2, timeFactor);
+	private void updateSunVariables(float timeFactor, WeatherFrame frame1, WeatherFrame frame2) {	
+		sun.color = WeatherFrame.getInterpolatedSunLightColour(frame1, frame2, timeFactor);
 	}
 	
 	public Color getFogColor() {
 		return fogColor;
 	}
-	
-	public Color getSunLightColor() {
-		return sunLightColor;
-	}
+
 	
 }

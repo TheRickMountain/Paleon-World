@@ -15,7 +15,6 @@ import com.wfe.components.Model;
 import com.wfe.components.Text;
 import com.wfe.core.ResourceManager;
 import com.wfe.graph.Camera;
-import com.wfe.graph.DirectionalLight;
 import com.wfe.graph.Mesh;
 import com.wfe.graph.render.GUIRenderer;
 import com.wfe.graph.render.MeshRenderer;
@@ -27,7 +26,6 @@ import com.wfe.graph.water.WaterFrameBuffers;
 import com.wfe.graph.water.WaterTile;
 import com.wfe.input.Key;
 import com.wfe.input.Keyboard;
-import com.wfe.math.Vector3f;
 import com.wfe.math.Vector4f;
 import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainBlock;
@@ -82,7 +80,6 @@ public class World {
     private Vector4f normalClipPlane = new Vector4f(0, -1, 0, 15);
     
     private Color fogColor;
-    private final DirectionalLight sun;
 
     public World(Camera camera) throws Exception {
     	OpenglUtils.depthTest(true);
@@ -103,7 +100,6 @@ public class World {
 
         
         fogColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        sun = new DirectionalLight(new Vector3f(384, 1000, 1500), new Color(255, 255, 200));
         
         weather = new Weather();
         
@@ -114,7 +110,6 @@ public class World {
     	GameTime.update();
     	weather.updateWeather(GameTime.getATime());
     	fogColor = weather.getFogColor();
-    	sun.color = weather.getSunLightColor();
     	
         camera.update();
         camera.rotate(dt);
@@ -184,8 +179,8 @@ public class World {
         camera.invertPitch();
         clear();
         camera.updateViewMatrix();
-        meshRenderer.render(meshes, sun, camera, fogColor, reflectionClipPlane);
-        terrainRenderer.render(terrains, sun, camera, fogColor, reflectionClipPlane);
+        meshRenderer.render(meshes, weather.sun, camera, fogColor, reflectionClipPlane);
+        terrainRenderer.render(terrains, weather.sun, camera, fogColor, reflectionClipPlane);
         skyboxRenderer.render(camera, fogColor);
         camera.getPosition().y += distance;
         camera.invertPitch();
@@ -193,18 +188,18 @@ public class World {
         fbos.bindRefractionFrameBuffer();
         clear();
         camera.updateViewMatrix();
-        meshRenderer.render(meshes, sun, camera, fogColor, refractionClipPlane);
-        terrainRenderer.render(terrains, sun, camera, fogColor, refractionClipPlane);
+        meshRenderer.render(meshes, weather.sun, camera, fogColor, refractionClipPlane);
+        terrainRenderer.render(terrains, weather.sun, camera, fogColor, refractionClipPlane);
         skyboxRenderer.render(camera, fogColor);
         
         GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
         fbos.unbindCurrentFrameBuffer();
         
         clear();
-        meshRenderer.render(meshes, sun, camera, fogColor, normalClipPlane);
-        terrainRenderer.render(terrains, sun, camera, fogColor, normalClipPlane);
+        meshRenderer.render(meshes, weather.sun, camera, fogColor, normalClipPlane);
+        terrainRenderer.render(terrains, weather.sun, camera, fogColor, normalClipPlane);
         skyboxRenderer.render(camera, fogColor);
-        waterRenderer.render(waters, sun, fogColor);
+        waterRenderer.render(waters, weather.sun, fogColor);
         guiRenderer.render(guis);
     }
 
