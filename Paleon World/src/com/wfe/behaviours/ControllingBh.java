@@ -11,6 +11,7 @@ import com.wfe.scenegraph.World;
 public class ControllingBh extends Behaviour {
 
 	private AnimBh anim;
+	private BoundingBoxBh playerBB;
 	
 	private boolean move = false;
 	
@@ -27,15 +28,22 @@ public class ControllingBh extends Behaviour {
 	@Override
 	public void start() {
 		this.anim = parent.getBehaviour(AnimBh.class);
+		this.playerBB = parent.getBehaviour(BoundingBoxBh.class);
 		this.world = parent.getWorld();
 	}
 
 	@Override
 	public void update(float dt) {	
-		/*Vector2f grid = MousePicker.getGridPoint();
-		if(grid != null) {
-			palm.position.set(world.cells.get((int)grid.x + " " + (int)grid.y).position);
-		}*/
+		for(Entity entity : world.entities) {
+			if(entity.name != "Settler") {
+				BoundingBoxBh bb = entity.getBehaviour(BoundingBoxBh.class);
+				if(bb != null) {
+					if(bb.intersect(playerBB)) {
+						System.out.println("Collision Detected");
+					}
+				}
+			}
+		}
 		
 		if(Mouse.isButtonDown(0)) {
 			for(Entity entity : world.entities) {

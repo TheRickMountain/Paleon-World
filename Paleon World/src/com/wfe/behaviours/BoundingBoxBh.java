@@ -1,6 +1,7 @@
 package com.wfe.behaviours;
 
 import com.wfe.math.Vector3f;
+import com.wfe.utils.MathUtils;
 import com.wfe.utils.MousePicker;
 
 public class BoundingBoxBh extends Behaviour {
@@ -37,6 +38,10 @@ public class BoundingBoxBh extends Behaviour {
 	@Override
 	public void onGUI() {
 		
+	}
+	
+	public boolean intersect(BoundingBoxBh bb) {
+		return MathUtils.AABB(bb, this);
 	}
 	
 	public boolean intersect() {
