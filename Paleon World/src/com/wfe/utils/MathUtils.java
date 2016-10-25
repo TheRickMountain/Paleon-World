@@ -112,11 +112,5 @@ public class MathUtils {
 		float distance = (float) Math.sqrt((dX * dX) + (dY * dY));
 		return distance;
 	}
-	
-	public static boolean AABB(BoundingBoxBh a, BoundingBoxBh b) {
-		return (a.bounds[0].x <= b.bounds[1].x && a.bounds[1].x >= b.bounds[0].x) &&
-				(a.bounds[0].y <= b.bounds[1].y && a.bounds[1].y >= b.bounds[0].y) &&
-				(a.bounds[0].z <= b.bounds[1].z && a.bounds[1].z >= b.bounds[0].z);
-	}
 
 }

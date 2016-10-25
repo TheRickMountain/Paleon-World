@@ -1,7 +1,6 @@
 package com.wfe.behaviours;
 
 import com.wfe.math.Vector3f;
-import com.wfe.utils.MathUtils;
 import com.wfe.utils.MousePicker;
 
 public class BoundingBoxBh extends Behaviour {
@@ -41,7 +40,9 @@ public class BoundingBoxBh extends Behaviour {
 	}
 	
 	public boolean intersect(BoundingBoxBh bb) {
-		return MathUtils.AABB(bb, this);
+		return (bb.bounds[0].x <= bounds[1].x && bb.bounds[1].x >= bounds[0].x) &&
+				(bb.bounds[0].y <= bounds[1].y && bb.bounds[1].y >= bounds[0].y) &&
+				(bb.bounds[0].z <= bounds[1].z && bb.bounds[1].z >= bounds[0].z);
 	}
 	
 	public boolean intersect() {
