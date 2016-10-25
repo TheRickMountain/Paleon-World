@@ -104,7 +104,7 @@ public class Settler extends Entity {
         }
         
         addBehaviour(new AnimBh());
-        addBehaviour(new ControllingBh());
+        addBehaviour(new ControllingBh(camera));
 	}
 
 	

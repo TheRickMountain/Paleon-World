@@ -113,7 +113,6 @@ public class World {
     	
         camera.update();
         camera.rotate(dt);
-        camera.move(dt);
         
         skyboxRenderer.update(dt);
         waterRenderer.update(dt);

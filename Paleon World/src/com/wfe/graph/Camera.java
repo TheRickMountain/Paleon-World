@@ -22,9 +22,9 @@ public class Camera {
     public static final float Z_FAR = 1000.f;
 
     private static final float MIN_DISTANCE = 10;
-    private static final float MAX_DISTANCE = 200;
+    private static final float MAX_DISTANCE = 60;
 
-    private float distanceFromPlayer = 60;
+    private float distanceFromPlayer = 20;
     private float angleAroundPlayer = 180;
     private float zoomSpeed = 50;
 
