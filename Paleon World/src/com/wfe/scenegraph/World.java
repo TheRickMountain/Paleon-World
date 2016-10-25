@@ -34,6 +34,7 @@ import com.wfe.terrain.TerrainBlock;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
 import com.wfe.utils.OpenglUtils;
+import com.wfe.weather.Weather;
 
 /**
  * Created by Rick on 06.10.2016.
@@ -66,11 +67,12 @@ public class World {
     private final List<Transform> transforms = new ArrayList<>();
     private final List<Transform> transformsToAdd = new ArrayList<>();
     private final List<Transform> transformsToRemove = new ArrayList<>();
+    
+    private final Weather weather;
 
     //public final Map<String, CellInfo> cells = new HashMap<>();
 
     private Camera camera;
-    private final DirectionalLight light;
 
     private boolean wireframeMode = false;
     public boolean onGuiLayer = false;
@@ -79,7 +81,8 @@ public class World {
     private Vector4f refractionClipPlane = new Vector4f(0, -1, 0, WaterTile.HEIGHT);
     private Vector4f normalClipPlane = new Vector4f(0, -1, 0, 15);
     
-    private Color fogColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+    private Color fogColor;
+    private final DirectionalLight sun;
 
     public World(Camera camera) throws Exception {
     	OpenglUtils.depthTest(true);
@@ -98,13 +101,20 @@ public class World {
 
         //MousePicker.setUpMousePicker(this, camera);
 
-        light = new DirectionalLight(new Vector3f(384, 1000, 1500), new Color(255, 255, 200));
+        
+        fogColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        sun = new DirectionalLight(new Vector3f(384, 1000, 1500), new Color(255, 255, 200));
+        
+        weather = new Weather();
         
         GameTime.init();
     }
 
     public void update(float dt) {
     	GameTime.update();
+    	weather.updateWeather(GameTime.getATime());
+    	fogColor = weather.getFogColor();
+    	sun.color = weather.getSunLightColor();
     	
         camera.update();
         camera.rotate(dt);
@@ -174,8 +184,8 @@ public class World {
         camera.invertPitch();
         clear();
         camera.updateViewMatrix();
-        meshRenderer.render(meshes, light, camera, fogColor, reflectionClipPlane);
-        terrainRenderer.render(terrains, light, camera, fogColor, reflectionClipPlane);
+        meshRenderer.render(meshes, sun, camera, fogColor, reflectionClipPlane);
+        terrainRenderer.render(terrains, sun, camera, fogColor, reflectionClipPlane);
         skyboxRenderer.render(camera, fogColor);
         camera.getPosition().y += distance;
         camera.invertPitch();
@@ -183,18 +193,18 @@ public class World {
         fbos.bindRefractionFrameBuffer();
         clear();
         camera.updateViewMatrix();
-        meshRenderer.render(meshes, light, camera, fogColor, refractionClipPlane);
-        terrainRenderer.render(terrains, light, camera, fogColor, refractionClipPlane);
+        meshRenderer.render(meshes, sun, camera, fogColor, refractionClipPlane);
+        terrainRenderer.render(terrains, sun, camera, fogColor, refractionClipPlane);
         skyboxRenderer.render(camera, fogColor);
         
         GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
         fbos.unbindCurrentFrameBuffer();
         
         clear();
-        meshRenderer.render(meshes, light, camera, fogColor, normalClipPlane);
-        terrainRenderer.render(terrains, light, camera, fogColor, normalClipPlane);
+        meshRenderer.render(meshes, sun, camera, fogColor, normalClipPlane);
+        terrainRenderer.render(terrains, sun, camera, fogColor, normalClipPlane);
         skyboxRenderer.render(camera, fogColor);
-        waterRenderer.render(waters, light, fogColor);
+        waterRenderer.render(waters, sun, fogColor);
         guiRenderer.render(guis);
     }
 

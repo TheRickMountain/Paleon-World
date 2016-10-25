@@ -9,7 +9,7 @@ import com.wfe.utils.Color;
 public class DirectionalLight {
 
     public final Vector3f position;
-    public final Color color;
+    public Color color;
 
     public DirectionalLight(Vector3f position, Color color) {
         this.position = position;
