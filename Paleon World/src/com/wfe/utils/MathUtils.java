@@ -112,52 +112,6 @@ public class MathUtils {
 		return distance;
 	}
 	
-	/*public void collisionResponce(BoundingBoxBh bb) {
-		moveAxis = MoveAxis.NONE_AXIS;
-		
-		Vector3f endp[] = new Vector3f[2];
-		endp[0] = new Vector3f();
-		endp[1] = new Vector3f();
-		
-		Vector3f direction = Vector3f.sub(bb.parent.position, parent.position, null);
-		System.out.println(direction);
-		
-		endp[1].x = Math.min(bb.bounds[1].x, bounds[1].x);
-		endp[1].y = Math.min(bb.bounds[1].y, bounds[1].y);
-		endp[1].z = Math.min(bb.bounds[1].z, bounds[1].z);
-		
-		endp[0].x = Math.max(bb.bounds[0].x, bounds[0].x);
-		endp[0].y = Math.max(bb.bounds[0].y, bounds[0].y);
-		endp[0].z = Math.max(bb.bounds[0].z, bounds[0].z);
-		
-		Vector3f overlap = Vector3f.sub(endp[1], endp[0], null);
-		
-		if((overlap.x < overlap.y) && (overlap.x < overlap.z))
-			moveAxis = MoveAxis.AXIS_X;
-		
-		if((overlap.y < overlap.x) && (overlap.y < overlap.z))
-			moveAxis = MoveAxis.AXIS_Y;
-		
-		if((overlap.z < overlap.x) && (overlap.z < overlap.y))
-			moveAxis = MoveAxis.AXIS_Z;		
-		
-		if(moveAxis.equals(MoveAxis.AXIS_X)) {
-			bb.parent.position.x = parent.position.x + (Math.signum(direction.x) *
-					((bb.bounds[1].x - bb.bounds[0].x + bounds[1].x - bounds[0].x) / 2));
-			System.out.println("X");
-		} else if(moveAxis.equals(MoveAxis.AXIS_Y)) {
-			bb.parent.position.y = parent.position.y + (Math.signum(direction.y) *
-					((bb.bounds[1].y - bb.bounds[0].y + bounds[1].y - bounds[0].y) / 2));
-			System.out.println("Y");
-		} else if(moveAxis.equals(MoveAxis.AXIS_Z)) {
-			bb.parent.position.z = parent.position.z + (Math.signum(direction.z) *
-					((bb.bounds[1].z - bb.bounds[0].z + bounds[1].z - bounds[0].z) / 2));
-			System.out.println("Z");
-		} else {
-			System.out.println("Zero");
-		}
-	}*/
-	
 	/*public boolean intersect() {
 		float tmin, tmax, tymin, tymax, tzmin, tzmax;
 		Vector3f rayOrigin = MousePicker.getRayOrigin();
@@ -207,5 +161,26 @@ public class MathUtils {
 			
 		return ( (tmin < 1000) && (tmax > 1) );
 	}*/
+	
+	public static boolean checkPointInTriangle(Vector3f p, Vector3f a1, Vector3f b1, Vector3f c1) {
+		Vector3f a = new Vector3f(a1.x, 0f, a1.z);
+		Vector3f b = new Vector3f(b1.x, 0f, b1.z);
+		Vector3f c = new Vector3f(c1.x, 0f, c1.z);
+		if (sameSide(p, a, b, c) && (sameSide(p, b, a, c)) && (sameSide(p, c, a, b))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static boolean sameSide(Vector3f p1, Vector3f p2, Vector3f a, Vector3f b) {
+		Vector3f cp1 = Vector3f.cross(Vector3f.sub(b, a, null), Vector3f.sub(p1, a, null), null);
+		Vector3f cp2 = Vector3f.cross(Vector3f.sub(b, a, null), Vector3f.sub(p2, a, null), null);
+		if (Vector3f.dot(cp1, cp2) >= 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }

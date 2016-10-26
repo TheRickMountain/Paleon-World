@@ -1,14 +1,12 @@
 package com.wfe.entities;
 
 import com.wfe.behaviours.AnimBh;
-import com.wfe.behaviours.BoundingBoxBh;
 import com.wfe.behaviours.ControllingBh;
 import com.wfe.components.Material;
 import com.wfe.components.Model;
 import com.wfe.core.ResourceManager;
 import com.wfe.graph.Camera;
 import com.wfe.graph.transform.Transform3D;
-import com.wfe.math.Vector3f;
 import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
 
@@ -106,8 +104,6 @@ public class Settler extends Entity {
         }
         
         addBehaviour(new AnimBh());
-        addBehaviour(new BoundingBoxBh(new Vector3f(-1f, 0f, -1f),
-        		new Vector3f(1f, 4f, 1f)));
         addBehaviour(new ControllingBh(camera));
 	}
 

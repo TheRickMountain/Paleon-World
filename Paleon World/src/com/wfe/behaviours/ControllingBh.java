@@ -3,9 +3,7 @@ package com.wfe.behaviours;
 import com.wfe.graph.Camera;
 import com.wfe.input.Key;
 import com.wfe.input.Keyboard;
-import com.wfe.input.Mouse;
 import com.wfe.math.Vector3f;
-import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
 
 public class ControllingBh extends Behaviour {
@@ -14,10 +12,9 @@ public class ControllingBh extends Behaviour {
 	private static final float JUMP_POWER = 20.0f;
 	private float upwardSpeed = 0;
 	private boolean isInAir = false;
-	public float speed = 10.0f;
+	public float speed = 15.0f;
 	
 	private AnimBh anim;
-	private BoundingBoxBh playerBB;
 	
 	private boolean move = false;
 	
@@ -34,33 +31,12 @@ public class ControllingBh extends Behaviour {
 	@Override
 	public void start() {
 		this.anim = parent.getBehaviour(AnimBh.class);
-		this.playerBB = parent.getBehaviour(BoundingBoxBh.class);
 		this.world = parent.getWorld();
 		direction = new Vector3f(0, 0, 0);
 	}
 
 	@Override
 	public void update(float dt) {	
-		for(Entity entity : world.entities) {
-			 if(entity.name != "Settler") {
-				 BoundingBoxBh bb = entity.getBehaviour(BoundingBoxBh.class);
-				 if(bb != null) {
-					 bb.collisionResponce(playerBB);
-				 }
-			 }
-		}
-		
-		if(Mouse.isButtonDown(0)) {
-			for(Entity entity : world.entities) {
-				BoundingBoxBh bb = entity.getBehaviour(BoundingBoxBh.class);
-				if(bb != null) {
-					if(bb.intersect()) {
-						System.out.println(entity.name);
-					}
-				}
-			}
-		}
-		
 		moving(dt);
 		
 		Vector3f parentPos = parent.position;

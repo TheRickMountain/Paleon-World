@@ -16,6 +16,8 @@ import com.wfe.graph.transform.Transform2D;
 import com.wfe.graph.transform.Transform3D;
 import com.wfe.graph.water.WaterTile;
 import com.wfe.math.Vector3f;
+import com.wfe.physics.FEllipse;
+import com.wfe.physics.FPlane;
 import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
 import com.wfe.terrain.Terrain;
@@ -24,6 +26,8 @@ import com.wfe.terrain.TexturePack;
 import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
+import com.wfe.utils.MathUtils;
+import com.wfe.utils.Triangle;
 
 public class Game implements IScene {
 	
@@ -185,7 +189,23 @@ public class Game implements IScene {
         
         GameTime.setTime(12, 00);
         
+        FEllipse ellipse = new FEllipse(new Vector3f(0.5f, 0, 0.5f),
+        		new Vector3f(3, 7, 3));
+        ellipse.velocity.set(0, 0, 1);
         
+        Triangle triangle = new Triangle(new Vector3f(1.0f, 0.0f, 1.0f),
+        		new Vector3f(-1.0f, 0.0f, -1.0f),
+        		new Vector3f(-1.0f, 0.0f, 1.0f));
+        
+        FPlane fplane = new FPlane(triangle.getPointN(0), triangle.getPointN(1), triangle.getPointN(2));
+       
+        float signedDistanceBasePoint = Vector3f.dot(fplane.normal, ellipse.position) + fplane.equation[3];
+        
+        float t0 = (1 - signedDistanceBasePoint) / Vector3f.dot(fplane.normal, ellipse.velocity);
+        float t1 = (-1 - signedDistanceBasePoint) / Vector3f.dot(fplane.normal, ellipse.velocity);
+        
+        System.out.println(MathUtils.checkPointInTriangle(ellipse.position, 
+        		triangle.getPointN(0), triangle.getPointN(1), triangle.getPointN(2)));
 	}
 
 	@Override
