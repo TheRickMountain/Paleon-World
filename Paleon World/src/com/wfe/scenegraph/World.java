@@ -94,8 +94,8 @@ public class World {
         terrainRenderer = new TerrainRenderer(camera);
         skyboxRenderer = new SkyboxRenderer(camera);
         waterRenderer = new WaterRenderer(camera, fbos);
-        guiRenderer = new GUIRenderer();
-
+        guiRenderer = new GUIRenderer();      
+        
         terrainGrid = new TerrainBlock[WORLD_TILE_WIDTH][WORLD_TILE_WIDTH];
 
         MousePicker.setUpMousePicker(this, camera);
@@ -157,7 +157,7 @@ public class World {
             }
             transformsToRemove.clear();
         }
-
+        
         if(Keyboard.isKeyDown(Key.F5)) {
             wireframeMode = !wireframeMode;
             OpenglUtils.wireframeMode(wireframeMode);
@@ -331,9 +331,5 @@ public class World {
         }
         return terrainGrid[terrain_i][terrain_j];
     }
-    
-    /*public int getShadowMapTexture() {
-    	return shadowMapMasterRenderer.getShadowMap();
-    }*/
 
 }

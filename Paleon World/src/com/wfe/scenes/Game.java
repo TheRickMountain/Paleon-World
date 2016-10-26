@@ -146,7 +146,7 @@ public class Game implements IScene {
         rock.scale.set(0.65f);
         
         Settler settler = new Settler(world, camera);
-        settler.position.set(420, world.getTerrainHeight(400, 400) + 2.2f, 400);
+        settler.position.set(380, world.getTerrainHeight(380, 420) + 2.2f, 420);
         settler.rotation.y = 180;
         
         Material grassMat = new Material(ResourceManager.getTexture("grass"));
@@ -184,6 +184,8 @@ public class Game implements IScene {
         palm.position.set(395, world.getTerrainHeight(395, 410), 410);
         
         GameTime.setTime(12, 00);
+        
+        
 	}
 
 	@Override

@@ -46,7 +46,70 @@ public class BoundingBoxBh extends Behaviour {
 	}
 	
 	public void collisionResponce(BoundingBoxBh bb) {
+		if((bb.bounds[0].z <= bounds[1].z && bb.bounds[1].z >= bounds[0].z)) {
+			if((bb.bounds[1].x > bounds[0].x && bb.bounds[1].x < bounds[1].x)) {
+				float length = bb.bounds[1].x - bounds[0].x;
+				System.out.println(length);
+				bb.parent.position.x -= length;
+			}
+			
+			if((bb.bounds[0].x > bounds[0].x && bb.bounds[0].x < bounds[1].x)) {
+				float length = bounds[1].x - bb.bounds[0].x;
+				bb.parent.position.x += length;
+			}
+		}
 		
+		/*if((bb.bounds[0].z > bounds[0].z && bb.bounds[0].z < bounds[1].z) ||
+				(bb.bounds[1].z > bounds[0].z && bb.bounds[1].z < bounds[1].z)) {
+			float length = bb.bounds[1].z - bounds[0].z;
+			bb.parent.position.z -= length;
+		}*/
+		
+		/*boolean moveX = false;
+		boolean moveY = false;
+		boolean moveZ = false;
+		
+		Vector3f endp[] = new Vector3f[2];
+		endp[0] = new Vector3f();
+		endp[1] = new Vector3f();
+		
+		Vector3f direction = Vector3f.sub(bb.parent.position, parent.position, null);
+		
+		endp[1].x = Math.min(bb.bounds[1].x, bounds[1].x);
+		endp[1].y = Math.min(bb.bounds[1].y, bounds[1].y);
+		endp[1].z = Math.min(bb.bounds[1].z, bounds[1].z);
+		
+		endp[0].x = Math.max(bb.bounds[0].x, bounds[0].x);
+		endp[0].y = Math.max(bb.bounds[0].y, bounds[0].y);
+		endp[0].z = Math.max(bb.bounds[0].z, bounds[0].z);
+		
+		Vector3f overlap = Vector3f.sub(endp[1], endp[0], null);
+		
+		
+		if((overlap.x < overlap.y) && (overlap.x < overlap.z))
+			moveX = true;
+		
+		if((overlap.y < overlap.x) && (overlap.y < overlap.z))
+			moveY = true;
+		
+		if((overlap.z < overlap.x) && (overlap.z < overlap.y))
+			moveZ = true;
+		
+		if(moveX) {
+			bb.parent.position.x = parent.position.x + (Math.signum(direction.x) *
+					((bb.bounds[1].x - bb.bounds[0].x + bounds[1].x - bounds[0].x) / 2));
+		}
+		
+			
+		if(moveY) {
+			bb.parent.position.y = parent.position.y + (Math.signum(direction.y) *
+					((bb.bounds[1].y - bb.bounds[0].y + bounds[1].y - bounds[0].y) / 2));
+		}
+		
+		if(moveZ) {
+			bb.parent.position.z = parent.position.z + (Math.signum(direction.z) *
+					((bb.bounds[1].z - bb.bounds[0].z + bounds[1].z - bounds[0].z) / 2));
+		}*/
 	}
 	
 	public boolean intersect() {

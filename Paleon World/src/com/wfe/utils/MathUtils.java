@@ -1,6 +1,5 @@
 package com.wfe.utils;
 
-import com.wfe.behaviours.BoundingBoxBh;
 import com.wfe.graph.Camera;
 import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector2f;
@@ -112,5 +111,101 @@ public class MathUtils {
 		float distance = (float) Math.sqrt((dX * dX) + (dY * dY));
 		return distance;
 	}
+	
+	/*public void collisionResponce(BoundingBoxBh bb) {
+		moveAxis = MoveAxis.NONE_AXIS;
+		
+		Vector3f endp[] = new Vector3f[2];
+		endp[0] = new Vector3f();
+		endp[1] = new Vector3f();
+		
+		Vector3f direction = Vector3f.sub(bb.parent.position, parent.position, null);
+		System.out.println(direction);
+		
+		endp[1].x = Math.min(bb.bounds[1].x, bounds[1].x);
+		endp[1].y = Math.min(bb.bounds[1].y, bounds[1].y);
+		endp[1].z = Math.min(bb.bounds[1].z, bounds[1].z);
+		
+		endp[0].x = Math.max(bb.bounds[0].x, bounds[0].x);
+		endp[0].y = Math.max(bb.bounds[0].y, bounds[0].y);
+		endp[0].z = Math.max(bb.bounds[0].z, bounds[0].z);
+		
+		Vector3f overlap = Vector3f.sub(endp[1], endp[0], null);
+		
+		if((overlap.x < overlap.y) && (overlap.x < overlap.z))
+			moveAxis = MoveAxis.AXIS_X;
+		
+		if((overlap.y < overlap.x) && (overlap.y < overlap.z))
+			moveAxis = MoveAxis.AXIS_Y;
+		
+		if((overlap.z < overlap.x) && (overlap.z < overlap.y))
+			moveAxis = MoveAxis.AXIS_Z;		
+		
+		if(moveAxis.equals(MoveAxis.AXIS_X)) {
+			bb.parent.position.x = parent.position.x + (Math.signum(direction.x) *
+					((bb.bounds[1].x - bb.bounds[0].x + bounds[1].x - bounds[0].x) / 2));
+			System.out.println("X");
+		} else if(moveAxis.equals(MoveAxis.AXIS_Y)) {
+			bb.parent.position.y = parent.position.y + (Math.signum(direction.y) *
+					((bb.bounds[1].y - bb.bounds[0].y + bounds[1].y - bounds[0].y) / 2));
+			System.out.println("Y");
+		} else if(moveAxis.equals(MoveAxis.AXIS_Z)) {
+			bb.parent.position.z = parent.position.z + (Math.signum(direction.z) *
+					((bb.bounds[1].z - bb.bounds[0].z + bounds[1].z - bounds[0].z) / 2));
+			System.out.println("Z");
+		} else {
+			System.out.println("Zero");
+		}
+	}*/
+	
+	/*public boolean intersect() {
+		float tmin, tmax, tymin, tymax, tzmin, tzmax;
+		Vector3f rayOrigin = MousePicker.getRayOrigin();
+		Vector3f rayDirection = MousePicker.getCurrentRay();
+		
+		if (rayDirection.x >= 0) {
+			tmin = (bounds[0].x - rayOrigin.x) / rayDirection.x;
+			tmax = (bounds[1].x - rayOrigin.x) / rayDirection.x;
+		} else {
+			tmin = (bounds[1].x - rayOrigin.x) / rayDirection.x;
+			tmax = (bounds[0].x - rayOrigin.x) / rayDirection.x;
+		}
+		
+		if (rayDirection.y >= 0) {
+			tymin = (bounds[0].y - rayOrigin.y) / rayDirection.y;
+			tymax = (bounds[1].y - rayOrigin.y) / rayDirection.y;
+		} else {
+			tymin = (bounds[1].y - rayOrigin.y) / rayDirection.y;
+			tymax = (bounds[0].y - rayOrigin.y) / rayDirection.y;
+		}
+		
+		if ( (tmin > tymax) || (tymin > tmax) )
+			return false;
+			
+		if (tymin > tmin)
+			tmin = tymin;
+		
+		if (tymax < tmax)
+			tmax = tymax;
+		
+		if (rayDirection.z >= 0) {
+			tzmin = (bounds[0].z - rayOrigin.z) / rayDirection.z;
+			tzmax = (bounds[1].z - rayOrigin.z) / rayDirection.z;
+		} else {
+			tzmin = (bounds[1].z - rayOrigin.z) / rayDirection.z;
+			tzmax = (bounds[0].z - rayOrigin.z) / rayDirection.z;
+		}
+			
+		if ( (tmin > tzmax) || (tzmin > tmax) )
+			return false;
+			
+		if (tzmin > tmin)
+			tmin = tzmin;
+			
+		if (tzmax < tmax)
+			tmax = tzmax;
+			
+		return ( (tmin < 1000) && (tmax > 1) );
+	}*/
 
 }
