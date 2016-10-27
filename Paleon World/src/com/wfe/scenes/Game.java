@@ -197,19 +197,19 @@ public class Game implements IScene {
         tri.addComponent(new Material(ResourceManager.getTexture("rock")));
         tri.setTransform(new Transform3D());
         tri.position.set(384, world.getTerrainHeight(384, 384) + 2, 384);
-        tri.scale.set(2);
+        tri.scale.set(10);
         
         Well well = new Well(world);
         well.position.set(374, world.getTerrainHeight(374, 384), 384);
         
         GameTime.setTime(18, 00);
         
-        Vector3f p1 = new Vector3f(-0.340490f * 2 + 384.0f, -0.184004f * 2 + world.getTerrainHeight(384, 384) + 2, 
-        		-0.522071f * 2 + 384.0f);
-        Vector3f p2 = new Vector3f(-0.340490f * 2 + 384.0f, -0.184004f * 2 + world.getTerrainHeight(384, 384) + 2, 
-        		0.529369f * 2 + 384.0f);
-        Vector3f p3 = new Vector3f(0.383110f * 2 + 384.0f, 0.368781f * 2 + world.getTerrainHeight(384, 384) + 2, 
-        		0.003649f * 2 + 384.0f);
+        Vector3f p1 = new Vector3f(-0.340490f * 10 + 384.0f, -0.184004f * 10 + world.getTerrainHeight(384, 384) + 2, 
+        		-0.522071f * 10 + 384.0f);
+        Vector3f p2 = new Vector3f(-0.340490f * 10 + 384.0f, -0.184004f * 10 + world.getTerrainHeight(384, 384) + 2, 
+        		0.529369f * 10 + 384.0f);
+        Vector3f p3 = new Vector3f(0.383110f * 10 + 384.0f, 0.368781f * 10 + world.getTerrainHeight(384, 384) + 2, 
+        		0.003649f * 10 + 384.0f);
         Triangle triangle = new Triangle(p1, p2, p3);
         
         Vector3f eRadius = new Vector3f(1.0f, 2.0f, 1.0f);

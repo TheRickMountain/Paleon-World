@@ -10,7 +10,6 @@ import com.wfe.scenegraph.World;
 
 public class ControllingBh extends Behaviour {
 
-	private static final Vector3f gravity = new Vector3f(0, -9.81f, 0);
 	private static final float GRAVITY = -50.0f;
 	private static final float JUMP_POWER = 20.0f;
 	private float upwardSpeed = 0;
@@ -36,7 +35,7 @@ public class ControllingBh extends Behaviour {
 		this.anim = parent.getBehaviour(AnimBh.class);
 		this.world = parent.getWorld();
 		
-		colPackage = new CollisionPacket(new Vector3f(1, 2, 1), new Vector3f(384, world.getTerrainHeight(384, 400) + 2.0f, 400));
+		colPackage = new CollisionPacket(new Vector3f(1, 2, 1), new Vector3f(384, world.getTerrainHeight(384, 384) + 50.0f, 384));
 	}
 
 	@Override
@@ -123,6 +122,12 @@ public class ControllingBh extends Behaviour {
 		
 		Vector3f finalPosition = collideWithWorld(eSpacePosition, eSpaceVelocity);
 		
+		colPackage.setR3toESpaceVelocity(0, -0.2f, 0);
+		eSpaceVelocity.set(colPackage.getVelocity());
+		collisionRecursionDepth = 0;
+		
+		finalPosition = collideWithWorld(finalPosition, eSpaceVelocity);
+		
 		colPackage.setESpacePosition(finalPosition.x, finalPosition.y, finalPosition.z);
 	}
 	
@@ -145,7 +150,43 @@ public class ControllingBh extends Behaviour {
 			return Vector3f.add(pos, vel, null);
 		}
 		
-		return pos;
+		Vector3f destinationPoint = Vector3f.add(pos, vel, null);
+		Vector3f newBasePoint = new Vector3f(pos);
+		
+		if(colPackage.nearestDistance >= veryCloseDistance) {
+			Vector3f V = new Vector3f(vel);
+			V.normalise();
+			V.scale((float) (colPackage.nearestDistance - veryCloseDistance));
+			newBasePoint = Vector3f.add(colPackage.getBasePoint(), V, null);
+			
+			V.normalise();
+			Vector3f vcdV = new Vector3f(V);
+			vcdV.scale(veryCloseDistance);
+			Vector3f.sub(colPackage.intersectionPoint, vcdV, 
+					colPackage.intersectionPoint);
+		}
+		
+		Vector3f slidePlaneOrigin = new Vector3f(colPackage.intersectionPoint);
+		Vector3f slidePlaneNormal = new Vector3f(
+				Vector3f.sub(newBasePoint, colPackage.intersectionPoint, null));
+		slidePlaneNormal.normalise();
+		FPlane slidingPlane = new FPlane(slidePlaneOrigin, slidePlaneNormal);
+		
+		Vector3f newSlidePlaneNormal = new Vector3f(slidePlaneNormal);
+		newSlidePlaneNormal.scale((float) slidingPlane.signedDistanceTo(destinationPoint));
+		
+		Vector3f newDestinationPoint = new Vector3f(
+				Vector3f.sub(destinationPoint, newSlidePlaneNormal, null));
+		
+		Vector3f newVelocityVector = Vector3f.sub(newDestinationPoint, 
+				colPackage.intersectionPoint, null);
+		
+		if(newVelocityVector.length() < veryCloseDistance) {
+			return newBasePoint;
+		}
+		
+		collisionRecursionDepth++;
+		return collideWithWorld(newBasePoint, newVelocityVector);
 	}
 
 }
