@@ -10,14 +10,15 @@ import com.wfe.core.ResourceManager;
 import com.wfe.entities.DesertHouse;
 import com.wfe.entities.Palm;
 import com.wfe.entities.Settler;
+import com.wfe.entities.Well;
 import com.wfe.graph.Camera;
 import com.wfe.graph.render.GUIRenderer;
 import com.wfe.graph.transform.Transform2D;
 import com.wfe.graph.transform.Transform3D;
 import com.wfe.graph.water.WaterTile;
+import com.wfe.math.Matrix3f;
+import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
-import com.wfe.physics.FEllipse;
-import com.wfe.physics.FPlane;
 import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
 import com.wfe.terrain.Terrain;
@@ -26,7 +27,6 @@ import com.wfe.terrain.TexturePack;
 import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
-import com.wfe.utils.MathUtils;
 import com.wfe.utils.Triangle;
 
 public class Game implements IScene {
@@ -96,6 +96,13 @@ public class Game implements IScene {
         /*** Palm ***/
         ResourceManager.loadTexture("models/palm/palm", "palm");
         ResourceManager.loadMesh("models/palm/palm", "palm");
+        /*** *** ***/
+        
+        ResourceManager.loadMesh("triangle", "triangle");
+        
+        /*** Well ***/
+        ResourceManager.loadTexture("models/well/well", "well");
+        ResourceManager.loadMesh("models/well/well", "well");
         /*** *** ***/
 	}
 
@@ -187,25 +194,37 @@ public class Game implements IScene {
         Palm palm = new Palm(world);
         palm.position.set(395, world.getTerrainHeight(395, 410), 410);
         
-        GameTime.setTime(12, 00);
+        Entity tri = new Entity(world, "Triangle");
+        tri.addComponent(new Model(ResourceManager.getMesh("triangle")));
+        tri.addComponent(new Material(ResourceManager.getTexture("rock")));
+        tri.setTransform(new Transform3D());
+        tri.position.set(384, world.getTerrainHeight(384, 384) + 2, 384);
+        tri.scale.set(2);
         
-        FEllipse ellipse = new FEllipse(new Vector3f(0.5f, 0, 0.5f),
-        		new Vector3f(3, 7, 3));
-        ellipse.velocity.set(0, 0, 1);
+        Well well = new Well(world);
+        well.position.set(374, world.getTerrainHeight(374, 384), 384);
         
-        Triangle triangle = new Triangle(new Vector3f(1.0f, 0.0f, 1.0f),
-        		new Vector3f(-1.0f, 0.0f, -1.0f),
-        		new Vector3f(-1.0f, 0.0f, 1.0f));
+        GameTime.setTime(18, 00);
         
-        FPlane fplane = new FPlane(triangle.getPointN(0), triangle.getPointN(1), triangle.getPointN(2));
-       
-        float signedDistanceBasePoint = Vector3f.dot(fplane.normal, ellipse.position) + fplane.equation[3];
+        Vector3f p1 = new Vector3f(-0.340490f, -0.184004f, -0.522071f);
+        Vector3f p2 = new Vector3f(-0.340490f, -0.184004f, 0.529369f);
+        Vector3f p3 = new Vector3f(0.383110f, 0.368781f, 0.003649f);
+        Triangle triangle = new Triangle(p1, p2, p3);
         
-        float t0 = (1 - signedDistanceBasePoint) / Vector3f.dot(fplane.normal, ellipse.velocity);
-        float t1 = (-1 - signedDistanceBasePoint) / Vector3f.dot(fplane.normal, ellipse.velocity);
+        Vector3f eRadius = new Vector3f(3.0f, 7.0f, 3.0f);
         
-        System.out.println(MathUtils.checkPointInTriangle(ellipse.position, 
-        		triangle.getPointN(0), triangle.getPointN(1), triangle.getPointN(2)));
+        Matrix3f eSpace = new Matrix3f();
+        eSpace.setIdentity();
+        eSpace.m00 /= eRadius.x;
+        eSpace.m11 /= eRadius.y;
+        eSpace.m22 /= eRadius.z;
+        
+        Matrix3f R3 = new Matrix3f();
+        Matrix3f.invert(eSpace, R3);
+
+        Triangle triangleInESpace = triangle.getTransformedCopy(eSpace);
+
+        world.addCollider(triangleInESpace);
 	}
 
 	@Override

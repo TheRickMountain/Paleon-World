@@ -7,6 +7,8 @@ import com.wfe.math.Vector3f;
 import com.wfe.math.altvecmath.Matrix4;
 import com.wfe.math.altvecmath.Transform;
 import com.wfe.math.altvecmath.Vector3;
+import com.wfe.physics.CollisionPacket;
+import com.wfe.physics.FPlane;
 
 public class MathUtils {
 	
@@ -182,5 +184,36 @@ public class MathUtils {
 			return false;
 		}
 	}
-
+	
+	public static float getLowestRoot(float a, float b, float c, float maxR) {// -1
+		// if no valid root
+		float determinant = b * b - (4.0f * a * c);
+		if (determinant < 0.0f) {
+			return -1.0f;
+		}
+		
+		float sqrtD = (float) Math.sqrt(determinant);
+		float r1 = (-b - sqrtD) / (2 * a);
+		float r2 = (-b + sqrtD) / (2 * a);
+		
+		// Sort so x1 <= x2
+		if (r1 > r2) {
+			float temp = r2;
+			r2 = r1;
+			r1 = temp;
+		}
+		
+		
+		if(r1 > 0 && r1 < maxR) {
+			return r1;
+		}
+		
+		if(r2 > 0 && r2 < maxR) {
+			return r2;
+		}
+		
+		return -1.0f;
+	}
+	
+	
 }

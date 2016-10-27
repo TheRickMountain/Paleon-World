@@ -27,13 +27,16 @@ import com.wfe.graph.water.WaterTile;
 import com.wfe.input.Key;
 import com.wfe.input.Keyboard;
 import com.wfe.math.Vector4f;
+import com.wfe.physics.CollisionPacket;
 import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainBlock;
 import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
+import com.wfe.utils.MathUtils;
 import com.wfe.utils.MousePicker;
 import com.wfe.utils.OpenglUtils;
+import com.wfe.utils.Triangle;
 import com.wfe.weather.Weather;
 
 /**
@@ -67,6 +70,7 @@ public class World {
     private final List<Transform> transforms = new ArrayList<>();
     private final List<Transform> transformsToAdd = new ArrayList<>();
     private final List<Transform> transformsToRemove = new ArrayList<>();
+    private final List<Triangle> colliders = new ArrayList<>();
     
     private final Weather weather;
 
@@ -330,6 +334,10 @@ public class World {
             return null;
         }
         return terrainGrid[terrain_i][terrain_j];
+    }
+    
+    public void addCollider(Triangle tri) {
+    	colliders.add(tri);
     }
 
 }

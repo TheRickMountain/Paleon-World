@@ -4,6 +4,8 @@ import com.wfe.graph.Camera;
 import com.wfe.input.Key;
 import com.wfe.input.Keyboard;
 import com.wfe.math.Vector3f;
+import com.wfe.physics.CollisionPacket;
+import com.wfe.physics.FPlane;
 import com.wfe.scenegraph.World;
 
 public class ControllingBh extends Behaviour {
@@ -22,7 +24,7 @@ public class ControllingBh extends Behaviour {
 	
 	private World world;
 	
-	public Vector3f direction;
+	CollisionPacket colPackage;
 	
 	public ControllingBh(Camera camera) {
 		this.camera = camera;
@@ -32,14 +34,15 @@ public class ControllingBh extends Behaviour {
 	public void start() {
 		this.anim = parent.getBehaviour(AnimBh.class);
 		this.world = parent.getWorld();
-		direction = new Vector3f(0, 0, 0);
+		
+		colPackage = new CollisionPacket(new Vector3f(3, 7, 3), new Vector3f(384, world.getTerrainHeight(384, 384), 384));
 	}
 
 	@Override
 	public void update(float dt) {	
 		moving(dt);
 		
-		Vector3f parentPos = parent.position;
+		/*Vector3f parentPos = parent.position;
 		upwardSpeed += GRAVITY * dt;
 		parentPos.y += upwardSpeed * dt;
 		float terrainHeight = world.getTerrainHeight(parentPos.x, parentPos.z) + 2.2f;
@@ -47,7 +50,7 @@ public class ControllingBh extends Behaviour {
 			upwardSpeed = 0;
 			isInAir = false;
 			parentPos.y = terrainHeight;
-		}
+		}*/
 	}
 	
 	public void jump() {
@@ -60,61 +63,41 @@ public class ControllingBh extends Behaviour {
 	public void moving(float dt) {
 		move = false;
 		
-		Vector3f parentPos = parent.position;
-		Vector3f parentRot = parent.rotation;
-		
-		camera.playerPosition.set(parentPos);
-		camera.playerPosition.y += 3.8f;
-		
 		float yaw = camera.getYaw();
 		
-		if(Keyboard.isKey(Key.W) && Keyboard.isKey(Key.D)) {
-			parentPos.x += (float)Math.sin(Math.toRadians(yaw + 45)) * -1.0f * -speed * dt;
-			parentPos.z += (float)Math.cos(Math.toRadians(yaw + 45))* -speed * dt;
-			parentRot.y = -yaw - 45;
-            move = true;
-		} else if(Keyboard.isKey(Key.W) && Keyboard.isKey(Key.A)) {
-			parentPos.x += (float)Math.sin(Math.toRadians(yaw - 45)) * -1.0f * -speed * dt;
-			parentPos.z += (float)Math.cos(Math.toRadians(yaw - 45))* -speed * dt;
-			parentRot.y = -yaw + 45;
-            move = true;
-		} else if(Keyboard.isKey(Key.S) && Keyboard.isKey(Key.A)) {
-			parentPos.x += (float)Math.sin(Math.toRadians(yaw + 45)) * -1.0f * speed * dt;
-			parentPos.z += (float)Math.cos(Math.toRadians(yaw + 45))* speed * dt;
-			parentRot.y = -yaw - 45;
-            move = true;
-		} else if(Keyboard.isKey(Key.S) && Keyboard.isKey(Key.D)) {
-			parentPos.x += (float)Math.sin(Math.toRadians(yaw - 45)) * -1.0f * speed * dt;
-			parentPos.z += (float)Math.cos(Math.toRadians(yaw - 45))* speed * dt;
-			parentRot.y = -yaw + 45;
-            move = true;
-		} else if(Keyboard.isKey(Key.W)) {	
-			parentPos.x += (float)Math.sin(Math.toRadians(yaw)) * -1.0f * -speed * dt;
-			parentPos.z += (float)Math.cos(Math.toRadians(yaw))* -speed * dt;
-			parentRot.y = -yaw;
-			direction.set((float)Math.sin(Math.toRadians(yaw)) * -1.0f * -speed * dt, 0,
-					(float)Math.cos(Math.toRadians(yaw))* -speed * dt);
-            move = true;
+		if(Keyboard.isKey(Key.W)) {
+			colPackage.setVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * -speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw))* -speed * dt);
+			parent.rotation.y = -yaw;
+			move = true;
 		} else if(Keyboard.isKey(Key.S)) {
-			parentPos.x += (float)Math.sin(Math.toRadians(yaw)) * -1.0f * speed * dt;;
-			parentPos.z += (float)Math.cos(Math.toRadians(yaw))* speed * dt;
-			parentRot.y = -yaw;
-            move = true;
+			colPackage.setVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw))* speed * dt);
+			parent.rotation.y = -yaw;
+			move = true;
 		} else if(Keyboard.isKey(Key.A)) {
-			parentPos.x += (float)Math.sin(Math.toRadians(yaw - 90)) * -1.0f * -speed * dt;;
-			parentPos.z += (float)Math.cos(Math.toRadians(yaw - 90))* -speed * dt;
-			parentRot.y = -yaw + 90;
-            move = true;
+			colPackage.setVelocity((float)Math.sin(Math.toRadians(yaw + 90)) * -1.0f * speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw + 90))* speed * dt);
+			parent.rotation.y = -yaw + 90;
+			move = true;
 		} else if(Keyboard.isKey(Key.D)) {
-			parentPos.x += (float)Math.sin(Math.toRadians(yaw + 90)) * -1.0f * -speed * dt;;
-			parentPos.z += (float)Math.cos(Math.toRadians(yaw + 90))* -speed * dt;
-			parentRot.y = -yaw - 90;
-            move = true;
+			colPackage.setVelocity((float)Math.sin(Math.toRadians(yaw - 90)) * -1.0f * speed * dt,
+					0, (float)Math.cos(Math.toRadians(yaw - 90))* speed * dt);
+			parent.rotation.y = -yaw - 90;
+			move = true;
 		}
 		
-		if(Keyboard.isKeyDown(Key.SPACE)) {
+		colPackage.update();
+		
+		parent.position.set(colPackage.getR3Position());
+		camera.playerPosition.set(parent.position);
+		camera.playerPosition.y += 3.8f;
+		
+		//world.checkCollision(colPackage);
+		
+		/*if(Keyboard.isKeyDown(Key.SPACE)) {
 			jump();
-		}
+		}*/
 		
 		if(move) {
 			anim.walkAnim(dt);	
@@ -127,5 +110,6 @@ public class ControllingBh extends Behaviour {
 	public void onGUI() {
 		
 	}
+	
 
 }
