@@ -17,7 +17,6 @@ import com.wfe.graph.transform.Transform2D;
 import com.wfe.graph.transform.Transform3D;
 import com.wfe.graph.water.WaterTile;
 import com.wfe.math.Matrix3f;
-import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
 import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
@@ -157,7 +156,6 @@ public class Game implements IScene {
         rock.scale.set(0.65f);
         
         Settler settler = new Settler(world, camera);
-        settler.position.set(380, world.getTerrainHeight(380, 420) + 2.2f, 420);
         settler.rotation.y = 180;
         
         Material grassMat = new Material(ResourceManager.getTexture("grass"));
@@ -206,12 +204,15 @@ public class Game implements IScene {
         
         GameTime.setTime(18, 00);
         
-        Vector3f p1 = new Vector3f(-0.340490f, -0.184004f, -0.522071f);
-        Vector3f p2 = new Vector3f(-0.340490f, -0.184004f, 0.529369f);
-        Vector3f p3 = new Vector3f(0.383110f, 0.368781f, 0.003649f);
+        Vector3f p1 = new Vector3f(-0.340490f * 2 + 384.0f, -0.184004f * 2 + world.getTerrainHeight(384, 384) + 2, 
+        		-0.522071f * 2 + 384.0f);
+        Vector3f p2 = new Vector3f(-0.340490f * 2 + 384.0f, -0.184004f * 2 + world.getTerrainHeight(384, 384) + 2, 
+        		0.529369f * 2 + 384.0f);
+        Vector3f p3 = new Vector3f(0.383110f * 2 + 384.0f, 0.368781f * 2 + world.getTerrainHeight(384, 384) + 2, 
+        		0.003649f * 2 + 384.0f);
         Triangle triangle = new Triangle(p1, p2, p3);
         
-        Vector3f eRadius = new Vector3f(3.0f, 7.0f, 3.0f);
+        Vector3f eRadius = new Vector3f(1.0f, 2.0f, 1.0f);
         
         Matrix3f eSpace = new Matrix3f();
         eSpace.setIdentity();

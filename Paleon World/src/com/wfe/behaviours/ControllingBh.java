@@ -35,7 +35,7 @@ public class ControllingBh extends Behaviour {
 		this.anim = parent.getBehaviour(AnimBh.class);
 		this.world = parent.getWorld();
 		
-		colPackage = new CollisionPacket(new Vector3f(3, 7, 3), new Vector3f(384, world.getTerrainHeight(384, 384), 384));
+		colPackage = new CollisionPacket(new Vector3f(1, 2, 1), new Vector3f(384, world.getTerrainHeight(384, 400) + 2.0f, 400));
 	}
 
 	@Override
@@ -64,6 +64,7 @@ public class ControllingBh extends Behaviour {
 		move = false;
 		
 		float yaw = camera.getYaw();
+		colPackage.setVelocity(0, 0, 0);
 		
 		if(Keyboard.isKey(Key.W)) {
 			colPackage.setVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * -speed * dt, 
@@ -93,7 +94,12 @@ public class ControllingBh extends Behaviour {
 		camera.playerPosition.set(parent.position);
 		camera.playerPosition.y += 3.8f;
 		
-		//world.checkCollision(colPackage);
+		world.checkCollision(colPackage);
+		
+		if(colPackage.foundCollision) {
+			System.out.println("Found Collision");
+			//colPackage.foundCollision = false;
+		}
 		
 		/*if(Keyboard.isKeyDown(Key.SPACE)) {
 			jump();

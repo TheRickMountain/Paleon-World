@@ -45,7 +45,6 @@ public class CollisionPacket {
 	
 	public void update() {
 		Vector3f.add(basePoint, velocity, basePoint);
-		setVelocity(0, 0, 0);
 	}
 	
 	public void setVelocity(float x, float y, float z) {

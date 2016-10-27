@@ -339,5 +339,12 @@ public class World {
     public void addCollider(Triangle tri) {
     	colliders.add(tri);
     }
+    
+    public void checkCollision(CollisionPacket colPackage) {
+    	for(Triangle triangle : colliders) {
+    		MathUtils.checkTriangle(colPackage, 
+    				triangle.getPointN(0), triangle.getPointN(1), triangle.getPointN(2));
+    	}
+    }
 
 }

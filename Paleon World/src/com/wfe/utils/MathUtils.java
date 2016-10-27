@@ -164,6 +164,204 @@ public class MathUtils {
 		return ( (tmin < 1000) && (tmax > 1) );
 	}*/
 	
+	public static void checkTriangle(CollisionPacket colPackage, Vector3f p1, Vector3f p2, Vector3f p3) {
+		FPlane trianglePlane = new FPlane(p1, p2, p3);
+		if(trianglePlane.isFrontFacingTo(colPackage.getNormalizedVelocity())) {
+			double t0, t1;
+			boolean embeddedInPlane = false;
+			
+			double signedDistToTrianglePlane = trianglePlane.signedDistanceTo(colPackage.getBasePoint());
+			
+			float normalDotVelocity = Vector3f.dot(trianglePlane.normal, colPackage.getVelocity());
+			
+			if(normalDotVelocity == 0.0f) {
+				if (Math.abs(signedDistToTrianglePlane) >= 1.0f) {
+					return;
+				} else {
+					embeddedInPlane = true;
+					t0 = 0.0f;
+					t1 = 1.0f;
+				}
+			} else {
+				t0 = (-1.0 - signedDistToTrianglePlane) / normalDotVelocity;
+				t1 = (1.0 - signedDistToTrianglePlane) / normalDotVelocity;
+				
+				if(t0 > t1) {
+					double temp = t1;
+					t1 = t0;
+					t0 = temp;
+				}
+				
+				if(t0 > 1.0f || t1 < 0.0f) {
+					return;
+				}
+				
+				if (t0 < 0.0) t0 = 0.0;
+				if (t1 < 0.0) t1 = 0.0;
+				if (t0 > 1.0) t0 = 1.0;
+				if (t1 > 1.0) t1 = 1.0;
+			}
+			
+			Vector3f collisionPoint = new Vector3f();
+			boolean foundCollision = false;
+			float t = 1.0f;
+			
+			if(!embeddedInPlane) {
+				Vector3f t0Velocity = new Vector3f();
+				t0Velocity.set(colPackage.getVelocity());
+				t0Velocity.scale((float) t0);
+				
+				Vector3f planeIntersectionPoint =
+						Vector3f.add(Vector3f.sub(colPackage.getBasePoint(), trianglePlane.normal, null),
+								t0Velocity, null);
+				
+				if(checkPointInTriangle(planeIntersectionPoint, p1, p2, p3)) {
+					foundCollision = true;
+					t = (float)t0;
+					collisionPoint.set(planeIntersectionPoint);
+				}
+			}
+			
+			if(foundCollision == false) {
+				Vector3f velocity = new Vector3f();
+				velocity.set(colPackage.getVelocity());
+				Vector3f base = new Vector3f();
+				base.set(colPackage.getBasePoint());
+				float velocitySquaredLength = velocity.lengthSquared();
+				float a, b, c;
+				float newT;
+				
+				a = velocitySquaredLength;
+				
+				b = 2.0f * Vector3f.dot(velocity, Vector3f.sub(base, p1, null));
+				c = Vector3f.sub(p1, base, null).lengthSquared() - 1.0f;
+				newT = getLowestRoot(a, b, c, t);
+				if(newT != -1.0f) {
+					t = newT;
+					foundCollision = true;
+					collisionPoint.set(p1);
+				}
+				
+				b = 2.0f * Vector3f.dot(velocity, Vector3f.sub(base, p2, null));
+				c = Vector3f.sub(p2, base, null).lengthSquared() - 1.0f;
+				newT = getLowestRoot(a, b, c, t);
+				if(newT != -1.0f) {
+					t = newT;
+					foundCollision = true;
+					collisionPoint.set(p2);
+				}
+				
+				b = 2.0f * Vector3f.dot(velocity, Vector3f.sub(base, p3, null));
+				c = Vector3f.sub(p3, base, null).lengthSquared() - 1.0f;
+				newT = getLowestRoot(a, b, c, t);
+				if(newT != -1.0f) {
+					t = newT;
+					foundCollision = true;
+					collisionPoint.set(p3);
+				}
+				
+				// p1 -> p2:
+				Vector3f edge = Vector3f.sub(p2, p1, null);
+				Vector3f baseToVertex = Vector3f.sub(p1, base, null);
+				float edgeSquaredLength = edge.lengthSquared();
+				float edgeDotVelocity = Vector3f.dot(edge, velocity);
+				float edgeDotBaseToVertex = Vector3f.dot(edge, baseToVertex);
+				
+				a = edgeSquaredLength * (-velocitySquaredLength) +
+						edgeDotVelocity * edgeDotVelocity;
+				b = edgeSquaredLength * (2 * Vector3f.dot(velocity, baseToVertex))
+						- 2.0f * edgeDotVelocity * edgeDotBaseToVertex;
+				c = edgeSquaredLength * (1 - baseToVertex.lengthSquared()) +
+						edgeDotBaseToVertex * edgeDotBaseToVertex;
+				
+				newT = getLowestRoot(a, b, c, t);
+				if(newT != -1.0f) {
+					float f = (edgeDotVelocity * newT - edgeDotBaseToVertex) /
+							edgeSquaredLength;
+					if(f >= 0.0f && f <= 1.0f) {
+						t = newT;
+						foundCollision = true;
+						
+						Vector3f fEdge = new Vector3f();
+						fEdge.set(edge);
+						fEdge.scale(f);
+						
+						collisionPoint.set(Vector3f.add(p1, fEdge, null));
+					}
+				}
+				
+				// p2 -> p3:
+				edge = Vector3f.sub(p3, p2, null);
+				baseToVertex = Vector3f.sub(p2, base, null);
+				edgeSquaredLength = edge.lengthSquared();
+				edgeDotVelocity = Vector3f.dot(edge, velocity);
+				edgeDotBaseToVertex = Vector3f.dot(edge, baseToVertex);
+				
+				a = edgeSquaredLength * (-velocitySquaredLength) +
+						edgeDotVelocity * edgeDotVelocity;
+				b = edgeSquaredLength * (2 * Vector3f.dot(velocity, baseToVertex))
+						- 2.0f * edgeDotVelocity * edgeDotBaseToVertex;
+				c = edgeSquaredLength * (1 - baseToVertex.lengthSquared()) +
+						edgeDotBaseToVertex * edgeDotBaseToVertex;
+				
+				newT = getLowestRoot(a, b, c, t);
+				if(newT != -1.0f) {
+					float f = (edgeDotVelocity * newT - edgeDotBaseToVertex) /
+							edgeSquaredLength;
+					if(f >= 0.0f && f <= 1.0f) {
+						t = newT;
+						foundCollision = true;
+						
+						Vector3f fEdge = new Vector3f();
+						fEdge.set(edge);
+						fEdge.scale(f);
+						
+						collisionPoint.set(Vector3f.add(p2, fEdge, null));
+					}
+				}
+				
+				// p3 -> p1:
+				edge = Vector3f.sub(p1, p3, null);
+				baseToVertex = Vector3f.sub(p3, base, null);
+				edgeSquaredLength = edge.lengthSquared();
+				edgeDotVelocity = Vector3f.dot(edge, velocity);
+				edgeDotBaseToVertex = Vector3f.dot(edge, baseToVertex);
+				
+				a = edgeSquaredLength * (-velocitySquaredLength) +
+						edgeDotVelocity * edgeDotVelocity;
+				b = edgeSquaredLength * (2 * Vector3f.dot(velocity, baseToVertex))
+						- 2.0f * edgeDotVelocity * edgeDotBaseToVertex;
+				c = edgeSquaredLength * (1 - baseToVertex.lengthSquared()) +
+						edgeDotBaseToVertex * edgeDotBaseToVertex;
+				
+				newT = getLowestRoot(a, b, c, t);
+				if(newT != -1.0f) {
+					float f = (edgeDotVelocity * newT - edgeDotBaseToVertex) /
+							edgeSquaredLength;
+					if(f >= 0.0f && f <= 1.0f) {
+						t = newT;
+						foundCollision = true;
+						
+						Vector3f fEdge = new Vector3f();
+						fEdge.set(edge);
+						fEdge.scale(f);
+						
+						collisionPoint.set(Vector3f.add(p3, fEdge, null));
+					}
+				}
+			}
+			
+			if(foundCollision == true) {
+				float distToCollision = t * colPackage.getVelocity().length();
+				if(colPackage.foundCollision == false || distToCollision < colPackage.nearestDistance) {
+					colPackage.nearestDistance = distToCollision;
+					colPackage.intersectionPoint.set(collisionPoint);
+					colPackage.foundCollision = true;
+				}
+			}
+		} // if not backface
+	}
+	
 	public static boolean checkPointInTriangle(Vector3f p, Vector3f a1, Vector3f b1, Vector3f c1) {
 		Vector3f a = new Vector3f(a1.x, 0f, a1.z);
 		Vector3f b = new Vector3f(b1.x, 0f, b1.z);
