@@ -10,6 +10,7 @@ import com.wfe.scenegraph.World;
 
 public class ControllingBh extends Behaviour {
 
+	private static final Vector3f gravity = new Vector3f(0, -9.81f, 0);
 	private static final float GRAVITY = -50.0f;
 	private static final float JUMP_POWER = 20.0f;
 	private float upwardSpeed = 0;
@@ -64,42 +65,35 @@ public class ControllingBh extends Behaviour {
 		move = false;
 		
 		float yaw = camera.getYaw();
-		colPackage.setVelocity(0, 0, 0);
+		colPackage.setR3toESpaceVelocity(0, 0, 0);
 		
 		if(Keyboard.isKey(Key.W)) {
-			colPackage.setVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * -speed * dt, 
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * -speed * dt, 
 					0, (float)Math.cos(Math.toRadians(yaw))* -speed * dt);
 			parent.rotation.y = -yaw;
 			move = true;
 		} else if(Keyboard.isKey(Key.S)) {
-			colPackage.setVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * speed * dt, 
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * speed * dt, 
 					0, (float)Math.cos(Math.toRadians(yaw))* speed * dt);
 			parent.rotation.y = -yaw;
 			move = true;
 		} else if(Keyboard.isKey(Key.A)) {
-			colPackage.setVelocity((float)Math.sin(Math.toRadians(yaw + 90)) * -1.0f * speed * dt, 
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw + 90)) * -1.0f * speed * dt, 
 					0, (float)Math.cos(Math.toRadians(yaw + 90))* speed * dt);
 			parent.rotation.y = -yaw + 90;
 			move = true;
 		} else if(Keyboard.isKey(Key.D)) {
-			colPackage.setVelocity((float)Math.sin(Math.toRadians(yaw - 90)) * -1.0f * speed * dt,
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw - 90)) * -1.0f * speed * dt,
 					0, (float)Math.cos(Math.toRadians(yaw - 90))* speed * dt);
 			parent.rotation.y = -yaw - 90;
 			move = true;
 		}
 		
-		colPackage.update();
+		collideAndSlide();
 		
 		parent.position.set(colPackage.getR3Position());
 		camera.playerPosition.set(parent.position);
 		camera.playerPosition.y += 3.8f;
-		
-		world.checkCollision(colPackage);
-		
-		if(colPackage.foundCollision) {
-			System.out.println("Found Collision");
-			//colPackage.foundCollision = false;
-		}
 		
 		/*if(Keyboard.isKeyDown(Key.SPACE)) {
 			jump();
@@ -117,5 +111,41 @@ public class ControllingBh extends Behaviour {
 		
 	}
 	
+	private int collisionRecursionDepth = 0;
+	public void collideAndSlide() {
+		Vector3f eSpacePosition = new Vector3f();
+		eSpacePosition.set(colPackage.getBasePoint());
+			
+		Vector3f eSpaceVelocity = new Vector3f();
+		eSpaceVelocity.set(colPackage.getVelocity());
+		
+		collisionRecursionDepth = 0;
+		
+		Vector3f finalPosition = collideWithWorld(eSpacePosition, eSpaceVelocity);
+		
+		colPackage.setESpacePosition(finalPosition.x, finalPosition.y, finalPosition.z);
+	}
+	
+	private static final float unitsPerMeter = 100.0f;
+	
+	public Vector3f collideWithWorld(Vector3f pos, Vector3f vel) {
+		float unitScale = unitsPerMeter / 100.0f;
+		float veryCloseDistance = 0.005f * unitScale;
+		
+		if(collisionRecursionDepth > 5)
+			return pos;
+		
+		colPackage.setESpaceVelocity(vel.x, vel.y, vel.z);
+		colPackage.setESpacePosition(pos.x, pos.y, pos.z);
+		colPackage.foundCollision = false;
+		
+		world.checkCollision(colPackage);
+		
+		if(colPackage.foundCollision == false) {
+			return Vector3f.add(pos, vel, null);
+		}
+		
+		return pos;
+	}
 
 }

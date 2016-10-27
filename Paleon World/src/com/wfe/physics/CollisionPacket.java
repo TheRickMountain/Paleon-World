@@ -43,22 +43,30 @@ public class CollisionPacket {
 		intersectionPoint = new Vector3f();
 	}
 	
-	public void update() {
+	public void moveTo(Vector3f velocity) {
 		Vector3f.add(basePoint, velocity, basePoint);
 	}
 	
-	public void setVelocity(float x, float y, float z) {
+	public void setR3toESpaceVelocity(float x, float y, float z) {
 		this.velocity.set(x, y, z);
 		Matrix3f.transform(eSpace, velocity, velocity);
+	}
+	
+	public void setESpaceVelocity(float x, float y, float z) {
+		this.velocity.set(x, y, z);
 	}
 	
 	public Vector3f getNormalizedVelocity() {
 		return velocity.normalise(normalizedVelocity);
 	}
 	
-	public void setBasePoint(float x, float y, float z) {
+	public void setR3toESpacePosition(float x, float y, float z) {
 		this.basePoint.set(x, y, z);
 		Matrix3f.transform(eSpace, basePoint, basePoint);
+	}
+	
+	public void setESpacePosition(float x, float y, float z) {
+		this.basePoint.set(x, y, z);
 	}
 
 	public Vector3f getR3Velocity() {
