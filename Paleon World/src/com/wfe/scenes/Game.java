@@ -17,7 +17,9 @@ import com.wfe.graph.transform.Transform2D;
 import com.wfe.graph.transform.Transform3D;
 import com.wfe.graph.water.WaterTile;
 import com.wfe.math.Matrix3f;
+import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
+import com.wfe.physics.ColliderLoader;
 import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
 import com.wfe.terrain.Terrain;
@@ -26,6 +28,7 @@ import com.wfe.terrain.TexturePack;
 import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
+import com.wfe.utils.MathUtils;
 import com.wfe.utils.Triangle;
 
 public class Game implements IScene {
@@ -204,13 +207,13 @@ public class Game implements IScene {
         
         GameTime.setTime(18, 00);
         
-        Vector3f p1 = new Vector3f(-0.340490f * 10 + 384.0f, -0.184004f * 10 + world.getTerrainHeight(384, 384) + 2, 
-        		-0.522071f * 10 + 384.0f);
-        Vector3f p2 = new Vector3f(-0.340490f * 10 + 384.0f, -0.184004f * 10 + world.getTerrainHeight(384, 384) + 2, 
-        		0.529369f * 10 + 384.0f);
-        Vector3f p3 = new Vector3f(0.383110f * 10 + 384.0f, 0.368781f * 10 + world.getTerrainHeight(384, 384) + 2, 
-        		0.003649f * 10 + 384.0f);
-        Triangle triangle = new Triangle(p1, p2, p3);
+        /*Vector3f p1 = new Vector3f(-0.340490f, -0.184004f, -0.522071f);
+        Vector3f p2 = new Vector3f(-0.340490f, -0.184004f, 0.529369f);
+        Vector3f p3 = new Vector3f(0.383110f, 0.368781f, 0.003649f);
+        Triangle triangle = new Triangle(p1, p2, p3);*/
+        
+        ColliderLoader loader = new ColliderLoader("triangle");
+        Triangle triangle = loader.extractTriangles()[0];
         
         Vector3f eRadius = new Vector3f(1.0f, 2.0f, 1.0f);
         
@@ -223,7 +226,14 @@ public class Game implements IScene {
         Matrix3f R3 = new Matrix3f();
         Matrix3f.invert(eSpace, R3);
 
-        Triangle triangleInESpace = triangle.getTransformedCopy(eSpace);
+        Matrix4f modelMatrix = new Matrix4f();
+        MathUtils.getEulerModelMatrix(modelMatrix, new Vector3f(384, 
+        		world.getTerrainHeight(384, 384) + 2, 384), new Vector3f(0, 0, 0), 10);
+        
+        
+        Triangle transformedTriangle = triangle.createInstance(modelMatrix);
+        Triangle triangleInESpace = transformedTriangle.getTransformedCopy(eSpace);
+        
 
         world.addCollider(triangleInESpace);
 	}
