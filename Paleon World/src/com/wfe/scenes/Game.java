@@ -1,10 +1,8 @@
 package com.wfe.scenes;
 
-import com.wfe.components.Image;
 import com.wfe.components.Material;
 import com.wfe.components.Model;
 import com.wfe.components.Text;
-import com.wfe.core.Display;
 import com.wfe.core.IScene;
 import com.wfe.core.ResourceManager;
 import com.wfe.entities.DesertHouse;
@@ -16,10 +14,7 @@ import com.wfe.graph.render.GUIRenderer;
 import com.wfe.graph.transform.Transform2D;
 import com.wfe.graph.transform.Transform3D;
 import com.wfe.graph.water.WaterTile;
-import com.wfe.math.Matrix3f;
-import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
-import com.wfe.physics.ColliderLoader;
 import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
 import com.wfe.terrain.Terrain;
@@ -28,8 +23,6 @@ import com.wfe.terrain.TexturePack;
 import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
-import com.wfe.utils.MathUtils;
-import com.wfe.utils.Triangle;
 
 public class Game implements IScene {
 	
@@ -100,8 +93,6 @@ public class Game implements IScene {
         ResourceManager.loadMesh("models/palm/palm", "palm");
         /*** *** ***/
         
-        ResourceManager.loadMesh("triangle", "triangle");
-        
         /*** Well ***/
         ResourceManager.loadTexture("models/well/well", "well");
         ResourceManager.loadMesh("models/well/well", "well");
@@ -110,7 +101,7 @@ public class Game implements IScene {
 
 	@Override
 	public void init() throws Exception {
-		Camera camera = new Camera(new Vector3f(0, 0, 0));
+		Camera camera = new Camera(new Vector3f(384, 3.92f, 384));
 		world = new World(camera);
 		
 		/*** Terrain ***/
@@ -160,6 +151,7 @@ public class Game implements IScene {
         
         Settler settler = new Settler(world, camera);
         settler.rotation.y = 180;
+        settler.position.set(384, world.getTerrainHeight(384, 384), 384);
         
         Material grassMat = new Material(ResourceManager.getTexture("grass"));
         grassMat.useFakeLighting = true;
@@ -183,59 +175,16 @@ public class Game implements IScene {
         grass1.textureIndex = 3;
         grass1.scale.set(2.5f);
         
-        Entity crosshair = new Entity(world, "Crosshair");
-        crosshair.setTransform(new Transform2D());
-        crosshair.addComponent(new Image(ResourceManager.getTexture("ui_crosshair")));
-        crosshair.scale.set(32, 32);
-        crosshair.position.set(Display.getWidth() / 2 - 16, Display.getHeight() / 2 - 16);
-        
         DesertHouse desertHouse = new DesertHouse(world);
         desertHouse.position.set(410, world.getTerrainHeight(410, 410), 410);
         
         Palm palm = new Palm(world);
         palm.position.set(395, world.getTerrainHeight(395, 410), 410);
         
-        Entity tri = new Entity(world, "Triangle");
-        tri.addComponent(new Model(ResourceManager.getMesh("triangle")));
-        tri.addComponent(new Material(ResourceManager.getTexture("rock")));
-        tri.setTransform(new Transform3D());
-        tri.position.set(384, world.getTerrainHeight(384, 384) + 2, 384);
-        tri.scale.set(10);
-        
         Well well = new Well(world);
         well.position.set(374, world.getTerrainHeight(374, 384), 384);
         
         GameTime.setTime(18, 00);
-        
-        /*Vector3f p1 = new Vector3f(-0.340490f, -0.184004f, -0.522071f);
-        Vector3f p2 = new Vector3f(-0.340490f, -0.184004f, 0.529369f);
-        Vector3f p3 = new Vector3f(0.383110f, 0.368781f, 0.003649f);
-        Triangle triangle = new Triangle(p1, p2, p3);*/
-        
-        ColliderLoader loader = new ColliderLoader("triangle");
-        Triangle triangle = loader.extractTriangles()[0];
-        
-        Vector3f eRadius = new Vector3f(1.0f, 2.0f, 1.0f);
-        
-        Matrix3f eSpace = new Matrix3f();
-        eSpace.setIdentity();
-        eSpace.m00 /= eRadius.x;
-        eSpace.m11 /= eRadius.y;
-        eSpace.m22 /= eRadius.z;
-        
-        Matrix3f R3 = new Matrix3f();
-        Matrix3f.invert(eSpace, R3);
-
-        Matrix4f modelMatrix = new Matrix4f();
-        MathUtils.getEulerModelMatrix(modelMatrix, new Vector3f(384, 
-        		world.getTerrainHeight(384, 384) + 2, 384), new Vector3f(0, 0, 0), 10);
-        
-        
-        Triangle transformedTriangle = triangle.createInstance(modelMatrix);
-        Triangle triangleInESpace = transformedTriangle.getTransformedCopy(eSpace);
-        
-
-        world.addCollider(triangleInESpace);
 	}
 
 	@Override

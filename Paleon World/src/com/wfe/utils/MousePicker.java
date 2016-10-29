@@ -1,6 +1,7 @@
 package com.wfe.utils;
 
 import com.wfe.graph.Camera;
+import com.wfe.input.Mouse;
 import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector2f;
 import com.wfe.math.Vector3f;
@@ -127,8 +128,8 @@ public class MousePicker {
 	}
 
 	private static Vector3f calculateMouseRayCamera() {
-		//Vector4f clipCoords = new Vector4f(Mouse.getNX(), Mouse.getNY(), -1.0f, 1.0f);
-		Vector4f clipCoords = new Vector4f(0, 0, -1.0f, 1.0f);
+		Vector4f clipCoords = new Vector4f(Mouse.getNX(), Mouse.getNY(), -1.0f, 1.0f);
+		//Vector4f clipCoords = new Vector4f(0, 0, -1.0f, 1.0f);
 		Vector4f eyeCoords = toEyeCoords(clipCoords);
 		Vector3f worldRay = toWorldCoords(eyeCoords);
 		return worldRay;
