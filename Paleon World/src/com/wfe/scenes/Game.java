@@ -184,7 +184,7 @@ public class Game implements IScene {
         Well well = new Well(world);
         well.position.set(374, world.getTerrainHeight(374, 384), 384);
         
-        GameTime.setTime(18, 00);
+        GameTime.setTime(15, 00);
 	}
 
 	@Override
