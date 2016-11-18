@@ -30,6 +30,7 @@ public class Game implements IScene {
 	
 	@Override
 	public void loadResources() {
+		System.out.println("Loading Game Resources");
 		ResourceManager.loadTexture("rock", "rock");
 		
 		ResourceManager.loadTexture("gui/crosshair", "ui_crosshair");
@@ -97,10 +98,12 @@ public class Game implements IScene {
         ResourceManager.loadTexture("models/well/well", "well");
         ResourceManager.loadMesh("models/well/well", "well");
         /*** *** ***/
+        System.out.println("Game Resources Have Loaded");
 	}
 
 	@Override
 	public void init() throws Exception {
+		System.out.println("Game Initialization");
 		Camera camera = new Camera(new Vector3f(384, 3.92f, 384));
 		world = new World(camera);
 		

@@ -16,14 +16,12 @@ public class ControllingBh extends Behaviour {
 	
 	private boolean move = false;
 	
-	private Camera camera;
-	
 	private World world;
 	
 	private Vector3f targetPosition;
 	
 	public ControllingBh(Camera camera) {
-		this.camera = camera;
+		
 	}
 	
 	@Override
@@ -34,14 +32,17 @@ public class ControllingBh extends Behaviour {
 
 	@Override
 	public void update(float dt) {	
+		Vector2f ctp = MousePicker.getGridPoint();
+		System.out.println(ctp);
 		if(Mouse.isButtonDown(0)) {
-			Vector3f ctp = MousePicker.getCurrentTerrainPoint();
+			//Vector2f ctp = MousePicker.getGridPoint();
+			//System.out.println(ctp);
 			
 			if(ctp != null) {
-				System.out.println(ctp);
 				targetPosition = new Vector3f();
-				targetPosition.x = ctp.x;
-				targetPosition.z = ctp.z;
+				Vector3f tp = world.cells.get((int)ctp.x + " " + (int)ctp.y).position;
+				targetPosition.x = tp.x;
+				targetPosition.z = tp.z;
 			}
 		}
 		
@@ -56,7 +57,7 @@ public class ControllingBh extends Behaviour {
 		
 		if(targetPosition != null) {
 			if(MathUtils.getDistanceBetweenPoints(targetPosition.x, targetPosition.z, 
-					parent.position.x, parent.position.z) >= 2) {
+					parent.position.x, parent.position.z) >= 0.5f) {
 				float direction = MathUtils.getRotationBetweenPoints(targetPosition.x, targetPosition.z, 
 						parent.position.x, parent.position.z);
 				parent.position.x += (float)Math.sin(Math.toRadians(direction + 90)) * -1.0f * speed * dt;
@@ -64,6 +65,9 @@ public class ControllingBh extends Behaviour {
 				parent.rotation.y = -direction + 90;
 				move = true;
 			} else {
+				parent.position.x = targetPosition.x;
+				parent.position.z = targetPosition.z;
+				System.out.println(parent.position);
 				targetPosition = null;
 			}
 		}

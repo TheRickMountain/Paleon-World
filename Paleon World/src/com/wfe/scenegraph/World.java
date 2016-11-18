@@ -165,6 +165,51 @@ public class World {
         }
     }
     
+    public void updateMenu(float dt) {
+    	for(Behaviour bh : behaviours) {
+        	if(bh.active)
+        		bh.update(dt);
+        }
+
+        if(!behavioursToAdd.isEmpty()) {
+            for(Behaviour bh : behavioursToAdd) {
+                behaviours.add(bh);
+            }
+            behavioursToAdd.clear();
+        }
+
+        if(!behavioursToRemove.isEmpty()) {
+            for(Behaviour bh : behavioursToRemove) {
+                behaviours.remove(bh);
+            }
+            behavioursToRemove.clear();
+        }
+
+        for(Transform tr : transforms) {
+        	if(tr.active)
+        		tr.update();
+        }
+
+        if(!transformsToAdd.isEmpty()) {
+            for(Transform tr : transformsToAdd) {
+                transforms.add(tr);
+            }
+            transformsToAdd.clear();
+        }
+
+        if(!transformsToRemove.isEmpty()) {
+            for(Transform tr : transformsToRemove) {
+                transforms.remove(tr);
+            }
+            transformsToRemove.clear();
+        }
+        
+        if(Keyboard.isKeyDown(Key.F5)) {
+            wireframeMode = !wireframeMode;
+            OpenglUtils.wireframeMode(wireframeMode);
+        }
+    }
+    
     public void clear() {
     	GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -202,6 +247,11 @@ public class World {
         skyboxRenderer.render(camera, fogColor);
         waterRenderer.render(waters, weather.sun, fogColor);
         guiRenderer.render(guis);
+    }
+    
+    public void renderMenu() {
+    	clear();
+    	guiRenderer.render(guis);
     }
 
     public void addTerrain(Terrain terrain){
