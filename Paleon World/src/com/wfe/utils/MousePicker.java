@@ -56,6 +56,24 @@ public class MousePicker {
 		
 		return currentGridPoint;
 	}
+	
+	public static Vector2f toGridPoint(Vector3f point) {
+		Vector2f gridPoint = new Vector2f(point.x, point.z);
+		gridPoint.x += 1.5f;
+		gridPoint.y += 1.5f;
+		gridPoint.x /= 3;
+		gridPoint.y /= 3;
+		gridPoint.x = (int) Math.round(gridPoint.x);
+		gridPoint.y = (int) Math.round(gridPoint.y);
+		gridPoint.x *= 3;
+		gridPoint.y *= 3;
+		gridPoint.x -= 1.5f;
+		gridPoint.y -= 1.5f;
+		
+		gridPoint.x = ((int)gridPoint.x) / 3;
+		gridPoint.y = ((int)gridPoint.y) / 3;
+		return gridPoint;
+	}
 
 	public static Vector3f getCurrentRay() {
 		return currentRay;

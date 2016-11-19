@@ -1,5 +1,9 @@
 package com.wfe.behaviours;
 
+import java.util.LinkedList;
+
+import com.wfe.astar.Cell;
+import com.wfe.astar.Table;
 import com.wfe.graph.Camera;
 import com.wfe.input.Mouse;
 import com.wfe.math.Vector2f;
@@ -32,18 +36,93 @@ public class ControllingBh extends Behaviour {
 
 	@Override
 	public void update(float dt) {	
-		Vector2f ctp = MousePicker.getGridPoint();
-		System.out.println(ctp);
 		if(Mouse.isButtonDown(0)) {
-			//Vector2f ctp = MousePicker.getGridPoint();
-			//System.out.println(ctp);
+			Vector2f finishPoint = MousePicker.getGridPoint();
 			
-			if(ctp != null) {
+			Table<Cell> cellList = new Table<Cell>(256, 256);
+			LinkedList<Cell> openList = new LinkedList<Cell>();
+			LinkedList<Cell> closedList = new LinkedList<Cell>();
+			LinkedList<Cell> tmpList = new LinkedList<Cell>();
+			
+			for(int i = 0; i < 256; i++)
+				for(int j = 0; j < 256; j++)
+					cellList.add(new Cell(j, i, world.blockList.get(j, i).blocked));
+			
+			Vector2f startPoint = MousePicker.toGridPoint(parent.position);
+			
+			cellList.get((int)startPoint.x, (int)startPoint.y).setAsStart();
+			cellList.get((int)finishPoint.x, (int)finishPoint.y).setAsFinish();
+			Cell start = cellList.get((int)startPoint.x, (int)startPoint.y);
+			Cell finish = cellList.get((int)finishPoint.x, (int)finishPoint.y);
+			
+			boolean found = false;
+			boolean noroute = false;
+			
+			openList.push(start);
+			
+			while(!found && !noroute) {
+				Cell min = openList.getFirst();
+				for(Cell cell : openList) {
+					if(cell.F < min.F) min = cell;
+				}
+				
+				closedList.push(min);
+				openList.remove(min);
+				
+				tmpList.clear();
+				tmpList.add(cellList.get(min.x - 1, min.y - 1));
+				tmpList.add(cellList.get(min.x, 	min.y - 1));
+				tmpList.add(cellList.get(min.x + 1, min.y - 1));
+				tmpList.add(cellList.get(min.x + 1, min.y));
+				tmpList.add(cellList.get(min.x + 1, min.y + 1));
+				tmpList.add(cellList.get(min.x, 	min.y + 1));
+				tmpList.add(cellList.get(min.x - 1, min.y + 1));
+				tmpList.add(cellList.get(min.x - 1, min.y));
+				
+				for(Cell neightbour : tmpList) {
+					if(neightbour.blocked || closedList.contains(neightbour)) continue;
+				
+					if(!openList.contains(neightbour)) {
+						openList.add(neightbour);
+						neightbour.parent = min;
+						neightbour.H = neightbour.mandist(finish);
+						neightbour.G = start.price(min);
+						neightbour.F = neightbour.H + neightbour.G;
+						continue;
+					}
+					
+					if(neightbour.G + neightbour.price(min) < min.G) {
+						neightbour.parent = min;
+						neightbour.H = neightbour.mandist(finish);
+						neightbour.G = start.price(min);
+						neightbour.F = neightbour.H + neightbour.G;
+					}
+				}
+				
+				if(openList.contains(finish))
+					found = true;
+				
+				if(openList.isEmpty())
+					noroute = true;
+			}
+			
+			if(!noroute) {
+				Cell rd = finish.parent;
+				while(!rd.equals(start)) {
+					rd.road = true;
+					rd = rd.parent;
+					if(rd == null) break;
+				}
+			} else {
+				System.out.println("No route");
+			}
+			
+			/*if(ctp != null) {
 				targetPosition = new Vector3f();
 				Vector3f tp = world.cells.get((int)ctp.x + " " + (int)ctp.y).position;
 				targetPosition.x = tp.x;
 				targetPosition.z = tp.z;
-			}
+			}*/
 		}
 		
 		

@@ -1,5 +1,6 @@
 package com.wfe.scenes;
 
+import com.wfe.astar.Cell;
 import com.wfe.components.Material;
 import com.wfe.components.Model;
 import com.wfe.components.Text;
@@ -131,8 +132,11 @@ public class Game implements IScene {
                 
                 world.cells.put(x + " " + z, 
                 		new CellInfo(new Vector3f(x * 3 + 1.5f, height, z * 3 + 1.5f), cellState));
+                if(cellState == 1)
+                	world.blockList.add(new Cell(x, z, true));
             }
         }
+        
         /*** *** ***/
 		
 		for(int i = 60; i < 840; i+= 120) {

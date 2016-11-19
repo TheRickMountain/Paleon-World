@@ -8,6 +8,8 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
+import com.wfe.astar.Cell;
+import com.wfe.astar.Table;
 import com.wfe.behaviours.Behaviour;
 import com.wfe.components.Component;
 import com.wfe.components.Image;
@@ -71,6 +73,7 @@ public class World {
     private final Weather weather;
 
     public final Map<String, CellInfo> cells = new HashMap<>();
+    public final Table<Cell> blockList = new Table<Cell>(256, 256);
 
     private Camera camera;
 
