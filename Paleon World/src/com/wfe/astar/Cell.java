@@ -47,8 +47,11 @@ public class Cell {
 		if(this.road) 
 			return "*";
 		
-		if(this.start || this.finish)
+		if(this.start)
 			return "+";
+		
+		if(this.finish)
+			return "=";
 		
 		if(this.blocked)
 			return "#";
