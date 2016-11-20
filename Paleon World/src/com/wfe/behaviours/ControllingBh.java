@@ -1,6 +1,7 @@
 package com.wfe.behaviours;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +29,10 @@ public class ControllingBh extends Behaviour {
 	
 	private List<Vector2f> gridPoints = new ArrayList<Vector2f>();
 	
+	private int cycle = 0;
+	private boolean finish = false;
+	private boolean astar = false;
+	
 	public ControllingBh(Camera camera) {
 		
 	}
@@ -39,18 +44,39 @@ public class ControllingBh extends Behaviour {
 	}
 
 	@Override
-	public void update(float dt) {	
+	public void update(float dt) {
 		if(Mouse.isButtonDown(0)) {
-			searchPath(MousePicker.toGridPoint(parent.position), MousePicker.getGridPoint());
-			
-			/*if(ctp != null) {
+			Vector2f gp = MousePicker.getGridPoint();
+			if(world.cells.get((int)gp.x + " " + (int)gp.y).getState() != 1) {
+				searchPath(MousePicker.toGridPoint(parent.position), MousePicker.getGridPoint());
+				Vector3f ctp = world.cells.get((int)gridPoints.get(cycle).x + " " + (int)gridPoints.get(cycle).y).position;
 				targetPosition = new Vector3f();
-				Vector3f tp = world.cells.get((int)ctp.x + " " + (int)ctp.y).position;
-				targetPosition.x = tp.x;
-				targetPosition.z = tp.z;
-			}*/
+				targetPosition.x = ctp.x;
+				targetPosition.z = ctp.z;
+				astar = true;
+			}
 		}
 		
+		if(astar) {
+			if(!finish) {
+				Vector3f tmpPos = world.cells.get((int)gridPoints.get(cycle).x + " " + (int)gridPoints.get(cycle).y).position;
+				if(tmpPos.x == parent.position.x &&
+						tmpPos.z == parent.position.z) {
+					if(cycle != gridPoints.size() - 1) {
+						cycle++;
+						Vector3f ctp = world.cells.get((int)gridPoints.get(cycle).x + " " + (int)gridPoints.get(cycle).y).position;
+						targetPosition = new Vector3f();
+						targetPosition.x = ctp.x;
+						targetPosition.z = ctp.z;
+					} else {
+						targetPosition = null;
+						finish = true;
+						astar = false;
+						System.out.println("Finish");
+					}
+				}
+			}
+		}
 		
 		moving(dt);
 	}
@@ -72,7 +98,7 @@ public class ControllingBh extends Behaviour {
 			} else {
 				parent.position.x = targetPosition.x;
 				parent.position.z = targetPosition.z;
-				System.out.println(parent.position);
+				System.out.println("Player Position: " + parent.position);
 				targetPosition = null;
 			}
 		}
@@ -162,6 +188,10 @@ public class ControllingBh extends Behaviour {
 		} else {
 			System.out.println("No route");
 		}
+		
+		cellList.printp();
+		
+		Collections.reverse(gridPoints);
 	}
 	
 	@Override
