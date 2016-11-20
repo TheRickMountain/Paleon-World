@@ -46,6 +46,10 @@ public class ControllingBh extends Behaviour {
 	@Override
 	public void update(float dt) {
 		if(Mouse.isButtonDown(0)) {
+			gridPoints.clear();
+			cycle = 0;
+			finish = false;
+			
 			Vector2f gp = MousePicker.getGridPoint();
 			if(world.cells.get((int)gp.x + " " + (int)gp.y).getState() != 1) {
 				searchPath(MousePicker.toGridPoint(parent.position), MousePicker.getGridPoint());
@@ -110,8 +114,7 @@ public class ControllingBh extends Behaviour {
 		}
 	}
 	
-	public void searchPath(Vector2f startPoint, Vector2f finishPoint) {
-		
+	public void searchPath(Vector2f startPoint, Vector2f finishPoint) {		
 		Table<Cell> cellList = new Table<Cell>(256, 256);
 		LinkedList<Cell> openList = new LinkedList<Cell>();
 		LinkedList<Cell> closedList = new LinkedList<Cell>();
@@ -188,8 +191,6 @@ public class ControllingBh extends Behaviour {
 		} else {
 			System.out.println("No route");
 		}
-		
-		cellList.printp();
 		
 		Collections.reverse(gridPoints);
 	}
