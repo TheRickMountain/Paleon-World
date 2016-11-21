@@ -14,9 +14,17 @@ public class MainMenuBh extends Behaviour {
 
 	@Override
 	public void update(float deltaTime) {
+		/**/
+		 try {
+			SceneManager.change("Game");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		 /**/
 		if(newGameBox.getBehaviour(ButtonBh.class).isPressedDown()) {
 			try {
-				SceneManager.change("Game");
+				//SceneManager.change("Game");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

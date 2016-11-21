@@ -156,9 +156,14 @@ public class Game implements IScene {
         rock.position.set(395, world.getTerrainHeight(395, 395), 395);
         rock.scale.set(0.65f);
         
-        Settler settler = new Settler(world, camera);
-        settler.rotation.y = 180;
-        settler.position.set(384, world.getTerrainHeight(384, 384), 384);
+        Settler settler1 = new Settler(world, camera);
+        settler1.position.set(384, world.getTerrainHeight(384, 384), 384);
+        
+        Settler settler2 = new Settler(world, camera);
+        settler2.position.set(400, world.getTerrainHeight(400, 384), 384);
+        
+        Settler settler3 = new Settler(world, camera);
+        settler3.position.set(384, world.getTerrainHeight(384, 400), 400);
         
         Material grassMat = new Material(ResourceManager.getTexture("grass"));
         grassMat.useFakeLighting = true;
