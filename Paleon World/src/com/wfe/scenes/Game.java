@@ -1,10 +1,8 @@
 package com.wfe.scenes;
 
-import com.wfe.components.Image;
 import com.wfe.components.Material;
 import com.wfe.components.Model;
 import com.wfe.components.Text;
-import com.wfe.core.Display;
 import com.wfe.core.IScene;
 import com.wfe.core.ResourceManager;
 import com.wfe.entities.DesertHouse;
@@ -183,12 +181,6 @@ public class Game implements IScene {
         grass1.textureIndex = 3;
         grass1.scale.set(2.5f);
         
-        Entity crosshair = new Entity(world, "Crosshair");
-        crosshair.setTransform(new Transform2D());
-        crosshair.addComponent(new Image(ResourceManager.getTexture("ui_crosshair")));
-        crosshair.scale.set(32, 32);
-        crosshair.position.set(Display.getWidth() / 2 - 16, Display.getHeight() / 2 - 16);
-        
         DesertHouse desertHouse = new DesertHouse(world);
         desertHouse.position.set(410, world.getTerrainHeight(410, 410), 410);
         
@@ -205,7 +197,7 @@ public class Game implements IScene {
         Well well = new Well(world);
         well.position.set(374, world.getTerrainHeight(374, 384), 384);
         
-        GameTime.setTime(18, 00);
+        GameTime.setTime(12, 00);
         
         /*Vector3f p1 = new Vector3f(-0.340490f, -0.184004f, -0.522071f);
         Vector3f p2 = new Vector3f(-0.340490f, -0.184004f, 0.529369f);

@@ -24,7 +24,7 @@ public class Camera {
     private static final float MIN_DISTANCE = 10;
     private static final float MAX_DISTANCE = 60;
 
-    private float distanceFromPlayer = 20;
+    private float distanceFromPlayer = 50;
     private float angleAroundPlayer = 180;
     private float zoomSpeed = 50;
 
@@ -71,8 +71,6 @@ public class Camera {
         if(Display.wasResized()) {
             MathUtils.getPerspProjectionMatrix(projectionMatrix, FOV, Display.getWidth(), Display.getHeight(), Z_NEAR, Z_FAR);
         }
-
-        //viewMatrix = MathUtils.getViewMatrix(viewMatrix, this);
         
         frustum.updatePlanes();
     }
@@ -80,7 +78,7 @@ public class Camera {
     public void rotate(float dt) {
         if(Mouse.isButton(1)) {
             calculateAngleAroundPlayer(dt);
-            calculatePitch(dt);
+            //calculatePitch(dt);
         }
 
         if(Mouse.isButtonDown(1)) {

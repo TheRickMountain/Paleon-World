@@ -10,10 +10,6 @@ import com.wfe.scenegraph.World;
 
 public class ControllingBh extends Behaviour {
 
-	private static final float GRAVITY = -50.0f;
-	private static final float JUMP_POWER = 20.0f;
-	private float upwardSpeed = 0;
-	private boolean isInAir = false;
 	public float speed = 15.0f;
 	
 	private AnimBh anim;
@@ -35,29 +31,12 @@ public class ControllingBh extends Behaviour {
 		this.anim = parent.getBehaviour(AnimBh.class);
 		this.world = parent.getWorld();
 		
-		colPackage = new CollisionPacket(new Vector3f(1, 2, 1), new Vector3f(400, world.getTerrainHeight(400, 400) + 3.92f, 400));
+		colPackage = new CollisionPacket(new Vector3f(1, 2, 1), new Vector3f(400, world.getTerrainHeight(400, 400) + 2.2f, 400));
 	}
 
 	@Override
 	public void update(float dt) {	
 		moving(dt);
-		
-		/*Vector3f parentPos = parent.position;
-		upwardSpeed += GRAVITY * dt;
-		parentPos.y += upwardSpeed * dt;
-		float terrainHeight = world.getTerrainHeight(parentPos.x, parentPos.z) + 2.2f;
-		if(parentPos.y < terrainHeight) {
-			upwardSpeed = 0;
-			isInAir = false;
-			parentPos.y = terrainHeight;
-		}*/
-	}
-	
-	public void jump() {
-		if(!isInAir) {
-			this.upwardSpeed = JUMP_POWER;
-			isInAir = true;
-		}
 	}
 
 	public void moving(float dt) {
@@ -66,24 +45,44 @@ public class ControllingBh extends Behaviour {
 		float yaw = camera.getYaw();
 		colPackage.setR3toESpaceVelocity(0, 0, 0);
 		
-		if(Keyboard.isKey(Key.W)) {
+		if(Keyboard.isKey(Key.W) && Keyboard.isKey(Key.A)) {
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw + 135)) * -1.0f * speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw + 135)) * speed * dt);
+			parent.rotation.y = -yaw + 45;
+			move = true;
+		} else if(Keyboard.isKey(Key.W) && Keyboard.isKey(Key.D)) {
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw - 135)) * -1.0f * speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw - 135)) * speed * dt);
+			parent.rotation.y = -yaw - 45;
+			move = true;
+		} else if(Keyboard.isKey(Key.S) && Keyboard.isKey(Key.D)) {
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw - 45)) * -1.0f * speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw -45)) * speed * dt);
+			parent.rotation.y = -yaw - 135;
+			move = true;
+		} else if(Keyboard.isKey(Key.S) && Keyboard.isKey(Key.A)) {
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw + 45)) * -1.0f * speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw + 45)) * speed * dt);
+			parent.rotation.y = -yaw + 135;
+			move = true;
+		} else if(Keyboard.isKey(Key.W)) {
 			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * -speed * dt, 
-					0, (float)Math.cos(Math.toRadians(yaw))* -speed * dt);
+					0, (float)Math.cos(Math.toRadians(yaw)) * -speed * dt);
 			parent.rotation.y = -yaw;
 			move = true;
 		} else if(Keyboard.isKey(Key.S)) {
 			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * speed * dt, 
-					0, (float)Math.cos(Math.toRadians(yaw))* speed * dt);
-			parent.rotation.y = -yaw;
+					0, (float)Math.cos(Math.toRadians(yaw)) * speed * dt);
+			parent.rotation.y = -yaw + 180;
 			move = true;
 		} else if(Keyboard.isKey(Key.A)) {
 			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw + 90)) * -1.0f * speed * dt, 
-					0, (float)Math.cos(Math.toRadians(yaw + 90))* speed * dt);
+					0, (float)Math.cos(Math.toRadians(yaw + 90)) * speed * dt);
 			parent.rotation.y = -yaw + 90;
 			move = true;
 		} else if(Keyboard.isKey(Key.D)) {
 			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw - 90)) * -1.0f * speed * dt,
-					0, (float)Math.cos(Math.toRadians(yaw - 90))* speed * dt);
+					0, (float)Math.cos(Math.toRadians(yaw - 90)) * speed * dt);
 			parent.rotation.y = -yaw - 90;
 			move = true;
 		}
@@ -92,11 +91,7 @@ public class ControllingBh extends Behaviour {
 		
 		parent.position.set(colPackage.getR3Position());
 		camera.playerPosition.set(parent.position);
-		camera.playerPosition.y += 3.8f;
-		
-		/*if(Keyboard.isKeyDown(Key.SPACE)) {
-			jump();
-		}*/
+		camera.playerPosition.y += 2.2f;
 		
 		if(move) {
 			anim.walkAnim(dt);	
@@ -122,9 +117,9 @@ public class ControllingBh extends Behaviour {
 		
 		Vector3f finalPosition = collideWithWorld(eSpacePosition, eSpaceVelocity);
 		
-		colPackage.setR3toESpaceVelocity(0, -0.2f, 0);
+		/*colPackage.setR3toESpaceVelocity(0, -0.2f, 0);
 		eSpaceVelocity.set(colPackage.getVelocity());
-		collisionRecursionDepth = 0;
+		collisionRecursionDepth = 0;*/
 		
 		//finalPosition = collideWithWorld(finalPosition, eSpaceVelocity);
 		
