@@ -1,18 +1,12 @@
 package com.wfe.scenes;
 
-import com.wfe.components.Material;
-import com.wfe.components.Model;
 import com.wfe.components.Text;
 import com.wfe.core.IScene;
 import com.wfe.core.ResourceManager;
-import com.wfe.entities.DesertHouse;
-import com.wfe.entities.Palm;
 import com.wfe.entities.Settler;
-import com.wfe.entities.Well;
 import com.wfe.graph.Camera;
 import com.wfe.graph.render.GUIRenderer;
 import com.wfe.graph.transform.Transform2D;
-import com.wfe.graph.transform.Transform3D;
 import com.wfe.graph.water.WaterTile;
 import com.wfe.math.Matrix3f;
 import com.wfe.math.Matrix4f;
@@ -37,10 +31,12 @@ public class Game implements IScene {
 	public void loadResources() {
 		ResourceManager.loadTexture("rock", "rock");
 		
-		ResourceManager.loadTexture("gui/crosshair", "ui_crosshair");
-		
-		/*** Terrain Textures ***/;
+		/*** Terrain Textures ***/
+		ResourceManager.loadTexture("terrain/dry_grass", "dry_grass");
+		ResourceManager.loadTexture("terrain/dry_ground", "dry_ground");
+		ResourceManager.loadTexture("terrain/ground", "ground");
 		ResourceManager.loadTexture("terrain/sand", "sand");
+		ResourceManager.loadTexture("terrain/grass", "fresh_grass");
 		/*** *** ***/
 		
 		/*** Water Textures ***/
@@ -116,10 +112,10 @@ public class Game implements IScene {
 		TexturePack texturePack = new TexturePack(
         		generator.getHeightMap(),
                 generator.getBlendMapTexture(),
-                ResourceManager.getTexture("sand"),
-                ResourceManager.getTexture("sand"),
-                ResourceManager.getTexture("sand"),
-                ResourceManager.getTexture("sand"));
+                ResourceManager.getTexture("dry_ground"),
+                ResourceManager.getTexture("dry_grass"),
+                ResourceManager.getTexture("ground"),
+                ResourceManager.getTexture("ground"));
 
         Terrain terrain = new Terrain(0, 0, texturePack);
         world.addTerrain(terrain);
@@ -146,63 +142,13 @@ public class Game implements IScene {
 		}
 		
         Entity text = new Entity(world, "Text");
-        text.addComponent(new Text("Winter Fox Engine 0.1", GUIRenderer.primitiveFont, 1f, Color.WHITE));
+        text.addComponent(new Text("Winter Fox Engine 0.2", GUIRenderer.primitiveFont, 1f, Color.WHITE));
         text.setTransform(new Transform2D());
         
-        Entity rock = new Entity(world, "Rock");
-        rock.addComponent(new Model(ResourceManager.getMesh("rock")));
-        rock.addComponent(new Material(ResourceManager.getTexture("rock")));
-        rock.setTransform(new Transform3D());
-        rock.position.set(395, world.getTerrainHeight(395, 395), 395);
-        rock.scale.set(0.65f);
-        
         Settler settler = new Settler(world, camera);
-        settler.rotation.y = 180;
-        
-        Material grassMat = new Material(ResourceManager.getTexture("grass"));
-        grassMat.useFakeLighting = true;
-        grassMat.setNumberOfRows(2);
-        grassMat.transparency = true;
-        
-        Entity grass = new Entity(world, "Grass");
-        grass.setTransform(new Transform3D());
-        grass.addComponent(new Model(ResourceManager.getMesh("grass")));
-        grass.addComponent(grassMat);
-        grass.position.set(400, world.getTerrainHeight(400, 400), 400);
-        grass.textureIndex = 1;
-        grass.scale.set(2.5f);
-        
-        Entity grass1 = new Entity(world, "Grass");
-        grass1.setTransform(new Transform3D());
-        grass1.addComponent(new Model(ResourceManager.getMesh("grass")));
-        grass1.addComponent(grassMat);
-        grass1.position.set(400, world.getTerrainHeight(400, 400), 400);
-        grass1.rotation.y = 85;
-        grass1.textureIndex = 3;
-        grass1.scale.set(2.5f);
-        
-        DesertHouse desertHouse = new DesertHouse(world);
-        desertHouse.position.set(410, world.getTerrainHeight(410, 410), 410);
-        
-        Palm palm = new Palm(world);
-        palm.position.set(395, world.getTerrainHeight(395, 410), 410);
-        
-        Entity tri = new Entity(world, "Triangle");
-        tri.addComponent(new Model(ResourceManager.getMesh("triangle")));
-        tri.addComponent(new Material(ResourceManager.getTexture("rock")));
-        tri.setTransform(new Transform3D());
-        tri.position.set(384, world.getTerrainHeight(384, 384) + 2, 384);
-        tri.scale.set(10);
-        
-        Well well = new Well(world);
-        well.position.set(374, world.getTerrainHeight(374, 384), 384);
+        settler.rotation.y = 180;    
         
         GameTime.setTime(12, 00);
-        
-        /*Vector3f p1 = new Vector3f(-0.340490f, -0.184004f, -0.522071f);
-        Vector3f p2 = new Vector3f(-0.340490f, -0.184004f, 0.529369f);
-        Vector3f p3 = new Vector3f(0.383110f, 0.368781f, 0.003649f);
-        Triangle triangle = new Triangle(p1, p2, p3);*/
         
         ColliderLoader loader = new ColliderLoader("box");
         

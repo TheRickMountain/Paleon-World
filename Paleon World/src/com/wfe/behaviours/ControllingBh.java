@@ -91,7 +91,7 @@ public class ControllingBh extends Behaviour {
 		
 		parent.position.set(colPackage.getR3Position());
 		camera.playerPosition.set(parent.position);
-		camera.playerPosition.y += 2.2f;
+		//camera.playerPosition.y += 2.2f;
 		
 		if(move) {
 			anim.walkAnim(dt);	
@@ -117,13 +117,8 @@ public class ControllingBh extends Behaviour {
 		
 		Vector3f finalPosition = collideWithWorld(eSpacePosition, eSpaceVelocity);
 		
-		/*colPackage.setR3toESpaceVelocity(0, -0.2f, 0);
-		eSpaceVelocity.set(colPackage.getVelocity());
-		collisionRecursionDepth = 0;*/
-		
-		//finalPosition = collideWithWorld(finalPosition, eSpaceVelocity);
-		
-		colPackage.setESpacePosition(finalPosition.x, finalPosition.y, finalPosition.z);
+		colPackage.setESpacePosition(finalPosition.x, 
+				(world.getTerrainHeight(parent.position.x, parent.position.z) + 2.2f) * 0.5f, finalPosition.z);
 	}
 	
 	private static final float unitsPerMeter = 100.0f;
