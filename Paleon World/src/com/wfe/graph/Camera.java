@@ -24,12 +24,12 @@ public class Camera {
     private static final float MIN_DISTANCE = 10;
     private static final float MAX_DISTANCE = 60;
 
-    private float distanceFromPlayer = 60;
+    private float distanceFromPlayer = 20;
     private float angleAroundPlayer = 180;
     private float zoomSpeed = 50;
 
     private static final float MAX_PITCH = 85;
-    private static final float MIN_PITCH = 1;
+    private static final float MIN_PITCH = -20;
     
     private Frustum frustum;
 

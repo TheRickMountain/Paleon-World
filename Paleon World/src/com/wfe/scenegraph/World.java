@@ -8,8 +8,6 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import com.wfe.astar.Cell;
-import com.wfe.astar.Table;
 import com.wfe.behaviours.Behaviour;
 import com.wfe.components.Component;
 import com.wfe.components.Image;
@@ -29,13 +27,16 @@ import com.wfe.graph.water.WaterTile;
 import com.wfe.input.Key;
 import com.wfe.input.Keyboard;
 import com.wfe.math.Vector4f;
+import com.wfe.physics.CollisionPacket;
 import com.wfe.terrain.Terrain;
 import com.wfe.terrain.TerrainBlock;
 import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
+import com.wfe.utils.MathUtils;
 import com.wfe.utils.MousePicker;
 import com.wfe.utils.OpenglUtils;
+import com.wfe.utils.Triangle;
 import com.wfe.weather.Weather;
 
 /**
@@ -69,11 +70,11 @@ public class World {
     private final List<Transform> transforms = new ArrayList<>();
     private final List<Transform> transformsToAdd = new ArrayList<>();
     private final List<Transform> transformsToRemove = new ArrayList<>();
+    private final List<Triangle> colliders = new ArrayList<>();
     
     private final Weather weather;
 
     public final Map<String, CellInfo> cells = new HashMap<>();
-    public final Table<Cell> blockList = new Table<Cell>(256, 256);
 
     private Camera camera;
 
@@ -119,57 +120,11 @@ public class World {
     	
         camera.update();
         camera.rotate(dt);
-        camera.move(dt);
         
         skyboxRenderer.update(dt);
         waterRenderer.update(dt);
 
         for(Behaviour bh : behaviours) {
-        	if(bh.active)
-        		bh.update(dt);
-        }
-
-        if(!behavioursToAdd.isEmpty()) {
-            for(Behaviour bh : behavioursToAdd) {
-                behaviours.add(bh);
-            }
-            behavioursToAdd.clear();
-        }
-
-        if(!behavioursToRemove.isEmpty()) {
-            for(Behaviour bh : behavioursToRemove) {
-                behaviours.remove(bh);
-            }
-            behavioursToRemove.clear();
-        }
-
-        for(Transform tr : transforms) {
-        	if(tr.active)
-        		tr.update();
-        }
-
-        if(!transformsToAdd.isEmpty()) {
-            for(Transform tr : transformsToAdd) {
-                transforms.add(tr);
-            }
-            transformsToAdd.clear();
-        }
-
-        if(!transformsToRemove.isEmpty()) {
-            for(Transform tr : transformsToRemove) {
-                transforms.remove(tr);
-            }
-            transformsToRemove.clear();
-        }
-        
-        if(Keyboard.isKeyDown(Key.F5)) {
-            wireframeMode = !wireframeMode;
-            OpenglUtils.wireframeMode(wireframeMode);
-        }
-    }
-    
-    public void updateMenu(float dt) {
-    	for(Behaviour bh : behaviours) {
         	if(bh.active)
         		bh.update(dt);
         }
@@ -250,11 +205,6 @@ public class World {
         skyboxRenderer.render(camera, fogColor);
         waterRenderer.render(waters, weather.sun, fogColor);
         guiRenderer.render(guis);
-    }
-    
-    public void renderMenu() {
-    	clear();
-    	guiRenderer.render(guis);
     }
 
     public void addTerrain(Terrain terrain){
@@ -384,6 +334,17 @@ public class World {
             return null;
         }
         return terrainGrid[terrain_i][terrain_j];
+    }
+    
+    public void addCollider(Triangle tri) {
+    	colliders.add(tri);
+    }
+    
+    public void checkCollision(CollisionPacket colPackage) {
+    	for(Triangle triangle : colliders) {
+    		MathUtils.checkTriangle(colPackage, 
+    				triangle);
+    	}
     }
 
 }

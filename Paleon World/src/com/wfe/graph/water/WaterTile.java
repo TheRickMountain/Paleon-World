@@ -3,7 +3,7 @@ package com.wfe.graph.water;
 public class WaterTile {
 	
 	public static final float TILE_SIZE = 60;
-	public static final float HEIGHT = 2;
+	public static final float HEIGHT = 1;
 
 	private float x,z;
 	

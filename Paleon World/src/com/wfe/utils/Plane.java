@@ -6,7 +6,7 @@ public class Plane {
 
 	private Triangle triangle;
 	private Vector3f origin;
-	private Vector3f normal;
+	public Vector3f normal;
 	private float constant;
 	
 	private float t0;
@@ -17,9 +17,8 @@ public class Plane {
 		Vector3f point0 = triangle.getPointN(0);
 		Vector3f point1 = triangle.getPointN(1);
 		Vector3f point2 = triangle.getPointN(2);
-		normal = Vector3f.cross(Vector3f.sub(point2, point0, null),
-				Vector3f.sub(point1, point0, null), null);
-		normal.normalise();
+		normal = MathUtils.calculateNormal(point0, point1, point2);
+		System.out.println(normal);
 		origin = new Vector3f(point0.x,point0.y,point0.z);
 		constant = -(normal.x*origin.x+normal.y*origin.y+normal.z*origin.z);
 	}

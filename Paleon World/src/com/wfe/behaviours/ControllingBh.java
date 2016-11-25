@@ -1,111 +1,102 @@
 package com.wfe.behaviours;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.wfe.astar.Cell;
-import com.wfe.astar.Table;
 import com.wfe.graph.Camera;
-import com.wfe.input.Mouse;
-import com.wfe.math.Vector2f;
+import com.wfe.input.Key;
+import com.wfe.input.Keyboard;
 import com.wfe.math.Vector3f;
+import com.wfe.physics.CollisionPacket;
+import com.wfe.physics.FPlane;
 import com.wfe.scenegraph.World;
-import com.wfe.utils.MathUtils;
-import com.wfe.utils.MousePicker;
 
 public class ControllingBh extends Behaviour {
 
+	private static final float GRAVITY = -50.0f;
+	private static final float JUMP_POWER = 20.0f;
+	private float upwardSpeed = 0;
+	private boolean isInAir = false;
 	public float speed = 15.0f;
 	
 	private AnimBh anim;
 	
 	private boolean move = false;
 	
+	private Camera camera;
+	
 	private World world;
 	
-	private Vector3f targetPosition;
-	
-	private List<Vector2f> gridPoints = new ArrayList<Vector2f>();
-	
-	private int cycle = 0;
-	private boolean finish = false;
-	private boolean astar = false;
+	CollisionPacket colPackage;
 	
 	public ControllingBh(Camera camera) {
-		
+		this.camera = camera;
 	}
 	
 	@Override
 	public void start() {
 		this.anim = parent.getBehaviour(AnimBh.class);
-		this.world = parent.getWorld();	
+		this.world = parent.getWorld();
+		
+		colPackage = new CollisionPacket(new Vector3f(1, 2, 1), new Vector3f(400, world.getTerrainHeight(400, 400) + 3.92f, 400));
 	}
 
 	@Override
-	public void update(float dt) {
-		if(Mouse.isButtonDown(0)) {
-			gridPoints.clear();
-			cycle = 0;
-			finish = false;
-			
-			Vector2f gp = MousePicker.getGridPoint();
-			if(world.cells.get((int)gp.x + " " + (int)gp.y).getState() != 1) {
-				searchPath(MousePicker.toGridPoint(parent.position), MousePicker.getGridPoint());
-				Vector3f ctp = world.cells.get((int)gridPoints.get(cycle).x + " " + (int)gridPoints.get(cycle).y).position;
-				targetPosition = new Vector3f();
-				targetPosition.x = ctp.x;
-				targetPosition.z = ctp.z;
-				astar = true;
-			}
-		}
-		
-		if(astar) {
-			if(!finish) {
-				Vector3f tmpPos = world.cells.get((int)gridPoints.get(cycle).x + " " + (int)gridPoints.get(cycle).y).position;
-				if(tmpPos.x == parent.position.x &&
-						tmpPos.z == parent.position.z) {
-					if(cycle != gridPoints.size() - 1) {
-						cycle++;
-						Vector3f ctp = world.cells.get((int)gridPoints.get(cycle).x + " " + (int)gridPoints.get(cycle).y).position;
-						targetPosition = new Vector3f();
-						targetPosition.x = ctp.x;
-						targetPosition.z = ctp.z;
-					} else {
-						targetPosition = null;
-						finish = true;
-						astar = false;
-						System.out.println("Finish");
-					}
-				}
-			}
-		}
-		
+	public void update(float dt) {	
 		moving(dt);
+		
+		/*Vector3f parentPos = parent.position;
+		upwardSpeed += GRAVITY * dt;
+		parentPos.y += upwardSpeed * dt;
+		float terrainHeight = world.getTerrainHeight(parentPos.x, parentPos.z) + 2.2f;
+		if(parentPos.y < terrainHeight) {
+			upwardSpeed = 0;
+			isInAir = false;
+			parentPos.y = terrainHeight;
+		}*/
+	}
+	
+	public void jump() {
+		if(!isInAir) {
+			this.upwardSpeed = JUMP_POWER;
+			isInAir = true;
+		}
 	}
 
 	public void moving(float dt) {
 		move = false;
 		
-		parent.position.y = world.getTerrainHeight(parent.position.x, parent.position.z) + 2.25f;
+		float yaw = camera.getYaw();
+		colPackage.setR3toESpaceVelocity(0, 0, 0);
 		
-		if(targetPosition != null) {
-			if(MathUtils.getDistanceBetweenPoints(targetPosition.x, targetPosition.z, 
-					parent.position.x, parent.position.z) >= 0.5f) {
-				float direction = MathUtils.getRotationBetweenPoints(targetPosition.x, targetPosition.z, 
-						parent.position.x, parent.position.z);
-				parent.position.x += (float)Math.sin(Math.toRadians(direction + 90)) * -1.0f * speed * dt;
-				parent.position.z += (float)Math.cos(Math.toRadians(direction + 90)) * speed * dt;
-				parent.rotation.y = -direction + 90;
-				move = true;
-			} else {
-				parent.position.x = targetPosition.x;
-				parent.position.z = targetPosition.z;
-				System.out.println("Player Position: " + parent.position);
-				targetPosition = null;
-			}
+		if(Keyboard.isKey(Key.W)) {
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * -speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw))* -speed * dt);
+			parent.rotation.y = -yaw;
+			move = true;
+		} else if(Keyboard.isKey(Key.S)) {
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw)) * -1.0f * speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw))* speed * dt);
+			parent.rotation.y = -yaw;
+			move = true;
+		} else if(Keyboard.isKey(Key.A)) {
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw + 90)) * -1.0f * speed * dt, 
+					0, (float)Math.cos(Math.toRadians(yaw + 90))* speed * dt);
+			parent.rotation.y = -yaw + 90;
+			move = true;
+		} else if(Keyboard.isKey(Key.D)) {
+			colPackage.setR3toESpaceVelocity((float)Math.sin(Math.toRadians(yaw - 90)) * -1.0f * speed * dt,
+					0, (float)Math.cos(Math.toRadians(yaw - 90))* speed * dt);
+			parent.rotation.y = -yaw - 90;
+			move = true;
 		}
+		
+		collideAndSlide();
+		
+		parent.position.set(colPackage.getR3Position());
+		camera.playerPosition.set(parent.position);
+		camera.playerPosition.y += 3.8f;
+		
+		/*if(Keyboard.isKeyDown(Key.SPACE)) {
+			jump();
+		}*/
 		
 		if(move) {
 			anim.walkAnim(dt);	
@@ -114,90 +105,88 @@ public class ControllingBh extends Behaviour {
 		}
 	}
 	
-	public void searchPath(Vector2f startPoint, Vector2f finishPoint) {		
-		Table<Cell> cellList = new Table<Cell>(256, 256);
-		LinkedList<Cell> openList = new LinkedList<Cell>();
-		LinkedList<Cell> closedList = new LinkedList<Cell>();
-		LinkedList<Cell> tmpList = new LinkedList<Cell>();
-		
-		for(int i = 0; i < 256; i++)
-			for(int j = 0; j < 256; j++)
-				cellList.add(new Cell(j, i, world.blockList.get(j, i).blocked));
-		
-		cellList.get((int)startPoint.x, (int)startPoint.y).setAsStart();
-		cellList.get((int)finishPoint.x, (int)finishPoint.y).setAsFinish();
-		Cell start = cellList.get((int)startPoint.x, (int)startPoint.y);
-		Cell finish = cellList.get((int)finishPoint.x, (int)finishPoint.y);
-		
-		boolean found = false;
-		boolean noroute = false;
-		
-		openList.push(start);
-		
-		while(!found && !noroute) {
-			Cell min = openList.getFirst();
-			for(Cell cell : openList) {
-				if(cell.F < min.F) min = cell;
-			}
-			
-			closedList.push(min);
-			openList.remove(min);
-			
-			tmpList.clear();
-			tmpList.add(cellList.get(min.x - 1, min.y - 1));
-			tmpList.add(cellList.get(min.x, 	min.y - 1));
-			tmpList.add(cellList.get(min.x + 1, min.y - 1));
-			tmpList.add(cellList.get(min.x + 1, min.y));
-			tmpList.add(cellList.get(min.x + 1, min.y + 1));
-			tmpList.add(cellList.get(min.x, 	min.y + 1));
-			tmpList.add(cellList.get(min.x - 1, min.y + 1));
-			tmpList.add(cellList.get(min.x - 1, min.y));
-			
-			for(Cell neightbour : tmpList) {
-				if(neightbour.blocked || closedList.contains(neightbour)) continue;
-			
-				if(!openList.contains(neightbour)) {
-					openList.add(neightbour);
-					neightbour.parent = min;
-					neightbour.H = neightbour.mandist(finish);
-					neightbour.G = start.price(min);
-					neightbour.F = neightbour.H + neightbour.G;
-					continue;
-				}
-				
-				if(neightbour.G + neightbour.price(min) < min.G) {
-					neightbour.parent = min;
-					neightbour.H = neightbour.mandist(finish);
-					neightbour.G = start.price(min);
-					neightbour.F = neightbour.H + neightbour.G;
-				}
-			}
-			
-			if(openList.contains(finish))
-				found = true;
-			
-			if(openList.isEmpty())
-				noroute = true;
-		}
-		
-		if(!noroute) {
-			Cell rd = finish.parent;
-			while(!rd.equals(start)) {
-				rd.road = true;
-				gridPoints.add(new Vector2f(rd.x, rd.y));
-				rd = rd.parent;
-				if(rd == null) break;
-			}
-		} else {
-			System.out.println("No route");
-		}
-		
-		Collections.reverse(gridPoints);
-	}
-	
 	@Override
 	public void onGUI() {
 		
+	}
+	
+	private int collisionRecursionDepth = 0;
+	public void collideAndSlide() {
+		Vector3f eSpacePosition = new Vector3f();
+		eSpacePosition.set(colPackage.getBasePoint());
+			
+		Vector3f eSpaceVelocity = new Vector3f();
+		eSpaceVelocity.set(colPackage.getVelocity());
+		
+		collisionRecursionDepth = 0;
+		
+		Vector3f finalPosition = collideWithWorld(eSpacePosition, eSpaceVelocity);
+		
+		colPackage.setR3toESpaceVelocity(0, -0.2f, 0);
+		eSpaceVelocity.set(colPackage.getVelocity());
+		collisionRecursionDepth = 0;
+		
+		//finalPosition = collideWithWorld(finalPosition, eSpaceVelocity);
+		
+		colPackage.setESpacePosition(finalPosition.x, finalPosition.y, finalPosition.z);
+	}
+	
+	private static final float unitsPerMeter = 100.0f;
+	
+	public Vector3f collideWithWorld(Vector3f pos, Vector3f vel) {
+		float unitScale = unitsPerMeter / 100.0f;
+		float veryCloseDistance = 0.005f * unitScale;
+		
+		if(collisionRecursionDepth > 5)
+			return pos;
+		
+		colPackage.setESpaceVelocity(vel.x, vel.y, vel.z);
+		colPackage.setESpacePosition(pos.x, pos.y, pos.z);
+		colPackage.foundCollision = false;
+		
+		world.checkCollision(colPackage);
+		
+		if(colPackage.foundCollision == false) {
+			return Vector3f.add(pos, vel, null);
+		}
+		
+		Vector3f destinationPoint = Vector3f.add(pos, vel, null);
+		Vector3f newBasePoint = new Vector3f(pos);
+		
+		if(colPackage.nearestDistance >= veryCloseDistance) {
+			Vector3f V = new Vector3f(vel);
+			V.normalise();
+			V.scale((float) (colPackage.nearestDistance - veryCloseDistance));
+			newBasePoint = Vector3f.add(colPackage.getBasePoint(), V, null);
+			
+			V.normalise();
+			Vector3f vcdV = new Vector3f(V);
+			vcdV.scale(veryCloseDistance);
+			Vector3f.sub(colPackage.intersectionPoint, vcdV, 
+					colPackage.intersectionPoint);
+		}
+		
+		Vector3f slidePlaneOrigin = new Vector3f(colPackage.intersectionPoint);
+		Vector3f slidePlaneNormal = new Vector3f(
+				Vector3f.sub(newBasePoint, colPackage.intersectionPoint, null));
+		slidePlaneNormal.normalise();
+		FPlane slidingPlane = new FPlane(slidePlaneOrigin, slidePlaneNormal);
+		
+		Vector3f newSlidePlaneNormal = new Vector3f(slidePlaneNormal);
+		newSlidePlaneNormal.scale((float) slidingPlane.signedDistanceTo(destinationPoint));
+		
+		Vector3f newDestinationPoint = new Vector3f(
+				Vector3f.sub(destinationPoint, newSlidePlaneNormal, null));
+		
+		Vector3f newVelocityVector = Vector3f.sub(newDestinationPoint, 
+				colPackage.intersectionPoint, null);
+		
+		if(newVelocityVector.length() < veryCloseDistance) {
+			return newBasePoint;
+		}
+		
+		collisionRecursionDepth++;
+		return collideWithWorld(newBasePoint, newVelocityVector);
 	}
 
 }
