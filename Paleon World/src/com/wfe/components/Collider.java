@@ -6,7 +6,7 @@ import java.util.List;
 import com.wfe.math.Matrix3f;
 import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
-import com.wfe.physics.ColliderLoader;
+import com.wfe.physics.ColliderMesh;
 import com.wfe.physics.CollisionPacket;
 import com.wfe.utils.MathUtils;
 import com.wfe.utils.Triangle;
@@ -15,14 +15,12 @@ public class Collider extends Component {
 	
 	private List<Triangle> tris = new ArrayList<Triangle>();
 
-	public Collider(String colliderName, Vector3f position, Vector3f rotation, Vector3f scale) {	
+	public Collider(ColliderMesh mesh, Vector3f position, Vector3f rotation, Vector3f scale) {	
 		type = Type.COLLIDER;
 		
-		ColliderLoader loader = null;
 		Triangle triangles[] = null;
 		try {
-			loader = new ColliderLoader(colliderName);
-			triangles = loader.extractTriangles();
+			triangles = mesh.extractTriangles();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

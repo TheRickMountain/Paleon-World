@@ -25,6 +25,8 @@ public class Game implements IScene {
 	
 	@Override
 	public void loadResources() {
+		ResourceManager.loadColliderMesh("box", "box");
+		
 		ResourceManager.loadMesh("box", "box");
 		ResourceManager.loadTexture("rock", "rock");
 		
@@ -150,40 +152,6 @@ public class Game implements IScene {
         Birch conifer3 = new Birch(world, new Vector3f(384, world.getTerrainHeight(384, 400), 400));
         
         GameTime.setTime(12, 00);
-        
-        /*Entity box = new Entity(world, "Box");
-        box.setTransform(new Transform3D());
-        box.addComponent(new Model(ResourceManager.getMesh("box")));
-        box.addComponent(new Material(ResourceManager.getTexture("rock")));
-        box.position.set(384, world.getTerrainHeight(384, 384) + 2, 384);
-        box.scale.y = 3;*/
-        
-        /*ColliderLoader loader = new ColliderLoader("box");
-        
-        Triangle triangles[] = loader.extractTriangles();
-        
-        Vector3f eRadius = new Vector3f(1.0f, 2.0f, 1.0f);
-        
-        Matrix3f eSpace = new Matrix3f();
-        eSpace.setIdentity();
-        eSpace.m00 /= eRadius.x;
-        eSpace.m11 /= eRadius.y;
-        eSpace.m22 /= eRadius.z;
-        
-        Matrix3f R3 = new Matrix3f();
-        Matrix3f.invert(eSpace, R3);
-
-        Matrix4f modelMatrix = new Matrix4f();
-        MathUtils.getEulerModelMatrix(modelMatrix, new Vector3f(384, 
-        		world.getTerrainHeight(384, 384) + 2, 384), new Vector3f(0, 0, 0), new Vector3f(1, 3, 1));
-        
-        
-        for(int i = 0; i < triangles.length; i++) {
-        	Triangle transformedTriangle = triangles[i].createInstance(modelMatrix);
-        	Triangle triangleInESpace = transformedTriangle.getTransformedCopy(eSpace);
-        
-        	world.addCollider(triangleInESpace);
-        }*/
 	}
 
 	@Override

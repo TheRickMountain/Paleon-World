@@ -9,16 +9,16 @@ import java.util.List;
 import com.wfe.math.Vector3f;
 import com.wfe.utils.Triangle;
 
-public class ColliderLoader {
+public class ColliderMesh {
 
 	private List<Vector3f> points;
 	private List<Triangle> triangles;
 
 	private BufferedReader reader;
 
-	public ColliderLoader(String fileName) throws Exception {
+	public ColliderMesh(String fileName) throws Exception {
 		reader = new BufferedReader(
-				new InputStreamReader(ColliderLoader.class.getClass().getResourceAsStream("/" + fileName + ".obj")));
+				new InputStreamReader(ColliderMesh.class.getClass().getResourceAsStream("/" + fileName + ".obj")));
 		points = new ArrayList<Vector3f>();
 		triangles = new ArrayList<Triangle>();
 	}

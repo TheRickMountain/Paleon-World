@@ -16,7 +16,8 @@ public class Birch extends Entity {
 		
 		addComponent(new Model(ResourceManager.getMesh("birch_trunk")));
 		addComponent(new Material(ResourceManager.getTexture("birch_trunk")));
-		addComponent(new Collider("box", new Vector3f(position), new Vector3f(0, 0, 0), new Vector3f(1, 3, 1)));
+		addComponent(new Collider(ResourceManager.getColliderMesh("box"), 
+				new Vector3f(position), new Vector3f(0, 0, 0), new Vector3f(1, 3, 1)));
 		setTransform(new Transform3D());
 		scale.set(2.5f);
 		

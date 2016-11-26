@@ -8,12 +8,14 @@ import com.wfe.graph.Texture;
 import com.wfe.graph.TextureLoader;
 import com.wfe.graph.shaders.ShaderProgram;
 import com.wfe.obj.OBJLoader;
+import com.wfe.physics.ColliderMesh;
 
 public class ResourceManager {
 
 	private static Map<String, ShaderProgram> shaders = new HashMap<>();
     private static Map<String, Texture> textures = new HashMap<>();
 	private static Map<String, Mesh> meshes = new HashMap<>();
+	private static Map<String, ColliderMesh> colliders = new HashMap<>();
 	
 	public static ShaderProgram loadShader(String shaderName) {
         try {
@@ -61,6 +63,21 @@ public class ResourceManager {
 
     public static Mesh getMesh(String meshName) {
         return meshes.get(meshName);
+    }
+    
+    public static ColliderMesh loadColliderMesh(String colliderMeshPath, String colliderMeshName) {
+        try {
+        	ColliderMesh collider = new ColliderMesh(colliderMeshPath);
+            colliders.put(colliderMeshName, collider);
+            return collider;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ColliderMesh getColliderMesh(String colliderMeshName) {
+        return colliders.get(colliderMeshName);
     }
 
 	public static void cleanup() {

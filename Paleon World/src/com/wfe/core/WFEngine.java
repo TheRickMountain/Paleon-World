@@ -1,7 +1,5 @@
 package com.wfe.core;
 
-
-
 import org.lwjgl.opengl.GL11;
 
 import com.wfe.input.Keyboard;

@@ -34,6 +34,7 @@ import com.wfe.terrain.TerrainBlock;
 import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
+import com.wfe.utils.MathUtils;
 import com.wfe.utils.MousePicker;
 import com.wfe.utils.OpenglUtils;
 import com.wfe.weather.Weather;
@@ -344,7 +345,11 @@ public class World {
     
     public void checkCollision(CollisionPacket colPackage) {
     	for(Collider collider : colliders) {
-    		collider.checkCollision(colPackage);
+    		if(MathUtils.getDistanceBetweenPoints(
+    				collider.parent.position.x, collider.parent.position.z, 
+    				colPackage.getR3Position().x, colPackage.getR3Position().z) < 10) {
+    			collider.checkCollision(colPackage);
+    		}
     	}
     }
 
