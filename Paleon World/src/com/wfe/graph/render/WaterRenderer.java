@@ -92,7 +92,7 @@ public class WaterRenderer {
 			if(camera.testWaterInView(tile)) {
 				MathUtils.getEulerModelMatrix(modelMatrix,
 						new Vector3f(tile.getX(), WaterTile.HEIGHT, tile.getZ()), new Vector3f(0, 0, 0),
-						WaterTile.TILE_SIZE);
+						new Vector3f(WaterTile.TILE_SIZE, WaterTile.TILE_SIZE, WaterTile.TILE_SIZE));
 				shader.setUniform("modelMatrix", modelMatrix);
 				GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, quad.getVertexCount());
 			}

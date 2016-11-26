@@ -3,15 +3,13 @@ package com.wfe.scenes;
 import com.wfe.components.Text;
 import com.wfe.core.IScene;
 import com.wfe.core.ResourceManager;
+import com.wfe.entities.Birch;
 import com.wfe.entities.Settler;
 import com.wfe.graph.Camera;
 import com.wfe.graph.render.GUIRenderer;
 import com.wfe.graph.transform.Transform2D;
 import com.wfe.graph.water.WaterTile;
-import com.wfe.math.Matrix3f;
-import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
-import com.wfe.physics.ColliderLoader;
 import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
 import com.wfe.terrain.Terrain;
@@ -20,8 +18,6 @@ import com.wfe.terrain.TexturePack;
 import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
-import com.wfe.utils.MathUtils;
-import com.wfe.utils.Triangle;
 
 public class Game implements IScene {
 	
@@ -29,6 +25,7 @@ public class Game implements IScene {
 	
 	@Override
 	public void loadResources() {
+		ResourceManager.loadMesh("box", "box");
 		ResourceManager.loadTexture("rock", "rock");
 		
 		/*** Terrain Textures ***/
@@ -148,9 +145,20 @@ public class Game implements IScene {
         Settler settler = new Settler(world, camera);
         settler.rotation.y = 180;    
         
+        Birch conifer1 = new Birch(world, new Vector3f(384, world.getTerrainHeight(384, 384), 384));
+        Birch conifer2 = new Birch(world, new Vector3f(400, world.getTerrainHeight(400, 384), 384));
+        Birch conifer3 = new Birch(world, new Vector3f(384, world.getTerrainHeight(384, 400), 400));
+        
         GameTime.setTime(12, 00);
         
-        ColliderLoader loader = new ColliderLoader("box");
+        /*Entity box = new Entity(world, "Box");
+        box.setTransform(new Transform3D());
+        box.addComponent(new Model(ResourceManager.getMesh("box")));
+        box.addComponent(new Material(ResourceManager.getTexture("rock")));
+        box.position.set(384, world.getTerrainHeight(384, 384) + 2, 384);
+        box.scale.y = 3;*/
+        
+        /*ColliderLoader loader = new ColliderLoader("box");
         
         Triangle triangles[] = loader.extractTriangles();
         
@@ -167,7 +175,7 @@ public class Game implements IScene {
 
         Matrix4f modelMatrix = new Matrix4f();
         MathUtils.getEulerModelMatrix(modelMatrix, new Vector3f(384, 
-        		world.getTerrainHeight(384, 384) + 2, 384), new Vector3f(0, 0, 0), 10);
+        		world.getTerrainHeight(384, 384) + 2, 384), new Vector3f(0, 0, 0), new Vector3f(1, 3, 1));
         
         
         for(int i = 0; i < triangles.length; i++) {
@@ -175,7 +183,7 @@ public class Game implements IScene {
         	Triangle triangleInESpace = transformedTriangle.getTransformedCopy(eSpace);
         
         	world.addCollider(triangleInESpace);
-        }
+        }*/
 	}
 
 	@Override

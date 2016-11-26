@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import com.wfe.behaviours.Behaviour;
+import com.wfe.components.Collider;
 import com.wfe.components.Component;
 import com.wfe.components.Image;
 import com.wfe.components.Model;
@@ -33,10 +34,8 @@ import com.wfe.terrain.TerrainBlock;
 import com.wfe.utils.CellInfo;
 import com.wfe.utils.Color;
 import com.wfe.utils.GameTime;
-import com.wfe.utils.MathUtils;
 import com.wfe.utils.MousePicker;
 import com.wfe.utils.OpenglUtils;
-import com.wfe.utils.Triangle;
 import com.wfe.weather.Weather;
 
 /**
@@ -70,7 +69,8 @@ public class World {
     private final List<Transform> transforms = new ArrayList<>();
     private final List<Transform> transformsToAdd = new ArrayList<>();
     private final List<Transform> transformsToRemove = new ArrayList<>();
-    private final List<Triangle> colliders = new ArrayList<>();
+    
+    private final List<Collider> colliders = new ArrayList<>();
     
     private final Weather weather;
 
@@ -264,6 +264,9 @@ public class World {
         } else if(component.type.equals(Component.Type.TEXT)) {
             Text text = (Text) component;
             guis.add(text);
+        } else if(component.type.equals(Component.Type.COLLIDER)) {
+        	Collider collider = (Collider) component;
+        	colliders.add(collider);
         }
     }
 
@@ -282,6 +285,9 @@ public class World {
         } else if(component.type.equals(Component.Type.TEXT)) {
             Text text = (Text) component;
             guis.remove(text);
+        } else if(component.type.equals(Component.Type.COLLIDER)) {
+        	Collider collider = (Collider) component;
+        	colliders.remove(collider);
         }
     }
 
@@ -336,14 +342,9 @@ public class World {
         return terrainGrid[terrain_i][terrain_j];
     }
     
-    public void addCollider(Triangle tri) {
-    	colliders.add(tri);
-    }
-    
     public void checkCollision(CollisionPacket colPackage) {
-    	for(Triangle triangle : colliders) {
-    		MathUtils.checkTriangle(colPackage, 
-    				triangle);
+    	for(Collider collider : colliders) {
+    		collider.checkCollision(colPackage);
     	}
     }
 

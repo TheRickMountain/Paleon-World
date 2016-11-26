@@ -53,12 +53,12 @@ public class MathUtils {
 	
 	static Transform transform = new Transform();
 	
-	public static Matrix4f getEulerModelMatrix(Matrix4f matrix, Vector3f position, Vector3f rotation, float scale) {
+	public static Matrix4f getEulerModelMatrix(Matrix4f matrix, Vector3f position, Vector3f rotation, Vector3f scale) {
 		transform.reset()
         .rotateSelf(Vector3.AXIS_X, rotation.x * DEGREES_TO_RADIANS)
         .rotateSelf(Vector3.AXIS_Z, rotation.z * DEGREES_TO_RADIANS)
         .rotateSelf(Vector3.AXIS_Y, rotation.y * DEGREES_TO_RADIANS)
-        .scaleSelf(new Vector3(scale, scale, scale))
+        .scaleSelf(new Vector3(scale.x, scale.y, scale.z))
         .translateSelf(new Vector3(position.x, position.y, position.z));
 		Matrix4 tempMatrix = transform.getMatrix();
 		matrix.m00 = tempMatrix.get(0, 0);

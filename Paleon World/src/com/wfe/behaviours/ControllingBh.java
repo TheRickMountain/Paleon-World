@@ -91,7 +91,6 @@ public class ControllingBh extends Behaviour {
 		
 		parent.position.set(colPackage.getR3Position());
 		camera.playerPosition.set(parent.position);
-		//camera.playerPosition.y += 2.2f;
 		
 		if(move) {
 			anim.walkAnim(dt);	

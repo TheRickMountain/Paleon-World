@@ -27,9 +27,11 @@ public class Transform3D extends Transform {
 			
 			Vector3f.add(localRotation,  pp.rotation, rotation);
 			scale.x = localScale.x * pp.scale.x;
+			scale.y = localScale.y * pp.scale.y;
+			scale.z = localScale.z * pp.scale.z;
         }
         
-        MathUtils.getEulerModelMatrix(modelMatrix, position, rotation, scale.x);
+        MathUtils.getEulerModelMatrix(modelMatrix, position, rotation, scale);
     }
 
 }

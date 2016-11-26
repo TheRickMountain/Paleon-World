@@ -22,7 +22,8 @@ public abstract class Component {
         MODEL,
         MATERIAL,
         TEXT,
-        IMAGE
+        IMAGE,
+        COLLIDER
     }
 
 }
