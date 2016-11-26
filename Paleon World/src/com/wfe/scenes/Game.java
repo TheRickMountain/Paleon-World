@@ -5,6 +5,7 @@ import com.wfe.core.IScene;
 import com.wfe.core.ResourceManager;
 import com.wfe.entities.Birch;
 import com.wfe.entities.Settler;
+import com.wfe.entities.Wall;
 import com.wfe.graph.Camera;
 import com.wfe.graph.render.GUIRenderer;
 import com.wfe.graph.transform.Transform2D;
@@ -29,6 +30,9 @@ public class Game implements IScene {
 		
 		ResourceManager.loadMesh("box", "box");
 		ResourceManager.loadTexture("rock", "rock");
+		
+		ResourceManager.loadTexture("clay", "clay");
+		ResourceManager.loadMesh("wall", "wall");
 		
 		/*** Terrain Textures ***/
 		ResourceManager.loadTexture("terrain/dry_grass", "dry_grass");
