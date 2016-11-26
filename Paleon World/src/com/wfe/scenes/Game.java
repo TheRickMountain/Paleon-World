@@ -5,7 +5,6 @@ import com.wfe.core.IScene;
 import com.wfe.core.ResourceManager;
 import com.wfe.entities.Birch;
 import com.wfe.entities.Settler;
-import com.wfe.entities.Wall;
 import com.wfe.graph.Camera;
 import com.wfe.graph.render.GUIRenderer;
 import com.wfe.graph.transform.Transform2D;

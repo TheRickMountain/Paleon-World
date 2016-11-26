@@ -57,14 +57,24 @@ public class ControllingBh extends Behaviour {
 			}
 			
 			if(Mouse.isButtonDown(0)) {
-				buildingEntity.addComponent(new Collider(ResourceManager.getColliderMesh("box"),
-						new Vector3f(buildingEntity.position.x, buildingEntity.position.y, buildingEntity.position.z),
-						new Vector3f(0, buildingEntity.rotation.y, 0), new Vector3f(0.75f, 4.5f, 1.5f)));
-				buildingEntity = null;
+				if(buildingEntity.rotation.y == 0) {
+					buildingEntity.addComponent(new Collider(ResourceManager.getColliderMesh("box"),
+							new Vector3f(buildingEntity.position.x, buildingEntity.position.y, buildingEntity.position.z),
+							new Vector3f(0, buildingEntity.rotation.y, 0), new Vector3f(0.75f, 4.5f, 1.5f)));
+					buildingEntity = null;
+				} else {
+					buildingEntity.addComponent(new Collider(ResourceManager.getColliderMesh("box"),
+							new Vector3f(buildingEntity.position.x, buildingEntity.position.y, buildingEntity.position.z),
+							new Vector3f(0, buildingEntity.rotation.y, 0), new Vector3f(1.5f, 4.5f, 0.75f)));
+					buildingEntity = null;
+				}
 			}
 			
 			if(Keyboard.isKeyDown(Key.R)) {
-				buildingEntity.rotation.y += 90;
+				if(buildingEntity.rotation.y == 90)
+					buildingEntity.rotation.y -= 90;
+				else
+					buildingEntity.rotation.y += 90;
 			}
 		}
 		

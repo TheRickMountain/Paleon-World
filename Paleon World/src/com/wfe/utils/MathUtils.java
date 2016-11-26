@@ -8,6 +8,7 @@ import com.wfe.math.altvecmath.Matrix4;
 import com.wfe.math.altvecmath.Transform;
 import com.wfe.math.altvecmath.Vector3;
 import com.wfe.physics.CollisionPacket;
+import com.wfe.physics.Triangle;
 
 public class MathUtils {
 	
@@ -54,6 +55,7 @@ public class MathUtils {
 	static Transform transform = new Transform();
 	
 	public static Matrix4f getEulerModelMatrix(Matrix4f matrix, Vector3f position, Vector3f rotation, Vector3f scale) {
+		matrix.setIdentity();
 		transform.reset()
         .rotateSelf(Vector3.AXIS_X, rotation.x * DEGREES_TO_RADIANS)
         .rotateSelf(Vector3.AXIS_Z, rotation.z * DEGREES_TO_RADIANS)
@@ -121,56 +123,6 @@ public class MathUtils {
 		float distance = (float) Math.sqrt((dX * dX) + (dY * dY));
 		return distance;
 	}
-	
-	/*public boolean intersect() {
-		float tmin, tmax, tymin, tymax, tzmin, tzmax;
-		Vector3f rayOrigin = MousePicker.getRayOrigin();
-		Vector3f rayDirection = MousePicker.getCurrentRay();
-		
-		if (rayDirection.x >= 0) {
-			tmin = (bounds[0].x - rayOrigin.x) / rayDirection.x;
-			tmax = (bounds[1].x - rayOrigin.x) / rayDirection.x;
-		} else {
-			tmin = (bounds[1].x - rayOrigin.x) / rayDirection.x;
-			tmax = (bounds[0].x - rayOrigin.x) / rayDirection.x;
-		}
-		
-		if (rayDirection.y >= 0) {
-			tymin = (bounds[0].y - rayOrigin.y) / rayDirection.y;
-			tymax = (bounds[1].y - rayOrigin.y) / rayDirection.y;
-		} else {
-			tymin = (bounds[1].y - rayOrigin.y) / rayDirection.y;
-			tymax = (bounds[0].y - rayOrigin.y) / rayDirection.y;
-		}
-		
-		if ( (tmin > tymax) || (tymin > tmax) )
-			return false;
-			
-		if (tymin > tmin)
-			tmin = tymin;
-		
-		if (tymax < tmax)
-			tmax = tymax;
-		
-		if (rayDirection.z >= 0) {
-			tzmin = (bounds[0].z - rayOrigin.z) / rayDirection.z;
-			tzmax = (bounds[1].z - rayOrigin.z) / rayDirection.z;
-		} else {
-			tzmin = (bounds[1].z - rayOrigin.z) / rayDirection.z;
-			tzmax = (bounds[0].z - rayOrigin.z) / rayDirection.z;
-		}
-			
-		if ( (tmin > tzmax) || (tzmin > tmax) )
-			return false;
-			
-		if (tzmin > tmin)
-			tmin = tzmin;
-			
-		if (tzmax < tmax)
-			tmax = tzmax;
-			
-		return ( (tmin < 1000) && (tmax > 1) );
-	}*/
 	
 	public static void checkTriangle(CollisionPacket colPackage, Triangle triangle) {
 		Plane trianglePlane = new Plane(triangle);
@@ -370,27 +322,6 @@ public class MathUtils {
 			}
 		} // if not backface
 	}
-	
-	/*public static boolean checkPointInTriangle(Vector3f p, Vector3f a1, Vector3f b1, Vector3f c1) {
-		Vector3f a = new Vector3f(a1.x, 0f, a1.z);
-		Vector3f b = new Vector3f(b1.x, 0f, b1.z);
-		Vector3f c = new Vector3f(c1.x, 0f, c1.z);
-		if (sameSide(p, a, b, c) && (sameSide(p, b, a, c)) && (sameSide(p, c, a, b))) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public static boolean sameSide(Vector3f p1, Vector3f p2, Vector3f a, Vector3f b) {
-		Vector3f cp1 = Vector3f.cross(Vector3f.sub(b, a, null), Vector3f.sub(p1, a, null), null);
-		Vector3f cp2 = Vector3f.cross(Vector3f.sub(b, a, null), Vector3f.sub(p2, a, null), null);
-		if (Vector3f.dot(cp1, cp2) >= 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}*/
 	
 	public static boolean checkPointInTriangle(Vector3f p, Vector3f a, Vector3f b, Vector3f c) {
 		Vector3f v0 = Vector3f.sub(c, a, null);

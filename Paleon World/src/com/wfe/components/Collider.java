@@ -8,8 +8,8 @@ import com.wfe.math.Matrix4f;
 import com.wfe.math.Vector3f;
 import com.wfe.physics.ColliderMesh;
 import com.wfe.physics.CollisionPacket;
+import com.wfe.physics.Triangle;
 import com.wfe.utils.MathUtils;
-import com.wfe.utils.Triangle;
 
 public class Collider extends Component {
 	

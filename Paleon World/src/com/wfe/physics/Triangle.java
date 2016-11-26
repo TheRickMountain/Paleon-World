@@ -1,4 +1,4 @@
-package com.wfe.utils;
+package com.wfe.physics;
 
 import com.wfe.math.Matrix3f;
 import com.wfe.math.Matrix4f;

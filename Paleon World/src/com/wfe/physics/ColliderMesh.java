@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wfe.math.Vector3f;
-import com.wfe.utils.Triangle;
 
 public class ColliderMesh {
 

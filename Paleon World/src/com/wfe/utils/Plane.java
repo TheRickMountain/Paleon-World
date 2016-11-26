@@ -1,6 +1,7 @@
 package com.wfe.utils;
 
 import com.wfe.math.Vector3f;
+import com.wfe.physics.Triangle;
 
 public class Plane {
 
