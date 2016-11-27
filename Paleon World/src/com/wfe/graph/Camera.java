@@ -29,7 +29,7 @@ public class Camera {
     private float zoomSpeed = 50;
 
     private static final float MAX_PITCH = 85;
-    private static final float MIN_PITCH = -20;
+    private static final float MIN_PITCH = 0;
     
     private Frustum frustum;
 
@@ -78,7 +78,7 @@ public class Camera {
     public void rotate(float dt) {
         if(Mouse.isButton(1)) {
             calculateAngleAroundPlayer(dt);
-            //calculatePitch(dt);
+            calculatePitch(dt);
         }
 
         if(Mouse.isButtonDown(1)) {

@@ -26,12 +26,14 @@ public class Game implements IScene {
 	@Override
 	public void loadResources() {
 		ResourceManager.loadColliderMesh("box", "box");
+		ResourceManager.loadColliderMesh("wall", "wall");
 		
 		ResourceManager.loadMesh("box", "box");
 		ResourceManager.loadTexture("rock", "rock");
 		
 		ResourceManager.loadTexture("clay", "clay");
 		ResourceManager.loadMesh("wall", "wall");
+		ResourceManager.loadMesh("corner_wall", "corner_wall");
 		
 		/*** Terrain Textures ***/
 		ResourceManager.loadTexture("terrain/dry_grass", "dry_grass");
@@ -73,7 +75,7 @@ public class Game implements IScene {
     	ResourceManager.loadTexture("models/birch/trunk", "birch_trunk");
         ResourceManager.loadMesh("models/birch/trunk", "birch_trunk");
         
-        ResourceManager.loadTexture("models/birch/leaves2", "birch_leaves");
+        ResourceManager.loadTexture("models/birch/leaves", "birch_leaves");
         ResourceManager.loadMesh("models/birch/leaves", "birch_leaves");
         /*** *** ***/
         
@@ -114,10 +116,10 @@ public class Game implements IScene {
 		TexturePack texturePack = new TexturePack(
         		generator.getHeightMap(),
                 generator.getBlendMapTexture(),
-                ResourceManager.getTexture("dry_ground"),
                 ResourceManager.getTexture("dry_grass"),
-                ResourceManager.getTexture("ground"),
-                ResourceManager.getTexture("ground"));
+                ResourceManager.getTexture("fresh_grass"),
+                ResourceManager.getTexture("sand"),
+                ResourceManager.getTexture("sand"));
 
         Terrain terrain = new Terrain(0, 0, texturePack);
         world.addTerrain(terrain);

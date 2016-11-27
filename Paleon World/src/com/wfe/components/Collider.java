@@ -37,7 +37,7 @@ public class Collider extends Component {
         Matrix3f.invert(eSpace, R3);
 
         Matrix4f modelMatrix = new Matrix4f();
-        MathUtils.getEulerModelMatrix(modelMatrix, position, rotation, scale);       
+        MathUtils.getModelMatrix(modelMatrix, position, rotation, scale);       
         
         for(int i = 0; i < triangles.length; i++) {
         	Triangle transformedTriangle = triangles[i].createInstance(modelMatrix);

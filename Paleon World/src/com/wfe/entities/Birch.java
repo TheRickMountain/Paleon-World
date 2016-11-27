@@ -24,6 +24,7 @@ public class Birch extends Entity {
 		Entity leaves = new Entity(world, "");
 		leaves.addComponent(new Model(ResourceManager.getMesh("birch_leaves")));
 		Material leavesMat = new Material(ResourceManager.getTexture("birch_leaves"));
+		leavesMat.color.set(0.8f, 1.0f, 0.8f);
 		leavesMat.transparency = true;
 		leaves.addComponent(leavesMat);
 		leaves.setTransform(new Transform3D());
