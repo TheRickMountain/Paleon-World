@@ -42,6 +42,10 @@ public class Entity {
     
     private float furthestPoint = 0;
 
+    public Entity(World world) {
+        this(world, "");
+    }
+    
     public Entity(World world, String name) {
         this.world = world;
         this.world.addEntity(this);

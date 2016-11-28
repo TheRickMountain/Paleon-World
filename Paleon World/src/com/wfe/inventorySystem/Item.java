@@ -1,36 +1,41 @@
 package com.wfe.inventorySystem;
 
-import java.io.Serializable;
-
+import com.wfe.core.ResourceManager;
 import com.wfe.graph.Texture;
 
-public class Item implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class Item {
 	
 	public String itemName;
 	public int itemID;
 	public String itemDesc;
 	public Texture itemIcon;
-	public int itemPower;
-	public int itemSpeed;
+	public int itemFood;
+	public float itemWeight;
 	public ItemType itemType;
+	public int stack;
 	
 	public enum ItemType {
-		Weapon,
-		Consumable,
-		Quest
+		WEAPON,
+		CONSUMABLE,
+		ITEM
 	}
 	
-	public Item(String itemName, int itemID, String itemDesc, Texture itemIcon, int itemPower, int itemSpeed,
-			ItemType itemType) {
+	public Item() {
+		
+	}
+
+	public Item(String itemName, int itemId, String itemDesc, int itemFood, float itemWeight,
+			ItemType itemType, int stackability) {
 		this.itemName = itemName;
-		this.itemID = itemID;
+		this.itemID = itemId;
 		this.itemDesc = itemDesc;
-		this.itemIcon = itemIcon;
-		this.itemPower = itemPower;
-		this.itemSpeed = itemSpeed;
+		if(!itemName.isEmpty()) {
+			this.itemIcon = ResourceManager.getTexture("ui_" + itemName);
+		}
+		this.itemFood = itemFood;
+		this.itemWeight = itemWeight;
 		this.itemType = itemType;
+		this.stack = stackability;
 	}
 
 }

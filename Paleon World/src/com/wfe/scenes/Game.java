@@ -26,12 +26,19 @@ public class Game implements IScene {
 	
 	private World world;
 	
+	public static State state = Game.State.GAME;
+	
+	public enum State {
+		GAME,
+		INVENTORY
+	}
+	
 	@Override
 	public void loadResources() {
-		ResourceManager.loadTexture("gui/slot", "slot_ui");
+		ResourceManager.loadTexture("gui/slot", "ui_slot");
 		
-		ResourceManager.loadTexture("gui/icons/flint", "flont_ui");
-		ResourceManager.loadTexture("gui/icons/apple", "apple_ui");
+		ResourceManager.loadTexture("gui/icons/flint", "ui_flint");
+		ResourceManager.loadTexture("gui/icons/apple", "ui_apple");
 		
 		ResourceManager.loadColliderMesh("box", "box");
 		ResourceManager.loadColliderMesh("wall", "wall");

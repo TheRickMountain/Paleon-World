@@ -20,6 +20,7 @@ import com.wfe.scenegraph.Entity;
 import com.wfe.utils.Color;
 import com.wfe.utils.MathUtils;
 import com.wfe.utils.OpenglUtils;
+import com.wfe.utils.Rect;
 
 /**
  * Created by Rick on 12.10.2016.
@@ -129,13 +130,13 @@ public class GUIRenderer {
         shader.unbind();
     }
     
-    public static void render(Texture texture, float xPos, float yPos, float rotation, float xScale, float yScale) {
+    public static void render(float xPos, float yPos, float xScale, float yScale, Texture texture) {
         GL30.glBindVertexArray(mesh.getVAO());
         GL20.glEnableVertexAttribArray(0);
 
         shader.setUniform("spriteColor", Color.WHITE);
         Matrix4f.mul(projectionMatrix, 
-        		MathUtils.getModelMatrix(modelMatrix, xPos, yPos, rotation, xScale, yScale), modelProjectionMatrix);
+        		MathUtils.getModelMatrix(modelMatrix, xPos, yPos, 0, xScale, yScale), modelProjectionMatrix);
         shader.setUniform("MP", modelProjectionMatrix);
 
         if (texture != null) {
@@ -148,6 +149,32 @@ public class GUIRenderer {
 
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);
+    }
+    
+    public static void render(Rect rect, Texture texture) {
+    	render(rect.x, rect.y, rect.width, rect.height, texture);
+    }
+    
+    public static void render(float xPos, float yPos, Text text) {
+         text.font.getTextureAtlas().bind(0);
+
+         shader.setUniform("mode", 2);
+
+         shader.setUniform("MP",
+                 MathUtils.getModelMatrix(modelMatrix, (xPos / Display.getWidth()) * 2.0f,
+                         (-yPos / Display.getHeight()) * 2.0f, 0, 1, 1));
+
+         shader.setUniform("spriteColor", text.color);
+
+         GL30.glBindVertexArray(text.mesh.getVAO());
+         GL20.glEnableVertexAttribArray(0);
+         GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, text.mesh.getVertexCount());
+         GL20.glDisableVertexAttribArray(0);
+         GL30.glBindVertexArray(0);
+    }
+    
+    public static void render(Rect rect, Text text) {
+    	render(rect.x, rect.y, text);
     }
 
     private void initRenderData() {
