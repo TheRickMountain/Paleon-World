@@ -57,7 +57,7 @@ public class ControllingBh extends Behaviour {
 			}
 			
 			if(Mouse.isButtonDown(0)) {
-				buildingEntity.addComponent(new Collider(ResourceManager.getColliderMesh("wall"),
+				buildingEntity.addComponent(new Collider(ResourceManager.getColliderMesh("box"),
 						new Vector3f(buildingEntity.position.x, buildingEntity.position.y, buildingEntity.position.z),
 						new Vector3f(0, buildingEntity.rotation.y, 0), new Vector3f(1.5f, 1.5f, 1.5f)));
 				buildingEntity = null;
@@ -124,7 +124,7 @@ public class ControllingBh extends Behaviour {
 		
 		parent.position.set(colPackage.getR3Position());
 		camera.playerPosition.set(parent.position);
-		camera.playerPosition.y += 4.2f;
+		camera.playerPosition.y += 1.1f;
 		
 		if(move) {
 			anim.walkAnim(dt);	

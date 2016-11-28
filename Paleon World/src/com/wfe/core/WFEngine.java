@@ -17,7 +17,7 @@ public class WFEngine implements Runnable {
 
     public WFEngine() {
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
-        display = new Display();
+        display = new Display("Winter Fox Engine", 1152, 648);
         scene = new SceneManager();
     }
 
@@ -43,7 +43,7 @@ public class WFEngine implements Runnable {
     }
 
     protected void init() throws Exception {
-        display.create("Winter Fox Engine", 1152, 648);
+        display.init();
         initScenes();
     }
 

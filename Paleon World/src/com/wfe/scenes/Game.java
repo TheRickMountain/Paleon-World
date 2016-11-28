@@ -4,6 +4,7 @@ import com.wfe.components.Text;
 import com.wfe.core.IScene;
 import com.wfe.core.ResourceManager;
 import com.wfe.entities.Birch;
+import com.wfe.entities.Grass;
 import com.wfe.entities.Settler;
 import com.wfe.graph.Camera;
 import com.wfe.graph.render.GUIRenderer;
@@ -28,7 +29,6 @@ public class Game implements IScene {
 		ResourceManager.loadColliderMesh("box", "box");
 		ResourceManager.loadColliderMesh("wall", "wall");
 		
-		ResourceManager.loadMesh("box", "box");
 		ResourceManager.loadTexture("rock", "rock");
 		
 		ResourceManager.loadTexture("clay", "clay");
@@ -84,7 +84,7 @@ public class Game implements IScene {
         /*** *** ***/
         
         /*** Grass ***/
-        ResourceManager.loadTexture("models/grass/grass", "grass");
+        ResourceManager.loadTexture("models/grass/diffuse", "diffuse");
         ResourceManager.loadMesh("models/grass/grass", "grass");
         /*** *** ***/
         
@@ -97,8 +97,6 @@ public class Game implements IScene {
         ResourceManager.loadTexture("models/palm/palm", "palm");
         ResourceManager.loadMesh("models/palm/palm", "palm");
         /*** *** ***/
-        
-        ResourceManager.loadMesh("box", "triangle");
         
         /*** Well ***/
         ResourceManager.loadTexture("models/well/well", "well");
@@ -148,6 +146,15 @@ public class Game implements IScene {
         Entity text = new Entity(world, "Text");
         text.addComponent(new Text("Winter Fox Engine 0.2", GUIRenderer.primitiveFont, 1f, Color.WHITE));
         text.setTransform(new Transform2D());
+        
+        Grass grass = new Grass(world);
+        grass.position.set(400, world.getTerrainHeight(400, 400), 400);
+        grass.textureIndex = 2;
+        
+        Grass grass2 = new Grass(world);
+        grass2.position.set(400, world.getTerrainHeight(400, 400), 400);
+        grass2.textureIndex = 0;
+        grass2.rotation.y = 45;
         
         Settler settler = new Settler(world, camera);
         settler.rotation.y = 180;    

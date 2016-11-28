@@ -52,15 +52,19 @@ public class Display {
 
     private static long window;
 
+    private static String title;
     private static int width;
     private static int height;
 
     private static boolean resized;
 
-    public void create(String title, int w, int h) {
-        width = w;
+    public Display(String t, int w, int h) {
+        title = t;
+    	width = w;
         height = h;
-
+    }
+        
+    public void init() {
         GLFWErrorCallback.createPrint(System.err).set();
 
         if(!glfwInit())
