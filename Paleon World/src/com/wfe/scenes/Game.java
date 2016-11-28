@@ -9,7 +9,9 @@ import com.wfe.entities.Settler;
 import com.wfe.graph.Camera;
 import com.wfe.graph.render.GUIRenderer;
 import com.wfe.graph.transform.Transform2D;
+import com.wfe.graph.transform.Transform3D;
 import com.wfe.graph.water.WaterTile;
+import com.wfe.inventorySystem.Inventory;
 import com.wfe.math.Vector3f;
 import com.wfe.scenegraph.Entity;
 import com.wfe.scenegraph.World;
@@ -26,6 +28,11 @@ public class Game implements IScene {
 	
 	@Override
 	public void loadResources() {
+		ResourceManager.loadTexture("gui/slot", "slot_ui");
+		
+		ResourceManager.loadTexture("gui/icons/flint", "flont_ui");
+		ResourceManager.loadTexture("gui/icons/apple", "apple_ui");
+		
 		ResourceManager.loadColliderMesh("box", "box");
 		ResourceManager.loadColliderMesh("wall", "wall");
 		
@@ -162,6 +169,10 @@ public class Game implements IScene {
         Birch conifer1 = new Birch(world, new Vector3f(384, world.getTerrainHeight(384, 384), 384));
         Birch conifer2 = new Birch(world, new Vector3f(400, world.getTerrainHeight(400, 384), 384));
         Birch conifer3 = new Birch(world, new Vector3f(384, world.getTerrainHeight(384, 400), 400));
+        
+        Entity inventory = new Entity(world, "Inventory");
+        inventory.addBehaviour(new Inventory());
+        inventory.setTransform(new Transform3D());
         
         GameTime.setTime(12, 00);
 	}

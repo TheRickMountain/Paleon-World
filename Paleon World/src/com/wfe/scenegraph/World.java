@@ -206,6 +206,15 @@ public class World {
         skyboxRenderer.render(camera, fogColor);
         waterRenderer.render(waters, weather.sun, fogColor);
         guiRenderer.render(guis);
+        
+        GUIRenderer.startRender();
+        
+        for(Behaviour bh : behaviours)
+        	if(bh.active)
+        		bh.onGUI();
+        
+        GUIRenderer.endRender();
+        
     }
 
     public void addTerrain(Terrain terrain){

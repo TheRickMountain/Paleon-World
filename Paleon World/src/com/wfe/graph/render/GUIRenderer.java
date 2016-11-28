@@ -1,5 +1,7 @@
 package com.wfe.graph.render;
 
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -19,8 +21,6 @@ import com.wfe.utils.Color;
 import com.wfe.utils.MathUtils;
 import com.wfe.utils.OpenglUtils;
 
-import java.util.List;
-
 /**
  * Created by Rick on 12.10.2016.
  */
@@ -30,9 +30,9 @@ public class GUIRenderer {
 
     public static Mesh mesh;
 
-    public Matrix4f projectionMatrix = new Matrix4f();
-    public Matrix4f modelMatrix = new Matrix4f();
-    public Matrix4f modelProjectionMatrix = new Matrix4f();
+    public static Matrix4f projectionMatrix = new Matrix4f();
+    public static Matrix4f modelMatrix = new Matrix4f();
+    public static Matrix4f modelProjectionMatrix = new Matrix4f();
 
     public static FontType primitiveFont;
 
@@ -53,7 +53,9 @@ public class GUIRenderer {
         primitiveFont = new FontType("primitive_font");
     }
 
-    public void startRender() {
+    public static void startRender() {
+    	shader.bind();
+    	
         OpenglUtils.alphaBlending(true);
         OpenglUtils.depthTest(false);
 
@@ -63,8 +65,6 @@ public class GUIRenderer {
     }
 
     public void render(List<Component> guis) {
-        shader.bind();
-
         startRender();
 
         for(Component gui : guis) {
@@ -120,13 +120,34 @@ public class GUIRenderer {
         }
 
         endRender();
-
-        shader.unbind();
     }
 
-    public void endRender() {
+    public static void endRender() {
         OpenglUtils.alphaBlending(false);
         OpenglUtils.depthTest(true);
+        
+        shader.unbind();
+    }
+    
+    public static void render(Texture texture, float xPos, float yPos, float rotation, float xScale, float yScale) {
+        GL30.glBindVertexArray(mesh.getVAO());
+        GL20.glEnableVertexAttribArray(0);
+
+        shader.setUniform("spriteColor", Color.WHITE);
+        Matrix4f.mul(projectionMatrix, 
+        		MathUtils.getModelMatrix(modelMatrix, xPos, yPos, rotation, xScale, yScale), modelProjectionMatrix);
+        shader.setUniform("MP", modelProjectionMatrix);
+
+        if (texture != null) {
+            texture.bind(0);
+            shader.setUniform("mode", 0);
+        } else {
+            shader.setUniform("mode", 1);
+        }
+        GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
+
+        GL20.glDisableVertexAttribArray(0);
+        GL30.glBindVertexArray(0);
     }
 
     private void initRenderData() {
