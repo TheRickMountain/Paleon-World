@@ -92,9 +92,22 @@ public class Inventory extends Behaviour {
 			updateOwn();
 		}
 	}
+	
+	public void showDownBar() {
+		for(int i = 0; i < 8; i++) {
+			slotsRect.x = ((Display.getWidth() / 2) - 235) + (i * 60);
+			slotsRect.y = Display.getHeight() - 50;
+			slotsRect.width = 50;
+			slotsRect.height = 50;
+			
+			GUIRenderer.render(slotsRect, slotSkin);
+		}
+	}
 
 	@Override
 	public void onGUI() {
+		showDownBar();
+		
 		tooltip = "";
 		if(showInventory) 
 		{
